@@ -1,6 +1,6 @@
 <ion-slides [options]="slideOpts">
   <ion-slide *ngFor="let product of products">
-    <ion-card>
+    <ion-card (click)="goToProduct(product)" test-id="product">
       <ion-card-content class="ion-no-padding">
         <ion-img object-fit="cover" [src]="product.image"></ion-img>
       </ion-card-content>

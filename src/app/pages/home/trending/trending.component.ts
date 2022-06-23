@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { SlideProduct } from '../model/slide-product';
 
 @Component({
@@ -14,8 +16,14 @@ export class TrendingComponent implements OnInit {
     slidesPerView: 2.2
   }
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit() {}
+
+  goToProduct(product: SlideProduct) {
+    this.router.navigate([`/products/${product.id}`]);
+  }
 
 }
