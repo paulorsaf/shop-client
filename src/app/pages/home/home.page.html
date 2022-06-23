@@ -1,3 +1,17 @@
 <ion-content>
-  <app-slider [slides]="slides"></app-slider>
+  <app-hero [products]="slides"></app-hero>
+
+  <section class="trending">
+    <app-section-title title="Em destaque"></app-section-title>
+    <div class="trending-wrapper">
+      <app-trending [products]="trending"></app-trending>
+    </div>
+  </section>
+
+  <section class="categories">
+    <app-section-title title="Categories"></app-section-title>
+    <div class="categories-wrapper">
+      <app-categories></app-categories>
+    </div>
+  </section>
 </ion-content>

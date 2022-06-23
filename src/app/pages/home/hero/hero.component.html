@@ -1,0 +1,15 @@
+<ion-slides pager="true">
+  <ion-slide *ngFor="let product of products">
+    <img [src]="product.image" object-fit="cover" />
+    <section>
+      <div class="product">
+        <ion-text>{{product.name}}</ion-text>
+      </div>
+      <div class="price">
+        <ion-text>{{product.price.value | currency: product.price.currency}}</ion-text>
+        <ion-text class="discount">{{product.discount.value | currency: product.discount.currency}}</ion-text>
+        <ion-button color="primary">Ver</ion-button>
+      </div>
+    </section>
+  </ion-slide>
+</ion-slides>

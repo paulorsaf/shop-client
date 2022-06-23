@@ -1,0 +1,21 @@
+ion-list {
+    background: transparent;
+
+    ion-item {
+        color: #444;
+        margin-bottom: 10px;
+        font-size: 22px;
+        --inner-padding-top: 10px;
+        --inner-padding-bottom: 10px;
+        --border-radius: 4px;
+
+        ion-icon {
+            margin-right: 15px;
+        }
+
+        .amount-of-items {
+            color: #888;
+            font-size: 14px;
+        }
+    }
+}

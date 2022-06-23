@@ -1,3 +1,14 @@
 ion-content {
-    background: rgb(244,248,254);
+    --background: rgb(244,248,254);
+}
+
+section {
+    margin: 10px 0;
+}
+
+.categories-wrapper {
+    padding: 10px;
+}
+.trending-wrapper {
+    padding: 10px 0;
 }

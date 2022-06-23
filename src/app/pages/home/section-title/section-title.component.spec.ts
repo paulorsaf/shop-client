@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { SliderComponent } from './slider.component';
+import { SectionTitleComponent } from './section-title.component';
 
-describe('SliderComponent', () => {
-  let component: SliderComponent;
-  let fixture: ComponentFixture<SliderComponent>;
+describe('SectionTitleComponent', () => {
+  let component: SectionTitleComponent;
+  let fixture: ComponentFixture<SectionTitleComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SliderComponent ],
+      declarations: [ SectionTitleComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SliderComponent);
+    fixture = TestBed.createComponent(SectionTitleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
