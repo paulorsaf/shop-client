@@ -2,6 +2,16 @@ ion-content {
     --background: rgb(244,248,254);
 }
 
+ion-searchbar {
+    position: absolute;
+    z-index: 9;
+    --background: rgba(0,0,0,0.5);
+    --color: white;
+    --icon-color: white;
+    --placeholder-color: white;
+    --placeholder-opacity: 0.8;
+}
+
 section {
     margin: 10px 0;
 }
