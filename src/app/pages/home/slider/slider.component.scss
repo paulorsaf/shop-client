@@ -1,0 +1,40 @@
+ion-slide {
+    img {
+        height: 50vh;
+        width: 100vh;
+        object-fit: cover;
+        border-radius: 0 0 40px 40px;
+    }
+    section {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: left;
+        border-radius: 0 0 40px 40px;
+        background: rgba(0,0,0,0.5);
+        background: linear-gradient(0deg, rgba(2,0,36,1) 0%, transparent 100%);
+        padding: 40px 20px 40px 20px;
+
+        .product {
+            color: white;
+            font-weight: 600;
+            font-size: 32px;
+        }
+        .price {
+            color: white;
+            font-weight: 600;
+            font-size: 24px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            justify-content: space-between;
+
+            .discount {
+                font-size: 18px;
+                text-decoration: line-through;
+                opacity: 0.8;
+            }
+        }
+    }
+}
