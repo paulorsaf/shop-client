@@ -1,21 +1,24 @@
+ion-card {
+    margin: 0;
+    margin-bottom: 1rem;
+}
+
 ion-list {
     background: transparent;
 
     ion-item {
         color: #444;
-        margin-bottom: 10px;
-        font-size: 22px;
-        --inner-padding-top: 10px;
-        --inner-padding-bottom: 10px;
-        --border-radius: 4px;
+        font-size: 2.2rem;
+        --inner-padding-top: 1rem;
+        --inner-padding-bottom: 1rem;
 
         ion-icon {
-            margin-right: 15px;
+            margin-right: 1.5rem;
         }
 
         .amount-of-items {
             color: #888;
-            font-size: 14px;
+            font-size: 1.4rem;
         }
     }
 }

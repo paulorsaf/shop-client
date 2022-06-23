@@ -3,7 +3,7 @@ ion-slide {
         height: 50vh;
         width: 100vh;
         object-fit: cover;
-        border-radius: 0 0 40px 40px;
+        border-radius: 0 0 4rem 4rem;
     }
     section {
         position: absolute;
@@ -11,27 +11,27 @@ ion-slide {
         left: 0;
         width: 100%;
         text-align: left;
-        border-radius: 0 0 40px 40px;
+        border-radius: 0 0 4rem 4rem;
         background: rgba(0,0,0,0.5);
         background: linear-gradient(0deg, rgba(2,0,36,1) 0%, transparent 100%);
-        padding: 40px 20px 40px 20px;
+        padding: 4rem 2rem 4rem 2rem;
 
         .product {
             color: white;
             font-weight: 600;
-            font-size: 32px;
+            font-size: 3.2rem;
         }
         .price {
             color: white;
             font-weight: 600;
-            font-size: 24px;
+            font-size: 2.4rem;
             display: flex;
-            gap: 30px;
+            gap: 3rem;
             align-items: center;
             justify-content: space-between;
 
             .discount {
-                font-size: 18px;
+                font-size: 1.8rem;
                 text-decoration: line-through;
                 opacity: 0.8;
             }
