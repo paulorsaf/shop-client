@@ -1,10 +1,10 @@
 import { actionSheetController } from '@ionic/core';
 import { createReducer, on } from '@ngrx/store';
-import { AppInitialState } from '../app-initial-state';
+import { appInitialState } from '../app-initial-state';
 import { TrendingState } from './trending-state';
 import { loadTrendings, loadTrendingsFail, loadTrendingsSuccess } from './trending.actions';
 
-const initialState: TrendingState = AppInitialState.trending;
+const initialState: TrendingState = appInitialState.trending;
 
 const _trendingReducer = createReducer(
   initialState,

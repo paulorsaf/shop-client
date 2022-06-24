@@ -1,7 +1,7 @@
 export class ProductServiceMock {
-    _response;
-    
+    response;
+
     findById() {
-        return this._response;
+        return this.response;
     }
-}
+};

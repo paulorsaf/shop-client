@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, of } from 'rxjs';
 import { Banner } from 'src/app/model/banner/banner';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, } from 'rxjs/operators';
+import { Product } from 'src/app/model/product/product';
 
 @Injectable({
   providedIn: 'root'
@@ -14,15 +15,32 @@ export class ProductService {
     private http: HttpClient
   ) { }
 
-  findById(id: string) : Observable<Banner> {
+  findById(id: string): Observable<Product> {
     const url = `${environment.apiCms}/products/${id}?_format=json`;
-    return this.http.get<Banner[]>(url).pipe(
-      switchMap(banners => of(banners[0])),
-      map(banner => {
-        banner.image = environment.imageBaseUrl + banner.image;
-        return banner;
+    return this.http.get<Product[]>(url).pipe(
+      switchMap(products => of(products[0])),
+      map(product => {
+        product.images = this.transformArrayWithPrefix(product.images, environment.imageBaseUrl);
+        product.colors = this.transformArray(product.colors);
+        return product;
       })
     );
   }
 
-}
+  private transformArray(array) {
+    const value = ((array as unknown) as string)?.split(', ');
+    if (value) {
+      return value.map(c => c);
+    }
+    return [];
+  }
+
+  private transformArrayWithPrefix(array, prefix: string) {
+    const value = ((array as unknown) as string)?.split(', ');
+    if (value) {
+      return value.map(c => prefix + c);
+    }
+    return [];
+  }
+
+};

@@ -1,6 +1,6 @@
-import { AppState } from "./app-state";
+import { AppState } from './app-state';
 
-export const AppInitialState: AppState = {
+export const appInitialState: AppState = {
     banner: {
         banners: [],
         error: null,
@@ -13,10 +13,16 @@ export const AppInitialState: AppState = {
         isLoaded: false,
         isLoading: false
     },
+    product: {
+        error: null,
+        isLoaded: false,
+        isLoading: false,
+        product: null
+    },
     trending: {
         error: null,
         isLoaded: false,
         isLoading: false,
         trendings: []
     }
-}
+};

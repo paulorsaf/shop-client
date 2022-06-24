@@ -1,9 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
-import { AppInitialState } from '../app-initial-state';
+import { appInitialState } from '../app-initial-state';
 import { CategoryState } from './category-state';
 import { loadCategories, loadCategoriesFail, loadCategoriesSuccess } from './category.actions';
 
-const initialState: CategoryState = AppInitialState.category;
+const initialState: CategoryState = appInitialState.category;
 
 const _categoryReducer = createReducer(
   initialState,

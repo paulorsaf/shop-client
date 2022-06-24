@@ -5,8 +5,8 @@ export type Trending = {
     image: string;
     price: string;
     priceWithDiscount: string;
-}
+};
 
 export type TrendingWrapper = {
     productId: string;
-}
+};

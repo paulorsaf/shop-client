@@ -6,6 +6,8 @@ import { BannerEffects } from './banner/banner.effects';
 import { bannerReducer } from './banner/banner.reducers';
 import { CategoryEffects } from './category/category.effects';
 import { categoryReducer } from './category/category.reducers';
+import { ProductEffects } from './product/product.effects';
+import { productReducer } from './product/product.reducers';
 import { TrendingEffects } from './trending/trending.effects';
 import { trendingReducer } from './trending/trending.reducers';
 
@@ -14,10 +16,12 @@ import { trendingReducer } from './trending/trending.reducers';
     StoreModule.forRoot([]),
     StoreModule.forFeature('banner', bannerReducer),
     StoreModule.forFeature('category', categoryReducer),
+    StoreModule.forFeature('product', productReducer),
     StoreModule.forFeature('trending', trendingReducer),
     EffectsModule.forRoot([
       BannerEffects,
       CategoryEffects,
+      ProductEffects,
       TrendingEffects
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),

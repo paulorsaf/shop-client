@@ -1,9 +1,9 @@
 export class HttpClientMock {
-    _response;
-    _urlCalled = "";
+    response;
+    urlCalled = "";
 
     get(url: string) {
-        this._urlCalled = url;
-        return this._response;
+        this.urlCalled = url;
+        return this.response;
     }
 }

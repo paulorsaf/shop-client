@@ -1,4 +1,4 @@
-import { AppInitialState } from "../app-initial-state"
+import { appInitialState } from "../app-initial-state"
 import { TrendingState } from "./trending-state"
 import { loadTrendings, loadTrendingsFail, loadTrendingsSuccess } from "./trending.actions"
 import { trendingReducer } from "./trending.reducers"
@@ -7,7 +7,7 @@ describe('Trending store', () => {
 
     it('loadTrendings', () => {
         const initialState: TrendingState = {
-            ...AppInitialState.trending,
+            ...appInitialState.trending,
             error: {error: "error"},
             isLoaded: true,
             isLoading: false,
@@ -17,7 +17,7 @@ describe('Trending store', () => {
         const newState = trendingReducer(initialState, loadTrendings());
 
         expect(newState).toEqual({
-            ...AppInitialState.trending,
+            ...appInitialState.trending,
             trendings: [],
             error: null,
             isLoaded: false,
@@ -27,7 +27,7 @@ describe('Trending store', () => {
 
     it('loadTrendingsSuccess', () => {
         const initialState: TrendingState = {
-            ...AppInitialState.trending,
+            ...appInitialState.trending,
             isLoading: true
         }
 
@@ -35,7 +35,7 @@ describe('Trending store', () => {
         const newState = trendingReducer(initialState, loadTrendingsSuccess({trendings}));
 
         expect(newState).toEqual({
-            ...AppInitialState.trending,
+            ...appInitialState.trending,
             trendings,
             isLoaded: true,
             isLoading: false
@@ -44,7 +44,7 @@ describe('Trending store', () => {
 
     it('loadTrendingsFail', () => {
         const initialState: TrendingState = {
-            ...AppInitialState.trending,
+            ...appInitialState.trending,
             isLoading: true
         }
 
@@ -52,7 +52,7 @@ describe('Trending store', () => {
         const newState = trendingReducer(initialState, loadTrendingsFail({error}));
 
         expect(newState).toEqual({
-            ...AppInitialState.trending,
+            ...appInitialState.trending,
             error,
             isLoaded: false,
             isLoading: false

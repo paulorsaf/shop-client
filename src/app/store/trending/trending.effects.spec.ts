@@ -39,7 +39,7 @@ describe('Trendings effects', () => {
 
     it('should loadPkce return retrieveAuthCode', (done) => {
       const trendings = <any> [{id: 1}];
-      trendingsService._response = of(trendings);
+      trendingsService.response = of(trendings);
 
       effects.loadTrendingsEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(loadTrendingsSuccess({trendings}));
@@ -49,7 +49,7 @@ describe('Trendings effects', () => {
   
     it('should retrieve auth code with success', (done) => {
       const error = {error: "error"};
-      trendingsService._response = throwError(error);
+      trendingsService.response = throwError(error);
 
       effects.loadTrendingsEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(loadTrendingsFail({error}));

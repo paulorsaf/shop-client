@@ -29,12 +29,12 @@ describe('CategoryService', () => {
     const categories: Category[] = <any> [{id: 1}, {id: 2}];
 
     beforeEach(() => {
-      http._response = of(categories);
+      http.response = of(categories);
     })
   
     it('then call categories api', done => {
       service.findAll().subscribe(() => {
-        expect(http._urlCalled).toContain("/categories");
+        expect(http.urlCalled).toContain("/categories");
         done();
       })
     });

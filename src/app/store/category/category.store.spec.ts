@@ -1,62 +1,62 @@
-import { AppInitialState } from "../app-initial-state"
-import { CategoryState } from "./category-state"
-import { loadCategories, loadCategoriesFail, loadCategoriesSuccess } from "./category.actions"
-import { categoryReducer } from "./category.reducers"
+import { appInitialState } from '../app-initial-state';
+import { CategoryState } from './category-state';
+import { loadCategories, loadCategoriesFail, loadCategoriesSuccess } from './category.actions';
+import { categoryReducer } from './category.reducers';
 
 describe('Trending store', () => {
 
     it('loadCategories', () => {
         const initialState: CategoryState = {
-            ...AppInitialState.category,
-            error: {error: "error"},
+            ...appInitialState.category,
+            error: {error: 'error'},
             isLoaded: true,
             isLoading: false,
-            categories: <any> [{id: 1}],
-        }
+            categories: [{id: 1}] as any,
+        };
 
         const newState = categoryReducer(initialState, loadCategories());
 
         expect(newState).toEqual({
-            ...AppInitialState.category,
+            ...appInitialState.category,
             categories: [],
             error: null,
             isLoaded: false,
             isLoading: true
-        })
-    })
+        });
+    });
 
     it('loadCategoriesSuccess', () => {
         const initialState: CategoryState = {
-            ...AppInitialState.category,
+            ...appInitialState.category,
             isLoading: true
-        }
+        };
 
-        const categories = <any> [{id: 1}]
+        const categories = [{id: 1}] as any;
         const newState = categoryReducer(initialState, loadCategoriesSuccess({categories}));
 
         expect(newState).toEqual({
-            ...AppInitialState.category,
+            ...appInitialState.category,
             categories,
             isLoaded: true,
             isLoading: false
-        })
-    })
+        });
+    });
 
     it('loadCategoriesFail', () => {
         const initialState: CategoryState = {
-            ...AppInitialState.category,
+            ...appInitialState.category,
             isLoading: true
-        }
+        };
 
-        const error = {error: "error"};
+        const error = {error: 'error'};
         const newState = categoryReducer(initialState, loadCategoriesFail({error}));
 
         expect(newState).toEqual({
-            ...AppInitialState.category,
+            ...appInitialState.category,
             error,
             isLoaded: false,
             isLoading: false
-        })
-    })
+        });
+    });
 
-})
+});

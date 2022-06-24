@@ -16,13 +16,25 @@ export class BannersService {
     private productService: ProductService
   ) { }
 
-  findAll() : Observable<Banner[]> {
+  findAll(): Observable<Banner[]> {
     const url = `${environment.apiCms}/banners?_format=json`;
     return this.http.get<BannerWrapper[]>(url).pipe(
       switchMap(banners =>
-        forkJoin(banners.map(b => this.productService.findById(b.productId)))
+        forkJoin(banners.map(b => this.productService.findById(b.productId))).pipe(
+          switchMap(products => of(products.map(p => {
+            const banner: Banner = {
+              title: p.title,
+              body: p.body,
+              id: p.id,
+              image: p.images[0],
+              price: p.price,
+              priceWithDiscount: p.priceWithDiscount
+            };
+            return banner;
+          })))
+        ),
       )
     );
   }
 
-}
+};

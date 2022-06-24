@@ -1,0 +1,78 @@
+ion-skeleton-text {
+    &.product-images {
+        height: 50vh;
+        border-radius: 0 0 4rem 4rem;
+    }
+    &.product-title {
+        height: 4.3rem;
+    }
+    &.product-price {
+        height: 3.2rem;
+    }
+    &.options-title {
+        height: 2.1rem;
+        width: 100px;
+    }
+    &.options {
+        height: 3.6rem;
+    }
+    &.option {
+        height: 3.2rem;
+    }
+}
+
+.options-round {
+    display: flex;
+    .options {
+        width: 3.6rem;
+        border-radius: 500px;
+        margin-right: 1rem;
+    }
+}
+
+section {
+    margin: 1.6rem;
+}
+
+section.images {
+    margin: 0;
+    
+    img {
+        height: 50vh;
+        width: 100vh;
+        object-fit: cover;
+        border-radius: 0 0 4rem 4rem;
+    }
+}
+
+section.header {
+    margin-bottom: 2rem;
+
+    .title {
+        font-size: 3.2rem;
+        line-height: 4rem;
+    }
+
+    .price {
+        align-items: center;
+        justify-content: flex-start;
+    }
+}
+
+section.options {
+    .title {
+        font-size: 1.6rem;
+        color: #444;
+        margin-bottom: 1rem;
+    }
+
+    ion-icon {
+        font-size: 3.2rem;
+        margin-right: 1rem;
+
+        &.selected {
+            border: 2px solid rgb(85,168,250);
+            border-radius: 500px;
+        }
+    }
+}

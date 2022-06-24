@@ -1,7 +1,7 @@
 export class TrendingsServiceMock {
-    _response;
+    response;
 
     findAll() {
-        return this._response;
+        return this.response;
     }
 }

@@ -1,9 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
-import { AppInitialState } from '../app-initial-state';
+import { appInitialState } from '../app-initial-state';
 import { loadBanners, loadBannersFail, loadBannersSuccess } from './banner.actions';
 import { BannerState } from './banner.state';
 
-const initialState: BannerState = AppInitialState.banner;
+const initialState: BannerState = appInitialState.banner;
 
 const _bannerReducer = createReducer(
   initialState,

@@ -39,7 +39,7 @@ describe('Trendings effects', () => {
 
     it('should loadPkce return retrieveAuthCode', (done) => {
       const categories = <any> [{id: 1}];
-      categoryService._response = of(categories);
+      categoryService.response = of(categories);
 
       effects.loadCategoriesEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(loadCategoriesSuccess({categories}));
@@ -48,7 +48,7 @@ describe('Trendings effects', () => {
     });
   
     it('should retrieve auth code with success', (done) => {
-      categoryService._response = throwError(error);
+      categoryService.response = throwError(error);
 
       effects.loadCategoriesEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(loadCategoriesFail({error}));

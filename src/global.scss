@@ -29,3 +29,21 @@ html,
 body {
   font-size: 62.5%;
 }
+
+ion-content {
+  --background: rgb(235,241,253);
+}
+
+.price {
+  font-size: 2.4rem;
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  justify-content: space-between;
+
+  .discount {
+      font-size: 1.8rem;
+      text-decoration: line-through;
+      opacity: 0.8;
+  }
+}

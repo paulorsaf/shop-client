@@ -1,7 +1,7 @@
 export class CategoryServiceMock {
-    _response;
+    response;
 
     findAll() {
-        return this._response;
+        return this.response;
     }
 }

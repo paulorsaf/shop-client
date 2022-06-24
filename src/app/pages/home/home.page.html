@@ -2,7 +2,7 @@
   <section class="banners">
     <ion-searchbar placeholder="Buscar..."></ion-searchbar>
     <ion-skeleton-text *ngIf="isLoading$ | async" animated test-id="banners-loader"></ion-skeleton-text>
-    <app-banners *ngIf="!(isLoading$ | async)" test-id="banners"></app-banners>
+    <app-banners *ngIf="(isLoading$ | async) === false" test-id="banners"></app-banners>
   </section>
 
   <section class="trending">
@@ -12,7 +12,7 @@
         <ion-skeleton-text animated></ion-skeleton-text>
         <ion-skeleton-text animated></ion-skeleton-text>
       </div>
-      <app-trending *ngIf="!(isLoadingTrendings$ | async)" test-id="trendings"></app-trending>
+      <app-trending *ngIf="(isLoadingTrendings$ | async) === false" test-id="trendings"></app-trending>
     </div>
   </section>
 
@@ -24,7 +24,7 @@
         <ion-skeleton-text animated></ion-skeleton-text>
         <ion-skeleton-text animated></ion-skeleton-text>
       </div>
-      <app-categories *ngIf="!(isLoadingCategories$ | async)" test-id="categories"></app-categories>
+      <app-categories *ngIf="(isLoadingCategories$ | async) === false" test-id="categories"></app-categories>
     </div>
   </section>
 </ion-content>

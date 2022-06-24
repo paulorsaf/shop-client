@@ -21,19 +21,9 @@ ion-slide {
             font-weight: 600;
             font-size: 3.2rem;
         }
+        
         .price {
             color: white;
-            font-size: 2.4rem;
-            display: flex;
-            gap: 3rem;
-            align-items: center;
-            justify-content: space-between;
-
-            .discount {
-                font-size: 1.8rem;
-                text-decoration: line-through;
-                opacity: 0.8;
-            }
         }
     }
 }

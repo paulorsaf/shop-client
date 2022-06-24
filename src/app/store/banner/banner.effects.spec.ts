@@ -39,7 +39,7 @@ describe('Banners effects', () => {
 
     it('should loadPkce return retrieveAuthCode', (done) => {
       const banners = <any> [{id: 1}];
-      bannerService._response = of(banners);
+      bannerService.response = of(banners);
 
       effects.loadBannersEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(loadBannersSuccess({banners}));
@@ -49,7 +49,7 @@ describe('Banners effects', () => {
   
     it('should retrieve auth code with success', (done) => {
       const error = {error: "error"};
-      bannerService._response = throwError(error);
+      bannerService.response = throwError(error);
 
       effects.loadBannersEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(loadBannersFail({error}));

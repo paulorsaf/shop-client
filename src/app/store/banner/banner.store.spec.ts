@@ -1,4 +1,4 @@
-import { AppInitialState } from "../app-initial-state"
+import { appInitialState } from "../app-initial-state"
 import { loadBanners, loadBannersFail, loadBannersSuccess } from "./banner.actions"
 import { bannerReducer } from "./banner.reducers"
 import { BannerState } from "./banner.state"
@@ -7,7 +7,7 @@ describe('Banner store', () => {
 
     it('loadBanners', () => {
         const initialState: BannerState = {
-            ...AppInitialState.banner,
+            ...appInitialState.banner,
             banners: <any> [{id: 1}],
             error: {error: "error"},
             isLoaded: true,
@@ -17,7 +17,7 @@ describe('Banner store', () => {
         const newState = bannerReducer(initialState, loadBanners());
 
         expect(newState).toEqual({
-            ...AppInitialState.banner,
+            ...appInitialState.banner,
             banners: [],
             error: null,
             isLoaded: false,
@@ -27,7 +27,7 @@ describe('Banner store', () => {
 
     it('loadBannersSuccess', () => {
         const initialState: BannerState = {
-            ...AppInitialState.banner,
+            ...appInitialState.banner,
             isLoading: true
         }
 
@@ -35,7 +35,7 @@ describe('Banner store', () => {
         const newState = bannerReducer(initialState, loadBannersSuccess({banners}));
 
         expect(newState).toEqual({
-            ...AppInitialState.banner,
+            ...appInitialState.banner,
             banners,
             isLoaded: true,
             isLoading: false
@@ -44,7 +44,7 @@ describe('Banner store', () => {
 
     it('loadBannersFail', () => {
         const initialState: BannerState = {
-            ...AppInitialState.banner,
+            ...appInitialState.banner,
             isLoading: true
         }
 
@@ -52,7 +52,7 @@ describe('Banner store', () => {
         const newState = bannerReducer(initialState, loadBannersFail({error}));
 
         expect(newState).toEqual({
-            ...AppInitialState.banner,
+            ...appInitialState.banner,
             error,
             isLoaded: false,
             isLoading: false

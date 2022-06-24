@@ -1,4 +1,4 @@
 export type PageMock = {
-    querySelector: Function;
-    querySelectorAll: Function;
-}
+    querySelector: (value: string) => void;
+    querySelectorAll: (value: string) => any[];
+};
