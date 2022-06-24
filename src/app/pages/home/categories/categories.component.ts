@@ -21,4 +21,8 @@ export class CategoriesComponent implements OnInit {
     this.categories$ = this.store.select(state => state.category.categories);
   }
 
+  goToCategoryPage(category: Category) {
+    
+  }
+
 }

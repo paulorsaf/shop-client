@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
@@ -12,6 +13,7 @@ describe('CategoriesComponent', () => {
   let fixture: ComponentFixture<CategoriesComponent>;
   let page: PageMock;
   let store: Store<AppState>;
+  let location: Location;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -25,6 +27,7 @@ describe('CategoriesComponent', () => {
 
     fixture = TestBed.createComponent(CategoriesComponent);
     store = TestBed.inject(Store);
+    location = TestBed.inject(Location);
 
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
@@ -39,14 +42,14 @@ describe('CategoriesComponent', () => {
     expect(page.querySelectorAll('[test-id="category"]').length).toEqual(2);
   })
 
-  // it('given user clicks on product, then go to product page', done => {
-  //   page.querySelectorAll('[test-id="trending"]')[0].click();
-  //   fixture.detectChanges();
+  it('given user clicks on product, then go to product page', done => {
+    page.querySelectorAll('[test-id="category"]')[0].click();
+    fixture.detectChanges();
 
-  //   setTimeout(() => {
-  //     expect(location.path()).toEqual('/products/1');
-  //     done();
-  //   }, 100)
-  // })
+    setTimeout(() => {
+      expect(location.path()).toEqual('/categories/1');
+      done();
+    }, 100)
+  })
 
 });

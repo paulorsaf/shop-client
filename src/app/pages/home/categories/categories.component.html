@@ -1,5 +1,6 @@
 <ion-list lines="none">
-  <ion-card lines="none" *ngFor="let category of (categories$ | async)" test-id="category">
+  <ion-card lines="none" *ngFor="let category of (categories$ | async)"
+    (click)="goToCategoryPage(category)" test-id="category">
     <ion-item>
       <ion-label>{{category.title}}</ion-label>
       <ion-icon name="chevron-forward" slot="end"></ion-icon>

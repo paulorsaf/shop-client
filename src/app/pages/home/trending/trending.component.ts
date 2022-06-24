@@ -30,7 +30,7 @@ export class TrendingComponent implements OnInit {
     this.trendings$ = this.store.select(state => state.trending.trendings);
   }
 
-  goToProduct(product: SlideProduct) {
+  goToProduct(product: Trending) {
     this.router.navigate([`/products/${product.id}`]);
   }
 
