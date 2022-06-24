@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Trending } from 'src/app/model/trending/trending';
 import { AppState } from 'src/app/store/app-state';
-import { SlideProduct } from '../model/slide-product';
 
 @Component({
   selector: 'app-trending',
@@ -14,10 +13,8 @@ import { SlideProduct } from '../model/slide-product';
 export class TrendingComponent implements OnInit {
 
   slideOpts = {
-    slidesPerView: 2.2,
-    spaceBetween: 10,
-    gap: 10
-  }
+    slidesPerView: 2.2
+  };
 
   trendings$: Observable<Trending[]>;
 

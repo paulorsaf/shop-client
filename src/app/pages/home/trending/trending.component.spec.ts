@@ -36,19 +36,19 @@ describe('TrendingComponent', () => {
     fixture = TestBed.createComponent(TrendingComponent);
     location = TestBed.inject(Location);
     store = TestBed.inject(Store);
-    
+
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
 
-    const trendings = <any> [{id: 1}, {id: 2}]
+    const trendings = [{id: 1}, {id: 2}] as any;
     store.dispatch(loadTrendingsSuccess({trendings}));
-    
+
     fixture.detectChanges();
   }));
 
   it('given product list, then show products', () => {
     expect(page.querySelectorAll('[test-id="trending"]').length).toEqual(2);
-  })
+  });
 
   it('given user clicks on product, then go to product page', done => {
     page.querySelectorAll('[test-id="trending"]')[0].click();
@@ -57,7 +57,7 @@ describe('TrendingComponent', () => {
     setTimeout(() => {
       expect(location.path()).toEqual('/products/1');
       done();
-    }, 100)
-  })
+    }, 100);
+  });
 
 });

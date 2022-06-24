@@ -10,7 +10,9 @@
         <ion-text class="discount" *ngIf="product.priceWithDiscount">
           {{product.priceWithDiscount | currency: "R$ "}}
         </ion-text>
-        <ion-button color="primary">Ver</ion-button>
+        <ion-button color="primary" (click)="goToProductPage(product)" test-id="action-button">
+          Ver
+        </ion-button>
       </div>
     </section>
   </ion-slide>

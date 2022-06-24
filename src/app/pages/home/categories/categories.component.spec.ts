@@ -1,5 +1,6 @@
 import { Location } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
 import { PageMock } from 'src/app/model/mocks/page.mock';
@@ -19,6 +20,9 @@ describe('CategoriesComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ CategoriesComponent ],
       imports: [
+        RouterTestingModule.withRoutes([{
+          path: 'categories/:id', component: CategoriesComponent
+        }]),
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
         StoreModule.forFeature('category', categoryReducer)
@@ -32,7 +36,7 @@ describe('CategoriesComponent', () => {
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
 
-    const categories = <any> [{id: 1}, {id: 2}]
+    const categories = [{id: 1}, {id: 2}] as any;
     store.dispatch(loadCategoriesSuccess({categories}));
 
     fixture.detectChanges();
@@ -40,7 +44,7 @@ describe('CategoriesComponent', () => {
 
   it('given categories, then show categories items', () => {
     expect(page.querySelectorAll('[test-id="category"]').length).toEqual(2);
-  })
+  });
 
   it('given user clicks on product, then go to product page', done => {
     page.querySelectorAll('[test-id="category"]')[0].click();
@@ -49,7 +53,7 @@ describe('CategoriesComponent', () => {
     setTimeout(() => {
       expect(location.path()).toEqual('/categories/1');
       done();
-    }, 100)
-  })
+    }, 100);
+  });
 
 });

@@ -1,10 +1,16 @@
-ion-slide {
-    padding-bottom: 1.5rem;
+ion-slides {
+    ion-slide:last-of-type {
+        ion-card {
+            margin-right: 1rem;
+        }
+    }
 }
 
 ion-card {
     text-align: left;
     margin: 0;
+    margin-left: 1rem;
+    margin-bottom: 0.3rem;
 
     ion-card-content.details {
         padding: 1rem;
