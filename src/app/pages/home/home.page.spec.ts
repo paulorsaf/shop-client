@@ -4,6 +4,8 @@ import { Store, StoreModule } from '@ngrx/store';
 import { AppState } from 'src/app/store/app-state';
 import { loadBannersSuccess } from 'src/app/store/banner/banner.actions';
 import { bannerReducer } from 'src/app/store/banner/banner.reducers';
+import { loadCategoriesSuccess } from 'src/app/store/category/category.actions';
+import { categoryReducer } from 'src/app/store/category/category.reducers';
 import { loadTrendingsSuccess } from 'src/app/store/trending/trending.actions';
 import { trendingReducer } from 'src/app/store/trending/trending.reducers';
 import { BannersComponent } from './banners/banners.component';
@@ -24,6 +26,7 @@ describe('HomePage', () => {
       imports: [
         StoreModule.forRoot([]),
         StoreModule.forFeature('banner', bannerReducer),
+        StoreModule.forFeature('category', categoryReducer),
         StoreModule.forFeature('trending', trendingReducer),
         IonicModule.forRoot()
       ]
@@ -49,6 +52,13 @@ describe('HomePage', () => {
 
     it('then load trendings', done => {
       store.select('trending').subscribe(state => {
+        expect(state.isLoading).toBeTruthy();
+        done();
+      })
+    })
+
+    it('then load categories', done => {
+      store.select('category').subscribe(state => {
         expect(state.isLoading).toBeTruthy();
         done();
       })
@@ -112,6 +122,36 @@ describe('HomePage', () => {
 
     it('then show trendings', () => {
       expect(page.querySelector('[test-id="trendings"]')).not.toBeNull();
+    })
+
+  })
+
+  describe('given loading categories', () => {
+
+    it('then show categories loader', () => {
+      expect(page.querySelector('[test-id="categories-loader"]')).not.toBeNull();
+    })
+
+    it('then hide categories', () => {
+      expect(page.querySelector('[test-id="categories"]')).toBeNull();
+    })
+
+  })
+
+  describe('given categories loaded', () => {
+
+    beforeEach(() => {
+      const categories = <any> [{id: 1}, {id: 2}];
+      store.dispatch(loadCategoriesSuccess({categories}));
+      fixture.detectChanges();
+    })
+
+    it('then hide categories loader', () => {
+      expect(page.querySelector('[test-id="categories-loader"]')).toBeNull();
+    })
+
+    it('then show categories', () => {
+      expect(page.querySelector('[test-id="categories"]')).not.toBeNull();
     })
 
   })

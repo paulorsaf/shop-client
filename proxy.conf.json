@@ -1,0 +1,7 @@
+{
+    "/shop-cms/api/*": {
+        "target": "http://paulorsaf.dev",
+        "secure": false,
+        "changeOrigin": true
+    }
+}

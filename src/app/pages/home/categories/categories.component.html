@@ -1,11 +1,7 @@
 <ion-list lines="none">
-  <ion-card lines="none" *ngFor="let category of categories">
+  <ion-card lines="none" *ngFor="let category of (categories$ | async)" test-id="category">
     <ion-item>
-      <ion-icon [name]="category.icon" slot="start"></ion-icon>
-      <ion-label>
-        {{category.name}}
-        <span class="amount-of-items">({{category.amountOfItems}} itens)</span>
-      </ion-label>
+      <ion-label>{{category.title}}</ion-label>
       <ion-icon name="chevron-forward" slot="end"></ion-icon>
     </ion-item>
   </ion-card>

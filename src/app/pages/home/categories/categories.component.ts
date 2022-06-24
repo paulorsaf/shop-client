@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import categoriesMock from '../mock/categories.mock';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { Category } from 'src/app/model/category/category';
+import { AppState } from 'src/app/store/app-state';
 
 @Component({
   selector: 'app-categories',
@@ -8,10 +11,14 @@ import categoriesMock from '../mock/categories.mock';
 })
 export class CategoriesComponent implements OnInit {
 
-  categories = categoriesMock;
+  categories$: Observable<Category[]>;
 
-  constructor() { }
+  constructor(
+    private store: Store<AppState>
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.categories$ = this.store.select(state => state.category.categories);
+  }
 
 }

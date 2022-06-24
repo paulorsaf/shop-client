@@ -8,15 +8,23 @@
   <section class="trending">
     <app-section-title title="Em destaque"></app-section-title>
     <div class="trending-wrapper">
-      <ion-skeleton-text *ngIf="isLoadingTrendings$ | async" animated test-id="trendings-loader"></ion-skeleton-text>
-      <app-trending [products]="trending" *ngIf="!(isLoadingTrendings$ | async)" test-id="trendings"></app-trending>
+      <div class="loader" *ngIf="isLoadingTrendings$ | async" test-id="trendings-loader">
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </div>
+      <app-trending *ngIf="!(isLoadingTrendings$ | async)" test-id="trendings"></app-trending>
     </div>
   </section>
 
   <section class="categories">
     <app-section-title title="Categorias"></app-section-title>
     <div class="categories-wrapper">
-      <app-categories></app-categories>
+      <div test-id="categories-loader" *ngIf="isLoadingCategories$ | async">
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </div>
+      <app-categories *ngIf="!(isLoadingCategories$ | async)" test-id="categories"></app-categories>
     </div>
   </section>
 </ion-content>

@@ -20,8 +20,19 @@ section.banners {
 }
 
 section.trending {
+    .loader {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
     ion-skeleton-text {
-        height: 220px;
+        height: 270px;
+    }
+}
+
+section.categories {
+    ion-skeleton-text {
+        height: 50px;
     }
 }
 
