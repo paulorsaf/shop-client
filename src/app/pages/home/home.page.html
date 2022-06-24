@@ -1,11 +1,15 @@
 <ion-content>
-  <ion-searchbar placeholder="Buscar..."></ion-searchbar>
-  <app-hero [products]="slides"></app-hero>
+  <section class="banners">
+    <ion-searchbar placeholder="Buscar..."></ion-searchbar>
+    <ion-skeleton-text *ngIf="isLoading$ | async" animated test-id="banners-loader"></ion-skeleton-text>
+    <app-banners *ngIf="!(isLoading$ | async)" test-id="banners"></app-banners>
+  </section>
 
   <section class="trending">
     <app-section-title title="Em destaque"></app-section-title>
     <div class="trending-wrapper">
-      <app-trending [products]="trending"></app-trending>
+      <ion-skeleton-text *ngIf="isLoadingTrendings$ | async" animated test-id="trendings-loader"></ion-skeleton-text>
+      <app-trending [products]="trending" *ngIf="!(isLoadingTrendings$ | async)" test-id="trendings"></app-trending>
     </div>
   </section>
 

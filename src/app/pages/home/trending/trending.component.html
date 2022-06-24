@@ -1,14 +1,16 @@
 <ion-slides [options]="slideOpts">
-  <ion-slide *ngFor="let product of products">
-    <ion-card (click)="goToProduct(product)" test-id="product">
+  <ion-slide *ngFor="let product of (trendings$ | async)">
+    <ion-card (click)="goToProduct(product)" test-id="trending">
       <ion-card-content class="ion-no-padding">
         <ion-img object-fit="cover" [src]="product.image"></ion-img>
       </ion-card-content>
       <ion-card-content class="details">
-        <ion-text class="description">{{product.name}}</ion-text>
+        <ion-text class="description">{{product.title}}</ion-text>
         <div class="price">
-          <ion-text>{{product.price.value | currency: product.price.currency}}</ion-text>
-          <ion-text class="discount">{{product.discount.value | currency: product.discount.currency}}</ion-text>
+          <ion-text>{{product.price | currency: "R$ "}}</ion-text>
+          <ion-text class="discount" *ngIf="product.priceWithDiscount">
+            {{product.priceWithDiscount | currency: "R$ "}}
+          </ion-text>
         </div>
       </ion-card-content>
     </ion-card>

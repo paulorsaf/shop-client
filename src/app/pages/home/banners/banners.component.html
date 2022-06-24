@@ -1,0 +1,17 @@
+<ion-slides pager="true">
+  <ion-slide *ngFor="let product of (banners$ | async)" test-id="banner">
+    <img [src]="product.image" object-fit="cover" />
+    <section>
+      <div class="product">
+        <ion-text>{{product.title}}</ion-text>
+      </div>
+      <div class="price">
+        <ion-text>{{product.price | currency: "R$ "}}</ion-text>
+        <ion-text class="discount" *ngIf="product.priceWithDiscount">
+          {{product.priceWithDiscount | currency: "R$ "}}
+        </ion-text>
+        <ion-button color="primary">Ver</ion-button>
+      </div>
+    </section>
+  </ion-slide>
+</ion-slides>

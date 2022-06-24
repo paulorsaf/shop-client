@@ -12,7 +12,21 @@ ion-searchbar {
     --placeholder-opacity: 0.8;
 }
 
-section {
+section.banners {
+    ion-skeleton-text {
+        height: 50vh;
+        margin: 0;
+    }
+}
+
+section.trending {
+    ion-skeleton-text {
+        height: 220px;
+    }
+}
+
+section.trending,
+section.category {
     margin: 1rem 0;
 }
 
