@@ -1,3 +1,11 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button fill="solid"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
   <div class="product" *ngIf="(isLoading$ | async) === false" test-id="product">
     <div *ngIf="product$ | async; let product">
