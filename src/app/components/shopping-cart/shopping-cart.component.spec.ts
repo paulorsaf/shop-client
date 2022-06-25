@@ -4,6 +4,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { ProductOptionsPipeModule } from 'src/app/pipes/product-options/product-options.pipe.module';
+import { ProductTotalPricePipeModule } from 'src/app/pipes/product-total-price/product-total-price.pipe.module';
 import { AppState } from 'src/app/store/app-state';
 import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
@@ -21,6 +22,7 @@ describe('ShoppingCartComponent', () => {
       imports: [
         IonicModule.forRoot(),
         ProductOptionsPipeModule,
+        ProductTotalPricePipeModule,
         StoreModule.forRoot([]),
         StoreModule.forFeature('shoppingCart', shoppingCartReducer)
       ]
