@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Product } from 'src/app/model/product/product';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
+import { ProductOptionsPipe } from 'src/app/pipes/product-options/product-options.pipe';
 import { AppState } from 'src/app/store/app-state';
 import { loadProduct } from 'src/app/store/product/product.actions';
 import { addProduct, openShoppingCart } from 'src/app/store/shopping-cart/shopping-cart.actions';
@@ -29,6 +30,7 @@ export class ProductPage implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private productOptionsPipe: ProductOptionsPipe,
     private store: Store<AppState>,
     private toastController: ToastController
   ) { }
@@ -62,7 +64,6 @@ export class ProductPage implements OnInit {
       }
 
       this.dispatchAddProduct(product);
-      this.showAddProductToShoppingCartSuccessMessage();
     });
   }
 
@@ -82,16 +83,23 @@ export class ProductPage implements OnInit {
     }
 
     this.store.dispatch(addProduct({shoppingCartProduct}));
+    this.showAddProductToShoppingCartSuccessMessage(shoppingCartProduct);
   }
 
-  private async showAddProductToShoppingCartSuccessMessage() {
+  private async showAddProductToShoppingCartSuccessMessage(shoppingCartProduct: ShoppingCartProduct) {
     const toast = await this.toastController.create({
-      message: 'Produto adicionado ao carrinho',
-      duration: 1000,
+      message: this.getSuccessMessage(shoppingCartProduct),
+      duration: 3000,
       position: 'middle',
       color: 'success'
     });
     toast.present();
+  }
+
+  private getSuccessMessage(shoppingCartProduct: ShoppingCartProduct) {
+    const optionsMessage = this.productOptionsPipe.transform(shoppingCartProduct);
+
+    return `Produto ${shoppingCartProduct.product.title} ${optionsMessage} adicionado ao carrinho`;
   }
 
 }

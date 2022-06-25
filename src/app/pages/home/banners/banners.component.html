@@ -5,11 +5,17 @@
       <div class="product">
         <ion-text>{{product.title}}</ion-text>
       </div>
-      <div class="price">
-        <ion-text>{{product.price | currency: "R$ "}}</ion-text>
-        <ion-text class="discount" *ngIf="product.priceWithDiscount">
-          {{product.priceWithDiscount | currency: "R$ "}}
+      <div class="price" *ngIf="product.priceWithDiscount">
+        <ion-text>{{product.priceWithDiscount | currency: "R$ "}}</ion-text>
+        <ion-text class="discount">
+          {{product.price | currency: "R$ "}}
         </ion-text>
+        <ion-button color="primary" (click)="goToProductPage(product)" test-id="action-button">
+          Ver
+        </ion-button>
+      </div>
+      <div class="price" *ngIf="!product.priceWithDiscount">
+        <ion-text>{{product.price | currency: "R$ "}}</ion-text>
         <ion-button color="primary" (click)="goToProductPage(product)" test-id="action-button">
           Ver
         </ion-button>

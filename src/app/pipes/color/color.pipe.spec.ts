@@ -1,4 +1,4 @@
-import { COLORS_MAP } from '../model/product/colors.map';
+import { COLORS_MAP } from '../../model/product/colors.map';
 import { ColorPipe } from './color.pipe';
 
 describe('Color pipe', () => {

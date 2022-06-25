@@ -28,11 +28,14 @@
         <div class="title">
           <ion-text>{{product.title}}</ion-text>
         </div>
-        <div class="price">
-          <ion-text>{{product.price | currency: "R$ "}}</ion-text>
+        <div class="price" *ngIf="product.priceWithDiscount">
+          <ion-text>{{product.priceWithDiscount | currency: "R$ "}}</ion-text>
           <ion-text class="discount">
-            {{product.priceWithDiscount | currency: "R$ "}}
+            {{product.price | currency: "R$ "}}
           </ion-text>
+        </div>
+        <div class="price" *ngIf="!product.priceWithDiscount">
+          <ion-text>{{product.price | currency: "R$ "}}</ion-text>
         </div>
       </section>
 
@@ -88,18 +91,7 @@
   <ion-toolbar color="primary">
     <ion-title align="middle" (click)="addToShoppingCart()" class="opacity"
       test-id="add-product-button">
-      Adicionar ({{totalPrice$ | async | currency: "R$ "}})
+      Adicionar ao carrinho
     </ion-title>
   </ion-toolbar>
 </ion-footer>
-
-<script>
-  var modal = document.querySelector('ion-modal');
-  var searchBar = document.querySelector('ion-searchbar');
-
-  modal.breakpoints = [0, 0.25, 0.5, 0.75];
-
-  searchBar.addEventListener('click', () => {
-    modal.setCurrentBreakpoint(0.75);
-  });
-</script>

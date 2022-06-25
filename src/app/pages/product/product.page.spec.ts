@@ -8,10 +8,12 @@ import { AppState } from 'src/app/store/app-state';
 import { productReducer } from 'src/app/store/product/product.reducers';
 import { ProductPage } from './product.page';
 import { loadProductSuccess } from 'src/app/store/product/product.actions';
-import { ColorPipeModule } from 'src/app/pipes/color.pipe.module';
+import { ColorPipeModule } from 'src/app/pipes/color/color.pipe.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
+import { ProductOptionsPipeModule } from 'src/app/pipes/product-options/product-options.pipe.module';
+import { ProductOptionsPipe } from 'src/app/pipes/product-options/product-options.pipe';
 
 describe('ProductPage', () => {
   let component: ProductPage;
@@ -32,8 +34,12 @@ describe('ProductPage', () => {
         ColorPipeModule,
         RouterTestingModule.withRoutes([]),
         StoreModule.forRoot([]),
+        ProductOptionsPipeModule,
         StoreModule.forFeature('product', productReducer),
         StoreModule.forFeature('shoppingCart', shoppingCartReducer)
+      ],
+      providers: [
+        ProductOptionsPipe
       ]
     })
     .overrideProvider(ActivatedRoute, {useValue: activatedRoute})

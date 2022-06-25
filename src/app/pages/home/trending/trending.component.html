@@ -6,11 +6,14 @@
       </ion-card-content>
       <ion-card-content class="details">
         <ion-text class="description">{{product.title}}</ion-text>
-        <div class="price">
-          <ion-text>{{product.price | currency: "R$ "}}</ion-text>
-          <ion-text class="discount" *ngIf="product.priceWithDiscount">
-            {{product.priceWithDiscount | currency: "R$ "}}
+        <div class="price" *ngIf="product.priceWithDiscount">
+          <ion-text>{{product.priceWithDiscount | currency: "R$ "}}</ion-text>
+          <ion-text class="discount">
+            {{product.price | currency: "R$ "}}
           </ion-text>
+        </div>
+        <div class="price" *ngIf="!product.priceWithDiscount">
+          <ion-text>{{product.price | currency: "R$ "}}</ion-text>
         </div>
       </ion-card-content>
     </ion-card>

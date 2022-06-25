@@ -1,5 +1,5 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
-import { COLORS_MAP } from '../model/product/colors.map';
+import { COLORS_MAP } from '../../model/product/colors.map';
 
 @Pipe({name: 'color'})
 @Injectable()
