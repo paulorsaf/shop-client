@@ -24,7 +24,7 @@ export class TrendingService {
           switchMap(products => of(products.map(p => {
             const trending: Trending = {
               title: p.title,
-              body: p.body,
+              description: p.description,
               id: p.id,
               image: p.images[0],
               price: p.price,

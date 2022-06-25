@@ -16,6 +16,8 @@ export class ProductPage implements OnInit {
   isLoading$: Observable<boolean>;
   product$: Observable<Product>;
 
+  selectedColor = '';
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private store: Store<AppState>
@@ -27,6 +29,10 @@ export class ProductPage implements OnInit {
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.store.dispatch(loadProduct({id}));
+  }
+
+  setColor(color: string) {
+    this.selectedColor = color;
   }
 
 }

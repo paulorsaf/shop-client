@@ -22,17 +22,17 @@ export class ProductService {
       map(product => {
         product.images = this.transformArrayWithPrefix(product.images, environment.imageBaseUrl);
         product.colors = this.transformArray(product.colors);
+        product.sizes = this.transformArray(product.sizes);
         return product;
       })
     );
   }
 
   private transformArray(array) {
-    const value = ((array as unknown) as string)?.split(', ');
-    if (value) {
-      return value.map(c => c);
+    if (!array) {
+      return [];
     }
-    return [];
+    return this.transformArrayWithPrefix(array, '');
   }
 
   private transformArrayWithPrefix(array, prefix: string) {

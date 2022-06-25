@@ -21,81 +21,45 @@
         </div>
       </section>
 
-      <section class="options">
+      <section class="options" *ngIf="product.colors?.length" test-id="product-colors">
         <div class="title">
           <ion-text>Cor:</ion-text>
         </div>
-        <ion-icon name="ellipse" style="color: white" class="selected"></ion-icon>
-        <ion-icon name="ellipse" style="color: red"></ion-icon>
-        <ion-icon name="ellipse" style="color: green"></ion-icon>
-        <ion-icon name="ellipse" style="color: blue"></ion-icon>
-        <ion-icon name="ellipse"></ion-icon>
+        <ion-icon name="ellipse" *ngFor="let color of product.colors"
+          [ngStyle]="{'color': color | color}" (click)="setColor(color)"
+          [ngClass]="color === selectedColor ? 'selected' : ''">
+        </ion-icon>
       </section>
 
-      <section class="options">
+      <section class="options" *ngIf="product.sizes?.length" test-id="product-sizes">
         <div class="title">
           <ion-text>Tamanho:</ion-text>
         </div>
         <div>
           <ion-segment mode="ios">
-            <ion-segment-button value="S">
-              <ion-label>S</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="M">
-              <ion-label>M</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="L">
-              <ion-label>L</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="XL">
-              <ion-label>XL</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="XXL">
-              <ion-label>XXL</ion-label>
+            <ion-segment-button *ngFor="let size of product.sizes" [value]="size">
+              <ion-label>{{size}}</ion-label>
             </ion-segment-button>
           </ion-segment>
         </div>
+      </section>
+
+      <section class="options" *ngIf="product.description" test-id="product-description">
+        <div class="title">
+          <ion-text>Descriçao:</ion-text>
+        </div>
+        <div [innerHTML]="product.description" class="description"></div>
       </section>
     </div>
   </div>
 
   <div test-id="loader" *ngIf="isLoading$ | async">
-    <section class="images">
-      <ion-skeleton-text animated class="product-images"></ion-skeleton-text>
-    </section>
-    <section class="header">
-      <ion-skeleton-text animated class="product-title"></ion-skeleton-text>
-      <ion-skeleton-text animated class="product-price"></ion-skeleton-text>
-    </section>
-    <section class="options">
-      <ion-skeleton-text animated class="options-title"></ion-skeleton-text>
-      <div class="options-round">
-        <ion-skeleton-text animated class="options"></ion-skeleton-text>
-        <ion-skeleton-text animated class="options"></ion-skeleton-text>
-        <ion-skeleton-text animated class="options"></ion-skeleton-text>
-        <ion-skeleton-text animated class="options"></ion-skeleton-text>
-        <ion-skeleton-text animated class="options"></ion-skeleton-text>
-      </div>
-    </section>
-    <section class="options">
-      <ion-skeleton-text animated class="options-title"></ion-skeleton-text>
-      <div class="options-size">
-        <ion-skeleton-text animated class="option"></ion-skeleton-text>
-      </div>
-    </section>
+    <app-product-loader></app-product-loader>
   </div>
 </ion-content>
 
 <ion-footer *ngIf="(isLoading$ | async) === false">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-buttons slot="end">
-        <ion-button><ion-icon name="remove-outline"></ion-icon></ion-button>
-      </ion-buttons>
-    </ion-buttons>
-    <ion-title>2 (R$ 20,00)</ion-title>
-    <ion-buttons slot="end">
-      <ion-button><ion-icon name="add-outline"></ion-icon></ion-button>
-    </ion-buttons>
+  <ion-toolbar color="primary">
+    <ion-title align="middle">Adicionar ao carrinho</ion-title>
   </ion-toolbar>
 </ion-footer>

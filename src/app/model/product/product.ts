@@ -1,9 +1,10 @@
 export type Product = {
-    body: string;
     colors: string[];
+    description: string;
     id: string;
     images: string[];
     price: string;
     priceWithDiscount: string;
+    sizes: string[];
     title: string;
 };

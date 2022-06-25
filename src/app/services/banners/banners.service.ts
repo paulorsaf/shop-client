@@ -24,7 +24,7 @@ export class BannersService {
           switchMap(products => of(products.map(p => {
             const banner: Banner = {
               title: p.title,
-              body: p.body,
+              description: p.description,
               id: p.id,
               image: p.images[0],
               price: p.price,

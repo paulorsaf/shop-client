@@ -1,6 +1,6 @@
 export type Trending = {
     title: string;
-    body: string;
+    description: string;
     id: string;
     image: string;
     price: string;

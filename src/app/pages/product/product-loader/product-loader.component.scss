@@ -1,0 +1,31 @@
+ion-skeleton-text {
+    &.product-images {
+        height: 50vh;
+        border-radius: 0 0 4rem 4rem;
+    }
+    &.product-title {
+        height: 4.3rem;
+    }
+    &.product-price {
+        height: 3.2rem;
+    }
+    &.options-title {
+        height: 2.1rem;
+        width: 100px;
+    }
+    &.options {
+        height: 3.6rem;
+    }
+    &.option {
+        height: 3.2rem;
+    }
+}
+
+.options-round {
+    display: flex;
+    .options {
+        width: 3.6rem;
+        border-radius: 500px;
+        margin-right: 1rem;
+    }
+}
