@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { appInitialState } from '../app-initial-state';
 import { isAddProductOnShoppingCart, isShoppingCardProductSameAsAddProduct, ShoppingCartState } from './shopping-cart.state';
-import { addProduct } from './shopping-cart.actions';
+import { addProduct, closeShoppingCart, openShoppingCart } from './shopping-cart.actions';
 
 const initialState: ShoppingCartState = appInitialState.shoppingCart;
 
@@ -18,6 +18,14 @@ const shoppingCartReduce = createReducer(
       })
       :
       [...state.products, {...action.shoppingCartProduct, quantity: 1}]
+  })),
+  on(openShoppingCart, (state) => ({
+    ...state,
+    isOpen: true
+  })),
+  on(closeShoppingCart, (state) => ({
+    ...state,
+    isOpen: false
   }))
 );
 

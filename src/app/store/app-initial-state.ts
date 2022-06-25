@@ -20,6 +20,7 @@ export const appInitialState: AppState = {
         product: null
     },
     shoppingCart: {
+        isOpen: false,
         products: []
     },
     trending: {

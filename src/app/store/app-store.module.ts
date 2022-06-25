@@ -8,6 +8,7 @@ import { CategoryEffects } from './category/category.effects';
 import { categoryReducer } from './category/category.reducers';
 import { ProductEffects } from './product/product.effects';
 import { productReducer } from './product/product.reducers';
+import { ShoppingCartEffects } from './shopping-cart/shopping-cart.effects';
 import { shoppingCartReducer } from './shopping-cart/shopping-cart.reducers';
 import { TrendingEffects } from './trending/trending.effects';
 import { trendingReducer } from './trending/trending.reducers';
@@ -24,6 +25,7 @@ import { trendingReducer } from './trending/trending.reducers';
       BannerEffects,
       CategoryEffects,
       ProductEffects,
+      ShoppingCartEffects,
       TrendingEffects
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),

@@ -1,16 +1,50 @@
 import { Product } from 'src/app/model/product/product';
 import { appInitialState } from '../app-initial-state';
-import { AddProduct, addProduct } from './shopping-cart.actions';
+import { AppState } from '../app-state';
+import { AddProduct, addProduct, closeShoppingCart, openShoppingCart } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
-import { isAddProductOnShoppingCart, isProductOnShoppingCart, ShoppingCartState } from './shopping-cart.state';
+import { isAddProductOnShoppingCart, isProductOnShoppingCart, ShoppingCartState, totalPrice, totalQuantity } from './shopping-cart.state';
 
 describe('Shopping cart store', () => {
+
+    describe('given totalPrice', () => {
+
+        let state: AppState;
+
+        beforeEach(() => {
+            state = {
+                shoppingCart: {
+                    products: [{
+                        product: {price: 10},
+                        quantity: 5
+                    }, {
+                        product: {price: 20},
+                        quantity: 5
+                    }, {
+                        product: {price: 50},
+                        quantity: 2
+                    }]
+                }
+            } as any;
+        });
+
+        it('when no discount, then sum normal prices', () => {
+            expect(totalPrice(state)).toEqual(250);
+        });
+
+        it('when there is a discount, then sum normal prices with discount prices', () => {
+            state.shoppingCart.products[2].product.priceWithDiscount = '25';
+
+            expect(totalPrice(state)).toEqual(200);
+        });
+
+    });
 
     describe('given isProductOnShoppingCart', () => {
 
         const state: ShoppingCartState = {
-            products: [{product: {id: 1}}] as any
-        };
+            products: [{product: {id: 1}}]
+        } as any;
 
         it('when product exists on shopping cart, then return true', () => {
             const product: Product = {id: 1} as any;
@@ -32,8 +66,8 @@ describe('Shopping cart store', () => {
 
         beforeEach(() => {
             state = {
-                products: [{product: {id: 1}}] as any
-            };
+                products: [{product: {id: 1}}]
+            } as any;
         });
 
         it('when product exists on shopping cart, then return true', () => {
@@ -62,6 +96,16 @@ describe('Shopping cart store', () => {
             expect(isAddProductOnShoppingCart(state, product)).toBeFalsy();
         });
 
+    });
+
+    it('totalQuantity', () => {
+        const state: AppState = {
+            shoppingCart: {
+                products: [{quantity: 5}, {quantity: 5}, {quantity: 2}]
+            }
+        } as any;
+
+        expect(totalQuantity(state)).toEqual(12);
     });
 
     describe('given addProduct', () => {
@@ -113,6 +157,34 @@ describe('Shopping cart store', () => {
             });
         });
 
+    });
+
+    it('openShoppingCart', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isOpen: false
+        };
+
+        const newState = shoppingCartReducer(initialState, openShoppingCart());
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            isOpen: true
+        });
+    });
+
+    it('closeShoppingCart', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isOpen: true
+        };
+
+        const newState = shoppingCartReducer(initialState, closeShoppingCart());
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            isOpen: false
+        });
     });
 
 });

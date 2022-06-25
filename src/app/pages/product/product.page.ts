@@ -8,8 +8,8 @@ import { Product } from 'src/app/model/product/product';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from 'src/app/store/app-state';
 import { loadProduct } from 'src/app/store/product/product.actions';
-import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
-import { isProductOnShoppingCart } from 'src/app/store/shopping-cart/shopping-cart.state';
+import { addProduct, openShoppingCart } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { totalPrice, totalQuantity } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
   selector: 'app-product',
@@ -20,6 +20,8 @@ export class ProductPage implements OnInit {
 
   isLoading$: Observable<boolean>;
   product$: Observable<Product>;
+  totalPrice$: Observable<number>;
+  totalQuantity$: Observable<number>;
 
   hasTriedToAdd = false;
   selectedColor = '';
@@ -34,6 +36,8 @@ export class ProductPage implements OnInit {
   ngOnInit() {
     this.isLoading$ = this.store.select(state => state.product.isLoading);
     this.product$ = this.store.select(state => state.product.product);
+    this.totalPrice$ = this.store.select(totalPrice);
+    this.totalQuantity$ = this.store.select(totalQuantity);
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.store.dispatch(loadProduct({id}));
@@ -62,6 +66,10 @@ export class ProductPage implements OnInit {
     });
   }
 
+  showShoppingCart() {
+    this.store.dispatch(openShoppingCart());
+  }
+
   private dispatchAddProduct(product: Product){
     const shoppingCartProduct: ShoppingCartProduct = {
       product
@@ -79,8 +87,8 @@ export class ProductPage implements OnInit {
   private async showAddProductToShoppingCartSuccessMessage() {
     const toast = await this.toastController.create({
       message: 'Produto adicionado ao carrinho',
-      duration: 2000,
-      position: 'bottom',
+      duration: 1000,
+      position: 'middle',
       color: 'success'
     });
     toast.present();
