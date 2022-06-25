@@ -31,24 +31,35 @@
 
       <section class="options" *ngIf="product.colors?.length" test-id="product-colors">
         <div class="title">
-          <ion-text>Cor:</ion-text>
+          <ion-text>Cor *:</ion-text>
         </div>
         <ion-icon name="ellipse" *ngFor="let color of product.colors"
           [ngStyle]="{'color': color | color}" (click)="setColor(color)"
-          [ngClass]="color === selectedColor ? 'selected' : ''">
+          [ngClass]="color === selectedColor ? 'selected' : ''" test-id="color">
         </ion-icon>
+        <div *ngIf="hasTriedToAdd && !selectedColor">
+          <ion-text color="danger" class="error" test-id="color-required-error">
+            Cor é obrigatória
+          </ion-text>
+        </div>
       </section>
 
       <section class="options" *ngIf="product.sizes?.length" test-id="product-sizes">
         <div class="title">
-          <ion-text>Tamanho:</ion-text>
+          <ion-text>Tamanho *:</ion-text>
         </div>
         <div>
-          <ion-segment mode="ios">
-            <ion-segment-button *ngFor="let size of product.sizes" [value]="size">
+          <ion-segment mode="ios" (ionChange)="setSize($event)">
+            <ion-segment-button *ngFor="let size of product.sizes" [value]="size"
+              test-id="size">
               <ion-label>{{size}}</ion-label>
             </ion-segment-button>
           </ion-segment>
+        </div>
+        <div *ngIf="hasTriedToAdd && !selectedSize">
+          <ion-text color="danger" class="error" test-id="size-required-error">
+            Tamanho é obrigatório
+          </ion-text>
         </div>
       </section>
 
@@ -68,6 +79,8 @@
 
 <ion-footer *ngIf="(isLoading$ | async) === false">
   <ion-toolbar color="primary">
-    <ion-title align="middle">Adicionar ao carrinho</ion-title>
+    <ion-title align="middle" (click)="addToShoppingCart()" test-id="add-product-button">
+      Adicionar ao carrinho
+    </ion-title>
   </ion-toolbar>
 </ion-footer>

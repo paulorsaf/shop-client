@@ -19,6 +19,9 @@ export const appInitialState: AppState = {
         isLoading: false,
         product: null
     },
+    shoppingCart: {
+        products: []
+    },
     trending: {
         error: null,
         isLoaded: false,

@@ -3,7 +3,7 @@ import { ProductState } from './product-state';
 import { loadProduct, loadProductFail, loadProductSuccess } from './product.actions';
 import { productReducer } from './product.reducers';
 
-describe('Trending store', () => {
+describe('Product store', () => {
 
     it('loadProduct', () => {
         const initialState: ProductState = {
