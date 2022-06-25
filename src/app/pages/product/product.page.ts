@@ -9,6 +9,7 @@ import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shoppin
 import { AppState } from 'src/app/store/app-state';
 import { loadProduct } from 'src/app/store/product/product.actions';
 import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { isProductOnShoppingCart } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
   selector: 'app-product',
@@ -18,7 +19,6 @@ import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
 export class ProductPage implements OnInit {
 
   isLoading$: Observable<boolean>;
-  isProductOnShoppingCart$: Observable<boolean>;
   product$: Observable<Product>;
 
   hasTriedToAdd = false;
@@ -33,11 +33,6 @@ export class ProductPage implements OnInit {
 
   ngOnInit() {
     this.isLoading$ = this.store.select(state => state.product.isLoading);
-    this.isProductOnShoppingCart$ = this.store.select(
-      state => state.shoppingCart.products?.some(
-        p => p.product.id === state.product.product?.id
-      )
-    );
     this.product$ = this.store.select(state => state.product.product);
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');

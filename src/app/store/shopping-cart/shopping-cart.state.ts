@@ -9,10 +9,10 @@ export type ShoppingCartState = {
 export const isProductOnShoppingCart = (state: ShoppingCartState, product: Product) =>
     state.products.some(p => p.product.id === product.id);
 
-export const isAddProductOnShoppingCart = (state: ShoppingCartState, addProduct: AddProduct) => {
-    const product = state.products.find(p => p.product.id === addProduct.product.id);
-    if (product) {
-        return product.color === addProduct.color && product.size === addProduct.size;
-    }
-    return false;
-};
+export const isAddProductOnShoppingCart = (state: ShoppingCartState, addProduct: AddProduct) =>
+    state.products.some(p => isShoppingCardProductSameAsAddProduct(p, addProduct));
+
+export const isShoppingCardProductSameAsAddProduct = (shoppingCartProduct: ShoppingCartProduct, addProduct: AddProduct) =>
+    shoppingCartProduct.product.id === addProduct.product.id &&
+    shoppingCartProduct.color === addProduct.color &&
+    shoppingCartProduct.size === addProduct.size;
