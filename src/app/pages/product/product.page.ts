@@ -49,7 +49,7 @@ export class ProductPage implements OnInit {
     this.selectedColor = color;
   }
 
-  setSize(event: SegmentCustomEvent) {
+  setSize(event: any) {
     this.selectedSize = event.target.value;
   }
 

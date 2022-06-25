@@ -29,6 +29,7 @@ import { ProductTotalPricePipeModule } from './pipes/product-total-price/product
     ProductOptionsPipe,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
+  exports: [ShoppingCartComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
