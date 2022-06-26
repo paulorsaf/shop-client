@@ -1,29 +1,46 @@
 <ion-content>
   <section *ngIf="(products$ | async).length === 0" class="empty" test-id="empty">
-    Nenhum produto adicionado ao carrinho.
+    Nenhum produto adicionado ao carrinho
   </section>
-
-  <ion-list *ngIf="(products$ | async).length" test-id="products">
-    <ion-item *ngFor="let shoppingCartProduct of (products$ | async)" test-id="product">
-      <ion-avatar slot="start">
-        <ion-img [src]="shoppingCartProduct.product.images[0]"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h2>{{shoppingCartProduct.product.title}}</h2>
-        <p>{{shoppingCartProduct | productOptions}}</p>
-        <p class="price" *ngIf="shoppingCartProduct.product.priceWithDiscount">
-          <ion-text>{{shoppingCartProduct.product.priceWithDiscount | currency: "R$ "}}</ion-text>
-          <ion-text class="discount">
-            {{shoppingCartProduct.product.price | currency: "R$ "}}
-          </ion-text>
-        </p>
-        <p class="price" *ngIf="!shoppingCartProduct.product.priceWithDiscount">
-          <ion-text>{{shoppingCartProduct.product.price | currency: "R$ "}}</ion-text>
-        </p>
-      </ion-label>
-      <ion-button slot="end">
-        {{shoppingCartProduct | productTotalPrice | currency: "R$ "}}
-      </ion-button>
-    </ion-item>
-  </ion-list>
+  <section *ngIf="(products$ | async).length" test-id="products">
+    <ion-list>
+      <ion-item lines="none">
+        <ion-buttons slot="end">
+          <ion-button fill="clear">
+            {{totalQuantity$ | async}}
+            {{(totalQuantity$ | async) === 1 ? 'item' : 'itens'}}
+          </ion-button>
+          <ion-button fill="clear">
+            {{totalPrice$ | async | currency: "R$ "}}
+          </ion-button>
+          <ion-button fill="solid" color="primary">
+            Finalizar compra
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+    <ion-list>
+      <ion-item *ngFor="let shoppingCartProduct of (products$ | async)" test-id="product">
+        <ion-thumbnail slot="start">
+          <ion-img [src]="shoppingCartProduct.product.images[0]"></ion-img>
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{shoppingCartProduct.quantity}}x {{shoppingCartProduct.product.title}}</h2>
+          <p>{{shoppingCartProduct | productOptions}}</p>
+          <p class="price" *ngIf="shoppingCartProduct.product.priceWithDiscount">
+            <ion-text>{{shoppingCartProduct.product.priceWithDiscount | currency: "R$ "}}</ion-text>
+            <ion-text class="discount">
+              {{shoppingCartProduct.product.price | currency: "R$ "}}
+            </ion-text>
+          </p>
+          <p class="price" *ngIf="!shoppingCartProduct.product.priceWithDiscount">
+            <ion-text>{{shoppingCartProduct.product.price | currency: "R$ "}}</ion-text>
+          </p>
+        </ion-label>
+        <ion-button fill="clear" slot="end">
+          {{shoppingCartProduct | productTotalPrice | currency: "R$ "}}
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </section>
 </ion-content>
