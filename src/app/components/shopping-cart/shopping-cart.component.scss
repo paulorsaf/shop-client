@@ -18,3 +18,14 @@ section.empty {
         font-size: 1.2rem;
     }
 }
+
+.totalizers {
+    ion-button {
+        --padding-end: 5px;
+        --padding-start: 5px;
+        &.amount {
+            --padding-start: 0;
+            --padding-end: 0;
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import { Product } from 'src/app/model/product/product';
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
-import { AddProduct, addProduct, closeShoppingCart, openShoppingCart } from './shopping-cart.actions';
+import { AddProduct, addProduct, closeShoppingCart, minusItem, openShoppingCart, plusItem, removeProduct } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { isAddProductOnShoppingCart, isProductOnShoppingCart, ShoppingCartState, totalPrice, totalQuantity } from './shopping-cart.state';
 
@@ -184,6 +184,51 @@ describe('Shopping cart store', () => {
         expect(newState).toEqual({
             ...appInitialState.shoppingCart,
             isOpen: false
+        });
+    });
+
+    it('plusItem', () => {
+        const shoppingCartProduct = {product: {id: 1}, quantity: 2} as any;
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            products: [shoppingCartProduct] as any
+        };
+
+        const newState = shoppingCartReducer(initialState, plusItem({shoppingCartProduct}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            products: [{...shoppingCartProduct, quantity: 3}]
+        });
+    });
+
+    it('minusItem', () => {
+        const shoppingCartProduct = {product: {id: 1}, quantity: 2} as any;
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            products: [shoppingCartProduct] as any
+        };
+
+        const newState = shoppingCartReducer(initialState, minusItem({shoppingCartProduct}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            products: [{...shoppingCartProduct, quantity: 1}]
+        });
+    });
+
+    it('removeProduct', () => {
+        const shoppingCartProduct = {product: {id: 1}, quantity: 2} as any;
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            products: [shoppingCartProduct] as any
+        };
+
+        const newState = shoppingCartReducer(initialState, removeProduct({shoppingCartProduct}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            products: []
         });
     });
 
