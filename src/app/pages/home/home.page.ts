@@ -31,4 +31,4 @@ export class HomePage implements OnInit {
     this.store.dispatch(loadTrendings());
   }
 
-}
+};

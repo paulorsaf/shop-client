@@ -8,6 +8,7 @@ import { BannersComponent } from './banners/banners.component';
 import { TrendingComponent } from './trending/trending.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SectionTitleComponent } from './section-title/section-title.component';
+import { HeaderModule } from 'src/app/components/header/header.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { SectionTitleComponent } from './section-title/section-title.component';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
+    HeaderModule
   ],
   declarations: [
     HomePage,

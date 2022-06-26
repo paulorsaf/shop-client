@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SegmentCustomEvent, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -9,8 +9,8 @@ import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shoppin
 import { ProductOptionsPipe } from 'src/app/pipes/product-options/product-options.pipe';
 import { AppState } from 'src/app/store/app-state';
 import { loadProduct } from 'src/app/store/product/product.actions';
-import { addProduct, openShoppingCart } from 'src/app/store/shopping-cart/shopping-cart.actions';
-import { totalPrice, totalQuantity } from 'src/app/store/shopping-cart/shopping-cart.state';
+import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { totalPrice } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
   selector: 'app-product',
@@ -22,7 +22,6 @@ export class ProductPage implements OnInit {
   isLoading$: Observable<boolean>;
   product$: Observable<Product>;
   totalPrice$: Observable<number>;
-  totalQuantity$: Observable<number>;
 
   hasTriedToAdd = false;
   selectedColor = '';
@@ -39,7 +38,6 @@ export class ProductPage implements OnInit {
     this.isLoading$ = this.store.select(state => state.product.isLoading);
     this.product$ = this.store.select(state => state.product.product);
     this.totalPrice$ = this.store.select(totalPrice);
-    this.totalQuantity$ = this.store.select(totalQuantity);
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.store.dispatch(loadProduct({id}));
@@ -65,10 +63,6 @@ export class ProductPage implements OnInit {
 
       this.dispatchAddProduct(product);
     });
-  }
-
-  showShoppingCart() {
-    this.store.dispatch(openShoppingCart());
   }
 
   private dispatchAddProduct(product: Product){

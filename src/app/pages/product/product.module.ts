@@ -6,6 +6,7 @@ import { ProductPageRoutingModule } from './product-routing.module';
 import { ProductPage } from './product.page';
 import { ColorPipeModule } from 'src/app/pipes/color/color.pipe.module';
 import { ProductLoaderComponent } from './product-loader/product-loader.component';
+import { HeaderModule } from 'src/app/components/header/header.module';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { ProductLoaderComponent } from './product-loader/product-loader.componen
     FormsModule,
     IonicModule,
     ProductPageRoutingModule,
-    ColorPipeModule
+    ColorPipeModule,
+    HeaderModule
   ],
   declarations: [
     ProductPage,

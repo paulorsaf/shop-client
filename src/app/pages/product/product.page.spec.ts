@@ -292,14 +292,4 @@ describe('ProductPage', () => {
 
   });
 
-  it('given user clicks on shopping cart button, then open shopping cart', done => {
-    page.querySelector('[test-id="shopping-cart-button"]').click();
-    fixture.detectChanges();
-
-    store.select('shoppingCart').subscribe(state => {
-      expect(state.isOpen).toBeTruthy();
-      done();
-    });
-  });
-
 });
