@@ -20,12 +20,26 @@ export class ProductService {
     return this.http.get<Product[]>(url).pipe(
       switchMap(products => of(products[0])),
       map(product => {
-        product.images = this.transformArrayWithPrefix(product.images, environment.imageBaseUrl);
-        product.colors = this.transformArray(product.colors);
-        product.sizes = this.transformArray(product.sizes);
+        this.adjustProduct(product);
         return product;
       })
     );
+  }
+
+  findByCategory(id: string): Observable<Product[]> {
+    const url = `${environment.apiCms}/categories/${id}/products?_format=json`;
+    return this.http.get<Product[]>(url).pipe(
+      map(products => {
+        products.forEach(p => this.adjustProduct(p));
+        return products;
+      })
+    );
+  }
+
+  private adjustProduct(product: Product) {
+    product.images = this.transformArrayWithPrefix(product.images, environment.imageBaseUrl);
+    product.colors = this.transformArray(product.colors);
+    product.sizes = this.transformArray(product.sizes);
   }
 
   private transformArray(array) {

@@ -9,6 +9,7 @@ import { TrendingComponent } from './trending/trending.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SectionTitleComponent } from './section-title/section-title.component';
 import { HeaderModule } from 'src/app/components/header/header.module';
+import { ProductCardModule } from 'src/app/components/product-card/product-card.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { HeaderModule } from 'src/app/components/header/header.module';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    HeaderModule
+    HeaderModule,
+    ProductCardModule
   ],
   declarations: [
     HomePage,

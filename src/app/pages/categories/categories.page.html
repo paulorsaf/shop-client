@@ -1,9 +1,25 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>categories</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button fill="clear" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="light">{{(category$ | async)?.title}}</ion-title>
+    <ion-buttons slot="end">
+      <app-header></app-header>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  
+  <section *ngIf="isLoading$ | async" class="loader" test-id="products-loader">
+    <ion-skeleton-text animated class="product"></ion-skeleton-text>
+    <ion-skeleton-text animated class="product"></ion-skeleton-text>
+    <ion-skeleton-text animated class="product"></ion-skeleton-text>
+    <ion-skeleton-text animated class="product"></ion-skeleton-text>
+  </section>
 
+  <section *ngIf="(isLoading$ | async) === false" class="products" test-id="products">
+    <app-product-card *ngFor="let product of (products$ | async)" [product]="product"></app-product-card>
+  </section>
 </ion-content>

@@ -19,16 +19,11 @@ export class TrendingComponent implements OnInit {
   trendings$: Observable<Trending[]>;
 
   constructor(
-    private router: Router,
     private store: Store<AppState>
   ) { }
 
   ngOnInit() {
     this.trendings$ = this.store.select(state => state.trending.trendings);
-  }
-
-  goToProduct(product: Trending) {
-    this.router.navigate([`/products/${product.id}`]);
   }
 
 }

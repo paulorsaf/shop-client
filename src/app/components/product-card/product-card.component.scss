@@ -1,0 +1,31 @@
+ion-card {
+    text-align: left;
+
+    ion-card-content.details {
+        padding: 1rem;
+    }
+
+    ion-img {
+        height: 26rem;
+        object-fit: cover;
+    }
+
+    .description {
+        font-size: 1.8rem;
+    }
+    .price {
+        color: #444;
+        font-weight: 600;
+        font-size: 1.6rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: space-between;
+    
+        .discount {
+            font-size: 1.2rem;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+    }
+}

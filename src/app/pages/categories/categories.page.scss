@@ -1,0 +1,21 @@
+.products {
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+
+    app-product-card {
+        flex: 50%;
+    }
+}
+
+.loader {
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+
+    ion-skeleton-text {
+        flex: 50%;
+        height: 300px;
+    }
+}

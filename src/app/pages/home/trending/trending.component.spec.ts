@@ -13,7 +13,6 @@ import { TrendingComponent } from './trending.component';
 describe('TrendingComponent', () => {
   let component: TrendingComponent;
   let fixture: ComponentFixture<TrendingComponent>;
-  let location: Location;
   let page: PageMock;
   let store: Store<AppState>;
 
@@ -23,10 +22,6 @@ describe('TrendingComponent', () => {
         TrendingComponent
       ],
       imports: [
-        RouterTestingModule.withRoutes([{
-          path: 'products/:id',
-          component: ProductPage
-        }]),
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
         StoreModule.forFeature('trending', trendingReducer)
@@ -34,7 +29,6 @@ describe('TrendingComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(TrendingComponent);
-    location = TestBed.inject(Location);
     store = TestBed.inject(Store);
 
     component = fixture.componentInstance;
@@ -47,17 +41,7 @@ describe('TrendingComponent', () => {
   }));
 
   it('given product list, then show products', () => {
-    expect(page.querySelectorAll('[test-id="trending"]').length).toEqual(2);
-  });
-
-  it('given user clicks on product, then go to product page', done => {
-    page.querySelectorAll('[test-id="trending"]')[0].click();
-    fixture.detectChanges();
-
-    setTimeout(() => {
-      expect(location.path()).toEqual('/products/1');
-      done();
-    }, 100);
+    expect(page.querySelectorAll('app-product-card').length).toEqual(2);
   });
 
 });

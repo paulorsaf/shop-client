@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Category } from 'src/app/model/category/category';
 
 @Injectable({
@@ -13,9 +13,9 @@ export class CategoryService {
     private http: HttpClient
   ) { }
 
-  findAll() : Observable<Category[]> {
+  findAll(): Observable<Category[]> {
     const url = `${environment.apiCms}/categories?_format=json`;
     return this.http.get<Category[]>(url);
   }
 
-}
+};

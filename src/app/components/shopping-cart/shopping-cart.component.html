@@ -2,6 +2,7 @@
   <section *ngIf="(products$ | async).length === 0" class="empty" test-id="empty">
     Nenhum produto adicionado ao carrinho
   </section>
+  
   <section *ngIf="(products$ | async).length" test-id="products">
     <ion-list>
       <ion-item lines="none">
@@ -13,7 +14,8 @@
           <ion-button fill="clear">
             {{totalPrice$ | async | currency: "R$ "}}
           </ion-button>
-          <ion-button fill="solid" color="primary">
+          <ion-button fill="solid" color="primary" (click)="onFinishPurchase()"
+            test-id="finish-button">
             Finalizar
           </ion-button>
         </ion-buttons>

@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
 import { take } from 'rxjs/operators';
 import { AlertControllerMock } from 'src/app/model/mocks/alert-controller.mock';
+import { ModalControllerMock } from 'src/app/model/mocks/modal-controller.mock';
 import { PageMock } from 'src/app/model/mocks/page.mock';
-import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { ProductOptionsPipeModule } from 'src/app/pipes/product-options/product-options.pipe.module';
 import { ProductTotalPricePipeModule } from 'src/app/pipes/product-total-price/product-total-price.pipe.module';
 import { AppState } from 'src/app/store/app-state';
@@ -18,9 +18,11 @@ describe('ShoppingCartComponent', () => {
   let page: PageMock;
   let store: Store<AppState>;
   let alertController: AlertControllerMock;
+  let modalController: ModalControllerMock;
 
   beforeEach(waitForAsync(() => {
     alertController = new AlertControllerMock();
+    modalController = new ModalControllerMock();
 
     TestBed.configureTestingModule({
       declarations: [ ShoppingCartComponent ],
@@ -33,6 +35,7 @@ describe('ShoppingCartComponent', () => {
       ]
     })
     .overrideProvider(AlertController, {useValue: alertController})
+    .overrideProvider(ModalController, {useValue: modalController})
     .compileComponents();
 
     fixture = TestBed.createComponent(ShoppingCartComponent);
@@ -157,6 +160,24 @@ describe('ShoppingCartComponent', () => {
         });
       });
 
+    });
+
+  });
+
+  describe('given user clicks to finish purchase', () => {
+
+    const shoppingCartProduct1: AddProduct = {
+      color: 'Azul',
+      product: {id: 1, images: ['']} as any,
+      size: 'M'
+    };
+
+    beforeEach(() => {
+      store.dispatch(addProduct({shoppingCartProduct: shoppingCartProduct1}));
+      fixture.detectChanges();
+
+      page.querySelector('[test-id="finish-button"]').click();
+      fixture.detectChanges();
     });
 
   });

@@ -17,7 +17,7 @@ export class ShoppingCartEffects {
       concatMap(() =>
         from(this.modalController.create({
           component: ShoppingCartComponent,
-          breakpoints: [0, 0.25, 1],
+          breakpoints: [0, 0.25, 0.9],
           initialBreakpoint: 0.25
         }))
       ),

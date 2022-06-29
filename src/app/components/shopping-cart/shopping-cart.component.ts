@@ -53,6 +53,10 @@ export class ShoppingCartComponent implements OnInit {
     }).then(alert => alert.present());
   }
 
+  onFinishPurchase() {
+
+  }
+
   identify(index: number, item: ShoppingCartProduct){
     return `${index}${item.product.id}`;
   }

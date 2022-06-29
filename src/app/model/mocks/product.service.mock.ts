@@ -4,4 +4,7 @@ export class ProductServiceMock {
     findById() {
         return this.response;
     }
+    findByCategory() {
+        return this.response;
+    }
 };
