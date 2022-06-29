@@ -180,6 +180,10 @@ describe('ShoppingCartComponent', () => {
       fixture.detectChanges();
     });
 
+    it('when user is not logged, then show login page', () => {
+      expect(modalController.isPresented).toBeTruthy();
+    });
+
   });
 
 });

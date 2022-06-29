@@ -38,6 +38,7 @@ export class ProductService {
 
   private adjustProduct(product: Product) {
     product.images = this.transformArrayWithPrefix(product.images, environment.imageBaseUrl);
+    product.image = product.images[0];
     product.colors = this.transformArray(product.colors);
     product.sizes = this.transformArray(product.sizes);
   }
