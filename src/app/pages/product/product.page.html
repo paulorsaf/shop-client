@@ -15,7 +15,7 @@
       <section class="images">
         <ion-slides pager="true">
           <ion-slide *ngFor="let image of product.images" test-id="banner">
-            <img [src]="image" object-fit="cover" />
+            <img [src]="image.imageUrl" object-fit="cover" />
           </ion-slide>
         </ion-slides>
       </section>

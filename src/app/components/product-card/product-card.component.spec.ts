@@ -30,7 +30,7 @@ describe('ProductCardComponent', () => {
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
 
-    component.product = {id: 1, image: 'url'} as any;
+    component.product = {id: 1, images: ['url']} as any;
     fixture.detectChanges();
   }));
 
