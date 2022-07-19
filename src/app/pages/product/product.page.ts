@@ -93,7 +93,7 @@ export class ProductPage implements OnInit {
   private getSuccessMessage(shoppingCartProduct: ShoppingCartProduct) {
     const optionsMessage = this.productOptionsPipe.transform(shoppingCartProduct);
 
-    return `Produto ${shoppingCartProduct.product.title} ${optionsMessage} adicionado ao carrinho`;
+    return `Produto ${shoppingCartProduct.product.name} ${optionsMessage} adicionado ao carrinho`;
   }
 
 }

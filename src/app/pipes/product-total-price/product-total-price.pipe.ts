@@ -5,7 +5,7 @@ import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shoppin
 @Injectable()
 export class ProductTotalPricePipe implements PipeTransform {
     transform(item: ShoppingCartProduct): number {
-        const price = parseFloat(item.product.priceWithDiscount || item.product.price);
+        const price = item.product.priceWithDiscount || item.product.price;
         return price * item.quantity;
     }
 };

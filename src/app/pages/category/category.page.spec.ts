@@ -9,12 +9,11 @@ import { AppState } from 'src/app/store/app-state';
 import { categoryReducer } from 'src/app/store/category/category.reducers';
 import { loadProductsByCategorySuccess } from 'src/app/store/products/products.actions';
 import { productsReducer } from 'src/app/store/products/products.reducers';
+import { CategoryPage } from './category.page';
 
-import { CategoriesPage } from './categories.page';
-
-describe('CategoriesPage', () => {
-  let component: CategoriesPage;
-  let fixture: ComponentFixture<CategoriesPage>;
+describe('CategoryPage', () => {
+  let component: CategoryPage;
+  let fixture: ComponentFixture<CategoryPage>;
   let store: Store<AppState>;
   let activatedRoute: ActivatedRouteMock;
   let page: PageMock;
@@ -23,7 +22,7 @@ describe('CategoriesPage', () => {
     activatedRoute = new ActivatedRouteMock();
 
     TestBed.configureTestingModule({
-      declarations: [ CategoriesPage ],
+      declarations: [ CategoryPage ],
       imports: [
         RouterTestingModule.withRoutes([]),
         IonicModule.forRoot(),
@@ -35,7 +34,7 @@ describe('CategoriesPage', () => {
     .overrideProvider(ActivatedRoute, {useValue: activatedRoute})
     .compileComponents();
 
-    fixture = TestBed.createComponent(CategoriesPage);
+    fixture = TestBed.createComponent(CategoryPage);
     store = TestBed.inject(Store);
 
     component = fixture.componentInstance;

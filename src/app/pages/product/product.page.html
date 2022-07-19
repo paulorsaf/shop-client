@@ -22,7 +22,7 @@
 
       <section class="header">
         <div class="title">
-          <ion-text>{{product.title}}</ion-text>
+          <ion-text>{{product.name}}</ion-text>
         </div>
         <div class="price" *ngIf="product.priceWithDiscount">
           <ion-text>{{product.priceWithDiscount | currency: "R$ "}}</ion-text>

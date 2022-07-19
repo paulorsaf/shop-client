@@ -13,9 +13,9 @@ export const totalPrice = (state: AppState) => {
     state.shoppingCart.products.forEach(p => {
         let price = 0;
         if (p.product.priceWithDiscount) {
-            price = parseFloat(p.product.priceWithDiscount);
+            price = p.product.priceWithDiscount;
         } else {
-            price = parseFloat(p.product.price);
+            price = p.product.price;
         }
         total = total + (price * p.quantity);
     });

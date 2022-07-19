@@ -14,7 +14,7 @@ export class CategoryService {
   ) { }
 
   findAll(): Observable<Category[]> {
-    const url = `${environment.apiCms}/categories?_format=json`;
+    const url = `${environment.api}/categories`;
     return this.http.get<Category[]>(url);
   }
 

@@ -33,7 +33,7 @@ describe('Shopping cart store', () => {
         });
 
         it('when there is a discount, then sum normal prices with discount prices', () => {
-            state.shoppingCart.products[2].product.priceWithDiscount = '25';
+            state.shoppingCart.products[2].product.priceWithDiscount = 25;
 
             expect(totalPrice(state)).toEqual(200);
         });

@@ -1,10 +1,10 @@
 export type Banner = {
-    title: string;
+    name: string;
     description: string;
     id: string;
     image: string;
-    price: string;
-    priceWithDiscount: string;
+    price: number;
+    priceWithDiscount: number;
 };
 
 export type BannerWrapper = {

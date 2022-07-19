@@ -9,11 +9,11 @@ import { loadCategories } from 'src/app/store/category/category.actions';
 import { loadProductsByCategory } from 'src/app/store/products/products.actions';
 
 @Component({
-  selector: 'app-categories',
-  templateUrl: './categories.page.html',
-  styleUrls: ['./categories.page.scss'],
+  selector: 'app-category',
+  templateUrl: './category.page.html',
+  styleUrls: ['./category.page.scss'],
 })
-export class CategoriesPage implements OnInit {
+export class CategoryPage implements OnInit {
 
   category$: Observable<Category>;
   isLoading$: Observable<boolean>;

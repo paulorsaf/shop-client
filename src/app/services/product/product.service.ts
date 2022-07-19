@@ -27,7 +27,7 @@ export class ProductService {
   }
 
   findByCategory(id: string): Observable<Product[]> {
-    const url = `${environment.apiCms}/categories/${id}/products?_format=json`;
+    const url = `${environment.api}/categories/${id}/products`;
     return this.http.get<Product[]>(url).pipe(
       map(products => {
         products.forEach(p => this.adjustProduct(p));

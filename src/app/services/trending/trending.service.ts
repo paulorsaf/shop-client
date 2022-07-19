@@ -23,7 +23,7 @@ export class TrendingService {
         forkJoin(trendings.map(t => this.productService.findById(t.productId))).pipe(
           switchMap(products => of(products.map(p => {
             const trending: Trending = {
-              title: p.title,
+              name: p.name,
               description: p.description,
               id: p.id,
               image: p.images[0],

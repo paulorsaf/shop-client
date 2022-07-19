@@ -23,7 +23,7 @@ export class BannersService {
         forkJoin(banners.map(b => this.productService.findById(b.productId))).pipe(
           switchMap(products => of(products.map(p => {
             const banner: Banner = {
-              title: p.title,
+              name: p.name,
               description: p.description,
               id: p.id,
               image: p.images[0],
