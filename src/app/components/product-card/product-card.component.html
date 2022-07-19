@@ -1,9 +1,9 @@
 <ion-card (click)="goToProduct(product)" test-id="product">
   <ion-card-content class="ion-no-padding">
-    <ion-img object-fit="cover" [src]="product.image"></ion-img>
+    <ion-img object-fit="cover" [src]="product.images[0].imageUrl"></ion-img>
   </ion-card-content>
   <ion-card-content class="details">
-    <ion-text class="description">{{product.title}}</ion-text>
+    <ion-text class="description">{{product.name}}</ion-text>
     <div class="price" *ngIf="product.priceWithDiscount">
       <ion-text>{{product.priceWithDiscount | currency: "R$ "}}</ion-text>
       <ion-text class="discount">
