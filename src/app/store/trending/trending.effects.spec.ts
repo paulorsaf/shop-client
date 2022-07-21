@@ -48,7 +48,6 @@ describe('Trendings effects', () => {
     });
   
     it('should retrieve auth code with success', (done) => {
-      const error = {error: "error"};
       trendingsService.response = throwError(error);
 
       effects.loadTrendingsEffect$.subscribe((newAction) => {

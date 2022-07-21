@@ -9,7 +9,7 @@ describe('Product options pipe', () => {
 
         it('when no discount, then return full price', () => {
             const shoppingCartProduct: ShoppingCartProduct = {
-                quantity: 2,
+                stockOption: {quantity: 2},
                 product: {price: 10}
             } as any;
             expect(pipe.transform(shoppingCartProduct)).toEqual(20);
@@ -17,7 +17,7 @@ describe('Product options pipe', () => {
 
         it('when discount, then return price with discount', () => {
             const shoppingCartProduct: ShoppingCartProduct = {
-                quantity: 2,
+                stockOption: {quantity: 2},
                 product: {price: 10, priceWithDiscount: 5}
             } as any;
             expect(pipe.transform(shoppingCartProduct)).toEqual(10);

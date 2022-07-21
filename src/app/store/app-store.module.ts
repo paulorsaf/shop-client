@@ -10,8 +10,8 @@ import { ProductEffects } from './product/product.effects';
 import { productReducer } from './product/product.reducers';
 import { ProductsEffects } from './products/products.effects';
 import { productsReducer } from './products/products.reducers';
-import { ShoppingCartEffects } from './shopping-cart/shopping-cart.effects';
-import { shoppingCartReducer } from './shopping-cart/shopping-cart.reducers';
+// import { ShoppingCartEffects } from './shopping-cart/shopping-cart.effects';
+// import { shoppingCartReducer } from './shopping-cart/shopping-cart.reducers';
 import { TrendingEffects } from './trending/trending.effects';
 import { trendingReducer } from './trending/trending.reducers';
 
@@ -22,14 +22,14 @@ import { trendingReducer } from './trending/trending.reducers';
     StoreModule.forFeature('category', categoryReducer),
     StoreModule.forFeature('product', productReducer),
     StoreModule.forFeature('products', productsReducer),
-    StoreModule.forFeature('shoppingCart', shoppingCartReducer),
+    // StoreModule.forFeature('shoppingCart', shoppingCartReducer),
     StoreModule.forFeature('trending', trendingReducer),
     EffectsModule.forRoot([
       BannerEffects,
       CategoryEffects,
       ProductEffects,
       ProductsEffects,
-      ShoppingCartEffects,
+      // ShoppingCartEffects,
       TrendingEffects
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),

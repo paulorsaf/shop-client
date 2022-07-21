@@ -1,0 +1,25 @@
+.title {
+    font-size: 1.6rem;
+    color: #444;
+    margin-bottom: 1rem;
+}
+
+ion-icon {
+    font-size: 3.2rem;
+    margin-right: 1rem;
+    border: 2px solid transparent;
+
+    &.selected {
+        border-color: rgb(85,168,250);
+        border-radius: 500px;
+    }
+}
+
+.options-round {
+    display: flex;
+    .options {
+        width: 3.6rem;
+        border-radius: 500px;
+        margin-right: 1rem;
+    }
+}

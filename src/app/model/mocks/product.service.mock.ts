@@ -1,5 +1,7 @@
+import { of } from "rxjs";
+
 export class ProductServiceMock {
-    response;
+    response = of({});
 
     findById() {
         return this.response;

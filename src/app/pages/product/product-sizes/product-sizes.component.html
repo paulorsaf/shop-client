@@ -1,0 +1,17 @@
+<div *ngIf="product$ | async; let product">
+  <div class="title">
+    <ion-text>Tamanho *:</ion-text>
+  </div>
+  <div>
+    <ion-segment mode="ios" (ionChange)="setSize($event)">
+      <ion-segment-button *ngFor="let size of sizes$ | async" [value]="size" test-id="size">
+        <ion-label>{{size}}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  <div *ngIf="showRequiredError && !selectedSize">
+    <ion-text color="danger" class="error" test-id="size-required-error">
+      Tamanho é obrigatório
+    </ion-text>
+  </div>
+</div>

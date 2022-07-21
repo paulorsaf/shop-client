@@ -6,11 +6,11 @@ import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shoppin
 export class ProductOptionsPipe implements PipeTransform {
     transform(item: ShoppingCartProduct): string {
         const options = [];
-        if (item.color) {
-            options.push(item.color);
+        if (item.stockOption.color) {
+            options.push(item.stockOption.color);
         }
-        if (item.size) {
-            options.push(item.size);
+        if (item.stockOption.size) {
+            options.push(item.stockOption.size);
         }
         return options.length ? `(${options.join('/')})` : '';
     }

@@ -1,5 +1,7 @@
+import { of } from "rxjs";
+
 export class CategoryServiceMock {
-    response;
+    response = of({});
 
     findAll() {
         return this.response;

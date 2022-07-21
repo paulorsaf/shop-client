@@ -35,39 +35,19 @@
         </div>
       </section>
 
-      <section class="options" *ngIf="product.colors?.length" test-id="product-colors">
-        <div class="title">
-          <ion-text>Cor *:</ion-text>
-        </div>
-        <ion-icon name="ellipse" *ngFor="let color of product.colors"
-          [ngStyle]="{'color': color | color}" (click)="setColor(color)"
-          [ngClass]="color === selectedColor ? 'selected' : ''" test-id="color">
-        </ion-icon>
-        <div *ngIf="hasTriedToAdd && !selectedColor">
-          <ion-text color="danger" class="error" test-id="color-required-error">
-            Cor é obrigatória
-          </ion-text>
-        </div>
+      <section class="options" *ngIf="product | productHasSize" test-id="product-sizes">
+        <app-product-sizes [selectedSize]="selectedSize" [showRequiredError]="hasTriedToAdd"
+          (sizeChanged)="setSize($event)">
+        </app-product-sizes>
       </section>
 
-      <section class="options" *ngIf="product.sizes?.length" test-id="product-sizes">
-        <div class="title">
-          <ion-text>Tamanho *:</ion-text>
-        </div>
-        <div>
-          <ion-segment mode="ios" (ionChange)="setSize($event)">
-            <ion-segment-button *ngFor="let size of product.sizes" [value]="size"
-              test-id="size">
-              <ion-label>{{size}}</ion-label>
-            </ion-segment-button>
-          </ion-segment>
-        </div>
-        <div *ngIf="hasTriedToAdd && !selectedSize">
-          <ion-text color="danger" class="error" test-id="size-required-error">
-            Tamanho é obrigatório
-          </ion-text>
-        </div>
-      </section>
+      <div *ngIf="!(product | productHasSize) || selectedSize">
+        <section class="options" *ngIf="product | productHasColor" test-id="product-colors">
+          <app-product-colors [selectedColor]="selectedColor" [selectedSize$]="selectedSize$"
+            [showRequiredError]="hasTriedToAdd" (colorChanged)="setColor($event)">
+          </app-product-colors>
+        </section>
+      </div>
 
       <section class="options" *ngIf="product.description" test-id="product-description">
         <div class="title">

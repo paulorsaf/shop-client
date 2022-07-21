@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
@@ -9,7 +10,7 @@ import { loadCategoriesSuccess } from 'src/app/store/category/category.actions';
 import { categoryReducer } from 'src/app/store/category/category.reducers';
 import { loadTrendingsSuccess } from 'src/app/store/trending/trending.actions';
 import { trendingReducer } from 'src/app/store/trending/trending.reducers';
-import { BannersComponent } from './banners/banners.component';
+import { CategoriesComponent } from './categories/categories.component';
 import { HomePage } from './home.page';
 
 describe('HomePage', () => {
@@ -29,8 +30,11 @@ describe('HomePage', () => {
         StoreModule.forFeature('category', categoryReducer),
         StoreModule.forFeature('trending', trendingReducer),
         IonicModule.forRoot()
-      ]
-    }).compileComponents();
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+    .overrideComponent(CategoriesComponent, {})
+    .compileComponents();
 
     fixture = TestBed.createComponent(HomePage);
     store = TestBed.get(Store);

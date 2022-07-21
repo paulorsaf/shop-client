@@ -1,8 +1,10 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
+import { HeaderModule } from 'src/app/components/header/header.module';
 import { ActivatedRouteMock } from 'src/app/model/mocks/activated-route.mock';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { AppState } from 'src/app/store/app-state';
@@ -29,7 +31,8 @@ describe('CategoryPage', () => {
         StoreModule.forRoot([]),
         StoreModule.forFeature('category', categoryReducer),
         StoreModule.forFeature('products', productsReducer)
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .overrideProvider(ActivatedRoute, {useValue: activatedRoute})
     .compileComponents();

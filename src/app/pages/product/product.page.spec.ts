@@ -10,10 +10,13 @@ import { ProductPage } from './product.page';
 import { loadProductSuccess } from 'src/app/store/product/product.actions';
 import { ColorPipeModule } from 'src/app/pipes/color/color.pipe.module';
 import { RouterTestingModule } from '@angular/router/testing';
-import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
 import { ProductOptionsPipeModule } from 'src/app/pipes/product-options/product-options.pipe.module';
 import { ProductOptionsPipe } from 'src/app/pipes/product-options/product-options.pipe';
+import { HasSizePipeModule } from 'src/app/pipes/product-has-size/product-has-size.pipe.module';
+import { HasColorPipeModule } from 'src/app/pipes/product-has-color/product-has-color.pipe.module';
+import { HeaderModule } from 'src/app/components/header/header.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('ProductPage', () => {
   let component: ProductPage;
@@ -32,15 +35,17 @@ describe('ProductPage', () => {
       imports: [
         IonicModule.forRoot(),
         ColorPipeModule,
+        HasColorPipeModule,
+        HasSizePipeModule,
         RouterTestingModule.withRoutes([]),
-        StoreModule.forRoot([]),
         ProductOptionsPipeModule,
-        StoreModule.forFeature('product', productReducer),
-        StoreModule.forFeature('shoppingCart', shoppingCartReducer)
+        StoreModule.forRoot([]),
+        StoreModule.forFeature('product', productReducer)
       ],
       providers: [
         ProductOptionsPipe
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .overrideProvider(ActivatedRoute, {useValue: activatedRoute})
     .overrideProvider(ToastController, {useValue: toastController})
@@ -90,55 +95,30 @@ describe('ProductPage', () => {
       expect(page.querySelector('[test-id="product"]')).not.toBeNull();
     });
 
-    describe('when product has colors', () => {
-
-      beforeEach(() => {
-        const product = {id: 1, colors: ['Amarelo', 'Verde', 'Vermelho']} as any;
-        store.dispatch(loadProductSuccess({product}));
-        fixture.detectChanges();
-      });
-
-      it('then show colors', () => {
-        expect(page.querySelector('[test-id="product-colors"]')).not.toBeNull();
-      });
-
-      it('and user selects color, then mark color as selected', () => {
-        page.querySelectorAll('[test-id="product-colors"] ion-icon')[1].click();
-        fixture.detectChanges();
-
-        expect(page.querySelectorAll('[test-id="product-colors"] ion-icon')[1]).toHaveClass('selected');
-      });
-
-      it('then hide color required error message', () => {
-        expect(page.querySelector('[test-id="color-required-error"]')).toBeNull();
-      });
-
-    });
-
     it('when product doesnt have colors, then hide colors', () => {
       expect(page.querySelector('[test-id="product-colors"]')).toBeNull();
     });
 
-    describe('when product has sizes', () => {
+    it('when product has colors, then show colors', () => {
+      const product = {id: 1, stockOptions: [
+        {color: 'Amarelo'}, {color: 'Verde'}, {color: 'Vermelho'}
+      ]} as any;
+      store.dispatch(loadProductSuccess({product}));
+      fixture.detectChanges();
 
-      beforeEach(() => {
-        const product = {id: 1, sizes: ['M']} as any;
-        store.dispatch(loadProductSuccess({product}));
-        fixture.detectChanges();
-      });
-
-      it('then show sizes', () => {
-        expect(page.querySelector('[test-id="product-sizes"]')).not.toBeNull();
-      });
-
-      it('then hide size required error message', () => {
-        expect(page.querySelector('[test-id="size-required-error"]')).toBeNull();
-      });
-
+      expect(page.querySelector('[test-id="product-colors"]')).not.toBeNull();
     });
 
     it('when product doesnt have sizes, then hide sizes', () => {
       expect(page.querySelector('[test-id="product-sizes"]')).toBeNull();
+    });
+
+    it('when product has sizes, then show sizes', () => {
+      const product = {id: 1, stockOptions: [{size: 'M'}]} as any;
+      store.dispatch(loadProductSuccess({product}));
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="product-sizes"]')).not.toBeNull();
     });
 
     it('when product has description, then show description', () => {
@@ -155,7 +135,40 @@ describe('ProductPage', () => {
 
   });
 
-  describe('given user clicks on add to shopping cart', () => {
+  describe('given product has colors and sizes', () => {
+
+    beforeEach(() => {
+      const product = {id: 1, stockOptions: [
+        {color: 'Amarelo', size: 'M'}, {color: 'Verde', size: 'P'}, {color: 'Vermelho', size: 'G'}
+      ]} as any;
+      store.dispatch(loadProductSuccess({product}));
+      fixture.detectChanges();
+    })
+
+    it('when size is not selected, then hide colors', () => {
+      expect(page.querySelector('[test-id="product-colors"]')).toBeNull();
+    })
+
+    it('when size is selected, then show colors', () => {
+      component.selectedSize = "M";
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="product-colors"]')).not.toBeNull();
+    })
+
+    it('when user changes size, then remove selected color', () => {
+      component.setColor('Verde');
+      fixture.detectChanges();
+
+      component.setSize({target: {value: 'M'}} as any);
+      fixture.detectChanges();
+
+      expect(component.selectedColor).toEqual("");
+    })
+
+  })
+
+  xdescribe('given user clicks on add to shopping cart', () => {
 
     let product;
 
@@ -163,15 +176,6 @@ describe('ProductPage', () => {
       product = {id: 1} as any;
       store.dispatch(loadProductSuccess({product}));
       fixture.detectChanges();
-    });
-
-    it('then add product to shopping cart', done => {
-      addToShoppintCart();
-
-      store.select('shoppingCart').subscribe(state => {
-        expect(state.products).toEqual([{product, quantity: 1}]);
-        done();
-      });
     });
 
     it('then show success message', done => {
@@ -183,61 +187,10 @@ describe('ProductPage', () => {
       }, 100);
     });
 
-    describe('when product has color', () => {
-
-      beforeEach(() => {
-        product = {id: 1, colors: ['Amarelo', 'Verde', 'Vermelho']} as any;
-        store.dispatch(loadProductSuccess({product}));
-        fixture.detectChanges();
-      });
-
-      describe('and color is not informed', () => {
-
-        beforeEach(() => {
-          addToShoppintCart();
-        });
-
-        it('and color is not informed, then dont add to shopping cart', done => {
-          store.select('shoppingCart').subscribe(state => {
-            expect(state.products).toEqual([]);
-            done();
-          });
-        });
-
-        it('and color is not informed, then show color required message', () => {
-          expect(page.querySelector('[test-id="color-required-error"]')).not.toBeNull();
-        });
-
-      });
-
-      describe('and color is informed', () => {
-
-        beforeEach(() => {
-          page.querySelectorAll('[test-id="color"]')[1].click();
-          fixture.detectChanges();
-
-          addToShoppintCart();
-        });
-
-        it('and color is informed, then add to shopping card', done => {
-          store.select('shoppingCart').subscribe(state => {
-            expect(state.products).toEqual([{color: 'Verde', product, quantity: 1}]);
-            done();
-          });
-        });
-
-        it('and color is informed, then hide color required message', () => {
-          expect(page.querySelector('[test-id="color-required-error"]')).toBeNull();
-        });
-
-      });
-
-    });
-
     describe('when product has size', () => {
 
       beforeEach(() => {
-        product = {id: 1, sizes: ['P', 'M', 'G']} as any;
+        product = {id: 1, stockOptions: [{size: 'P'}, {size: 'M'}, {size: 'G'}]} as any;
         store.dispatch(loadProductSuccess({product}));
         fixture.detectChanges();
       });
@@ -246,17 +199,6 @@ describe('ProductPage', () => {
 
         beforeEach(() => {
           addToShoppintCart();
-        });
-
-        it('then dont add to shopping cart', done => {
-          store.select('shoppingCart').subscribe(state => {
-            expect(state.products).toEqual([]);
-            done();
-          });
-        });
-
-        it('then show size required message', () => {
-          expect(page.querySelector('[test-id="size-required-error"]')).not.toBeNull();
         });
 
       });
@@ -268,13 +210,6 @@ describe('ProductPage', () => {
           fixture.detectChanges();
 
           addToShoppintCart();
-        });
-
-        it('then add to shopping card', done => {
-          store.select('shoppingCart').subscribe(state => {
-            expect(state.products).toEqual([{size: 'M', product, quantity: 1}]);
-            done();
-          });
         });
 
         it('then hide size required message', () => {

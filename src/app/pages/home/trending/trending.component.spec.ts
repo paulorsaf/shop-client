@@ -1,13 +1,12 @@
-import { Location } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
+import { ProductCardComponent } from 'src/app/components/product-card/product-card.component';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { AppState } from 'src/app/store/app-state';
 import { loadTrendingsSuccess } from 'src/app/store/trending/trending.actions';
 import { trendingReducer } from 'src/app/store/trending/trending.reducers';
-import { ProductPage } from '../../product/product.page';
 import { TrendingComponent } from './trending.component';
 
 describe('TrendingComponent', () => {
@@ -19,14 +18,16 @@ describe('TrendingComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        TrendingComponent
+        TrendingComponent,
       ],
       imports: [
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
         StoreModule.forFeature('trending', trendingReducer)
-      ]
-    }).compileComponents();
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(TrendingComponent);
     store = TestBed.inject(Store);
