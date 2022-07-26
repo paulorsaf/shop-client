@@ -15,7 +15,8 @@
     <app-banners *ngIf="(isLoading$ | async) === false" test-id="banners"></app-banners>
   </section>
 
-  <section class="trending">
+  <section class="trending"
+    *ngIf="(isLoadingTrendings$ | async) || (trendings$ | async).length > 0">
     <app-section-title title="Em destaque"></app-section-title>
     <div class="trending-wrapper">
       <div class="loader" *ngIf="isLoadingTrendings$ | async" test-id="trendings-loader">

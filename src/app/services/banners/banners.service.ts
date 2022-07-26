@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { forkJoin, Observable, of } from 'rxjs';
-import { Banner, BannerWrapper } from 'src/app/model/banner/banner';
-import { switchMap } from 'rxjs/operators';
-import { ProductService } from '../product/product.service';
+import { Observable } from 'rxjs';
+import { Banner } from 'src/app/model/banner/banner';
 
 @Injectable({
   providedIn: 'root'
@@ -12,29 +10,12 @@ import { ProductService } from '../product/product.service';
 export class BannersService {
 
   constructor(
-    private http: HttpClient,
-    private productService: ProductService
+    private http: HttpClient
   ) { }
 
   findAll(): Observable<Banner[]> {
-    const url = `${environment.apiCms}/banners?_format=json`;
-    return this.http.get<BannerWrapper[]>(url).pipe(
-      switchMap(banners =>
-        forkJoin(banners.map(b => this.productService.findById(b.productId))).pipe(
-          switchMap(products => of(products.map(p => {
-            const banner: Banner = {
-              name: p.name,
-              description: p.description,
-              id: p.id,
-              image: p.images[0],
-              price: p.price,
-              priceWithDiscount: p.priceWithDiscount
-            };
-            return banner;
-          })))
-        ),
-      )
-    );
+    const url = `${environment.api}/banners`;
+    return this.http.get<Banner[]>(url);
   }
 
 };

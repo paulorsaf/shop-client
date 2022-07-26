@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { Trending, TrendingWrapper } from 'src/app/model/trending/trending';
+import { Observable } from 'rxjs';
+import { Trending } from 'src/app/model/trending/trending';
 import { environment } from 'src/environments/environment';
-import { ProductService } from '../product/product.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,29 +10,12 @@ import { ProductService } from '../product/product.service';
 export class TrendingService {
 
   constructor(
-    private http: HttpClient,
-    private productService: ProductService
+    private http: HttpClient
   ) { }
 
   findAll(): Observable<Trending[]> {
-    const url = `${environment.apiCms}/trendings?_format=json`;
-    return this.http.get<TrendingWrapper[]>(url).pipe(
-      switchMap(trendings =>
-        forkJoin(trendings.map(t => this.productService.findById(t.productId))).pipe(
-          switchMap(products => of(products.map(p => {
-            const trending: Trending = {
-              name: p.name,
-              description: p.description,
-              id: p.id,
-              image: p.images[0],
-              price: p.price,
-              priceWithDiscount: p.priceWithDiscount
-            };
-            return trending;
-          })))
-        )
-      )
-    );
+    const url = `${environment.api}/trendins`;
+    return this.http.get<Trending[]>(url);
   }
 
 }
