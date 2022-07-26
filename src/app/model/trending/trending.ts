@@ -2,7 +2,7 @@ export type Trending = {
     name: string;
     description: string;
     id: string;
-    image: string;
+    images: TrendingImage[];
     price: number;
     priceWithDiscount: number;
 };
@@ -10,3 +10,7 @@ export type Trending = {
 export type TrendingWrapper = {
     productId: string;
 };
+
+export type TrendingImage = {
+    imageUrl: string;
+}

@@ -1,8 +1,7 @@
 export type Product = {
     description: string;
     id: string;
-    image: string;
-    images: string[];
+    images: ProductImage[];
     price: number;
     priceWithDiscount: number;
     name: string;
@@ -14,4 +13,8 @@ export type StockOption = {
     id: string;
     quantity: number;
     size: string;
+}
+
+export type ProductImage = {
+    imageUrl: string;
 }

@@ -3,7 +3,7 @@
     <img [src]="product.image" object-fit="cover" />
     <section>
       <div class="product">
-        <ion-text>{{product.title}}</ion-text>
+        <ion-text>{{product.name}}</ion-text>
       </div>
       <div class="price" *ngIf="product.priceWithDiscount">
         <ion-text>{{product.priceWithDiscount | currency: "R$ "}}</ion-text>

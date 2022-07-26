@@ -28,8 +28,8 @@ export class ProductSizesComponent implements OnInit {
     this.sizes$ = this.filterSizes();
   }
 
-  setSize(size: string) {
-    this.sizeChanged.emit(size);
+  setSize($event: any) {
+    this.sizeChanged.emit($event);
   }
 
   private filterSizes() {
