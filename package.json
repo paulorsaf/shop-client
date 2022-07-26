@@ -6,7 +6,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config ./proxy.conf.json",
-    "build": "ng build --configuration=production",
+    "build": "ng build",
+    "build:stiggo": "ng build --configuration=stiggo",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
