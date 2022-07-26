@@ -1,5 +1,6 @@
 {
-  "hosting": {
+  "hosting": [{
+    "target": "shop-354211",
     "public": "www",
     "ignore": [
       "firebase.json",
@@ -12,5 +13,19 @@
         "destination": "/index.html"
       }
     ]
-  }
+  }, {
+    "target": "mobile-stiggo",
+    "public": "www",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }]
 }
