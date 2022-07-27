@@ -1,4 +1,4 @@
-export class ModalControllerMock {
+export class LoadingControllerMock {
     isDismissed = false;
     isPresented = false;
     create() {

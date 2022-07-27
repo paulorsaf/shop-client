@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from 'src/app/store/app-state';
 import { addProduct, decreaseProduct, removeProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { selectTotalPrice, selectTotalQuantity } from 'src/app/store/shopping-cart/shopping-cart.state';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -20,6 +22,7 @@ export class ShoppingCartComponent implements OnInit {
 
   constructor(
     private alertController: AlertController,
+    private modalController: ModalController,
     private store: Store<AppState>
   ) { }
 
@@ -54,7 +57,15 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   onFinishPurchase() {
-
+    this.store.select('user').pipe(take(1)).subscribe(state => {
+      if (!state.user) {
+        this.modalController.create({
+          component: LoginComponent
+        }).then(modal => {
+          modal.present();
+        })
+      }
+    })
   }
 
   identify(index: number, item: ShoppingCartProduct){

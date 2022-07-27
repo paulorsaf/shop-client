@@ -60,3 +60,10 @@ ion-header ion-toolbar {
   --background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 10%, transparent 100%);
   position: absolute;
 }
+
+.centralize {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

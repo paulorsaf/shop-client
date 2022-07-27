@@ -13,6 +13,13 @@ export const appInitialState: AppState = {
         isLoaded: false,
         isLoading: false
     },
+    login: {
+        error: null,
+        isLoggedIn: false,
+        isLoggingIn: false,
+        isRecoveredPassword: false,
+        isRecoveringPassword: false
+    },
     product: {
         error: null,
         isLoaded: false,
@@ -34,5 +41,8 @@ export const appInitialState: AppState = {
         isLoaded: false,
         isLoading: false,
         trendings: []
+    },
+    user: {
+        user: null
     }
 };

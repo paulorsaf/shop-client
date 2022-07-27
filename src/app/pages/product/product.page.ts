@@ -113,7 +113,7 @@ export class ProductPage implements OnInit {
       }
     });
 
-    return stockOption || product.stockOptions[0];
+    return stockOption;
   }
 
 }

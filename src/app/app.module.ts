@@ -17,12 +17,15 @@ import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AddCompanyHeaderHttpRequestInterceptor } from './interceptors/add-company-header-http-request.interceptor';
+import { LoginComponent } from './components/login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
     ShoppingCartComponent
   ],
   imports: [
@@ -31,6 +34,7 @@ registerLocaleData(localePt);
     AppRoutingModule,
     HttpClientModule,
     AppStoreModule,
+    ReactiveFormsModule,
     ProductOptionsPipeModule,
     ProductTotalPricePipeModule,
 
@@ -62,7 +66,10 @@ registerLocaleData(localePt);
       multi: true
     }
   ],
-  exports: [ShoppingCartComponent],
+  exports: [
+    LoginComponent,
+    ShoppingCartComponent
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

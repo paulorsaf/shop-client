@@ -8,7 +8,7 @@ import { loadCategories, loadCategoriesFail, loadCategoriesSuccess } from './cat
 import { CategoryServiceMock } from 'src/app/model/mocks/category.service.mock';
 import { CategoryService } from 'src/app/services/category/category.service';
 
-describe('Trendings effects', () => {
+describe('Category effects', () => {
   let effects: CategoryEffects;
   let actions$: Observable<Action>;
   let categoryService: CategoryServiceMock;
@@ -31,13 +31,13 @@ describe('Trendings effects', () => {
     effects = TestBed.get(CategoryEffects);
   });
 
-  describe('given load banners', () => {
+  describe('given load categories', () => {
 
     beforeEach(() => {
       actions$ = of(loadCategories());
     })
 
-    it('should loadPkce return retrieveAuthCode', (done) => {
+    it('when success, then return load categories success', (done) => {
       const categories = <any> [{id: 1}];
       categoryService.response = of(categories);
 
@@ -47,7 +47,7 @@ describe('Trendings effects', () => {
       });
     });
   
-    it('should retrieve auth code with success', (done) => {
+    it('when fail, then return load categories fail', (done) => {
       categoryService.response = throwError(error);
 
       effects.loadCategoriesEffect$.subscribe((newAction) => {
