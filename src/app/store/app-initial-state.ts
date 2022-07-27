@@ -43,6 +43,9 @@ export const appInitialState: AppState = {
         trendings: []
     },
     user: {
+        error: null,
+        isLoggedOut: false,
+        isLoggingOut: false,
         user: null
     }
 };

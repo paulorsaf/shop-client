@@ -1,7 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { User } from 'src/app/model/user/user';
 
 @Injectable({
@@ -10,8 +9,7 @@ import { User } from 'src/app/model/user/user';
 export class AuthService {
 
   constructor(
-    private auth: AngularFireAuth,
-    private http: HttpClient
+    private auth: AngularFireAuth
   ) { }
 
   login(email: string, password: string): Observable<User> {
@@ -23,6 +21,10 @@ export class AuthService {
         } as User))
         .catch(this.translateFirebaseError)
     )
+  }
+
+  logout(): Observable<void> {
+    return from(this.auth.signOut());
   }
 
   recoverPassword(email: string): Observable<void> {

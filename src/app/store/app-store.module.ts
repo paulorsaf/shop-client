@@ -16,6 +16,7 @@ import { ShoppingCartEffects } from './shopping-cart/shopping-cart.effects';
 import { shoppingCartReducer } from './shopping-cart/shopping-cart.reducers';
 import { TrendingEffects } from './trending/trending.effects';
 import { trendingReducer } from './trending/trending.reducers';
+import { UserEffects } from './user/user.effects';
 import { userReducer } from './user/user.reducers';
 
 @NgModule({
@@ -36,7 +37,8 @@ import { userReducer } from './user/user.reducers';
       ProductEffects,
       ProductsEffects,
       ShoppingCartEffects,
-      TrendingEffects
+      TrendingEffects,
+      UserEffects
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
   ]
