@@ -23,7 +23,7 @@
     </ion-list>
     <ion-list *ngFor="let shoppingCartProduct of (products$ | async); trackBy:identify">
       <ion-item lines="none" test-id="product">
-        <ion-thumbnail slot="start">
+        <ion-thumbnail slot="start" *ngIf="shoppingCartProduct.product.images?.length">
           <ion-img [src]="shoppingCartProduct.product.images[0].imageUrl"></ion-img>
         </ion-thumbnail>
 
@@ -47,7 +47,7 @@
               {{shoppingCartProduct.stockOption.size}}
             </div>
           </div>
-          <p *ngIf="!shoppingCartProduct.stockOption?.color && shoppingCartProduct.stockOption.size">
+          <p *ngIf="!shoppingCartProduct.stockOption?.color && shoppingCartProduct.stockOption?.size">
             Tamanho: {{shoppingCartProduct.stockOption.size}}
           </p>
         </ion-label>
