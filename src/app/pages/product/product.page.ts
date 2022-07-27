@@ -66,9 +66,8 @@ export class ProductPage implements OnInit {
         this.addProductToShoppingCartWithStockOption(product);
       } else {
         this.store.dispatch(addProduct({product: {product}}));
+        this.showMessage();
       }
-
-      this.showMessage();
     })
   }
 
@@ -88,18 +87,21 @@ export class ProductPage implements OnInit {
 
   private addProductToShoppingCartWithStockOption(product: Product) {
     const stockOption = this.findSelectedStockOption(product);
-    this.store.dispatch(addProduct({product: {
-      product: product,
-      stockOption: {
-        id: stockOption.id,
-        color: stockOption.color,
-        size: stockOption.size
-      }
-    }}));
+    if (stockOption) {
+      this.store.dispatch(addProduct({product: {
+        product: product,
+        stockOption: {
+          id: stockOption.id,
+          color: stockOption.color,
+          size: stockOption.size
+        }
+      }}));
+      this.showMessage();
+    }
   }
 
   private findSelectedStockOption(product: Product) {
-    return product.stockOptions.find(s => {
+    const stockOption = product.stockOptions.find(s => {
       if (s.color && s.size) {
         return s.color === this.selectedColor && s.size === this.selectedSize;
       }
@@ -110,6 +112,8 @@ export class ProductPage implements OnInit {
         return s.size === this.selectedSize;
       }
     });
+
+    return stockOption || product.stockOptions[0];
   }
 
 }
