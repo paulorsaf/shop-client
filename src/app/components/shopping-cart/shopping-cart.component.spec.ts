@@ -7,6 +7,7 @@ import { PageMock } from 'src/app/model/mocks/page.mock';
 import { ProductOptionsPipeModule } from 'src/app/pipes/product-options/product-options.pipe.module';
 import { ProductTotalPricePipeModule } from 'src/app/pipes/product-total-price/product-total-price.pipe.module';
 import { AppState } from 'src/app/store/app-state';
+import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { ShoppingCartComponent } from './shopping-cart.component';
 
 describe('ShoppingCartComponent', () => {
@@ -28,7 +29,7 @@ describe('ShoppingCartComponent', () => {
         ProductOptionsPipeModule,
         ProductTotalPricePipeModule,
         StoreModule.forRoot([]),
-        // StoreModule.forFeature('shoppingCart', shoppingCartReducer)
+        StoreModule.forFeature('shoppingCart', shoppingCartReducer)
       ]
     })
     .overrideProvider(AlertController, {useValue: alertController})

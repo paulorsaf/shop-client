@@ -4,6 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from 'src/app/store/app-state';
+import { addProduct, decreaseProduct, removeProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { selectTotalPrice, selectTotalQuantity } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -22,17 +24,17 @@ export class ShoppingCartComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.products$ = of([]); //this.store.select(state => state.shoppingCart.products);
-    this.totalPrice$ = of(0); //this.store.select(totalPrice);
-    this.totalQuantity$ = of(0) //this.store.select(totalQuantity);
+    this.products$ = this.store.select(state => state.shoppingCart.products);
+    this.totalPrice$ = this.store.select(selectTotalPrice);
+    this.totalQuantity$ = this.store.select(selectTotalQuantity);
   }
 
   minus(shoppingCartProduct: ShoppingCartProduct) {
-    // this.store.dispatch(minusItem({shoppingCartProduct}));
+    this.store.dispatch(decreaseProduct({product: shoppingCartProduct}));
   }
 
   add(shoppingCartProduct: ShoppingCartProduct) {
-    // this.store.dispatch(plusItem({shoppingCartProduct}));
+    this.store.dispatch(addProduct({product: shoppingCartProduct}));
   }
 
   askRemove(shoppingCartProduct: ShoppingCartProduct) {
@@ -45,7 +47,7 @@ export class ShoppingCartComponent implements OnInit {
         text: 'Sim',
         id: 'remove-item',
         handler: () => {
-          // this.store.dispatch(removeProduct({shoppingCartProduct}));
+          this.store.dispatch(removeProduct({product: shoppingCartProduct}));
         }
       }]
     }).then(alert => alert.present());

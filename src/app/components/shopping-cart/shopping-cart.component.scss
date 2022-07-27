@@ -2,6 +2,23 @@ ion-content {
     --background: white;
 }
 
+.color-label {
+    padding-left: 4px;
+}
+.color {
+    width: 50px;
+    height: 30px;
+    border-radius: 500px;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+    font-weight: 600;
+}
+
+h2 {
+    white-space: normal;
+}
+
 section.empty {
     font-size: 1.8rem;
     display: flex;

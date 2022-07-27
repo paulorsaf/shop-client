@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { AppState } from 'src/app/store/app-state';
+import { openShoppingCart } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { selectTotalQuantity } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
   selector: 'app-header',
@@ -19,11 +21,11 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.totalQuantity$ = of(0); //this.store.select(totalQuantity);
+    this.totalQuantity$ = this.store.select(selectTotalQuantity);
   }
 
   showShoppingCart() {
-    // this.store.dispatch(openShoppingCart());
+    this.store.dispatch(openShoppingCart());
   }
 
 }

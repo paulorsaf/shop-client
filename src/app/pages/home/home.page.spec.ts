@@ -8,7 +8,7 @@ import { loadBannersSuccess } from 'src/app/store/banner/banner.actions';
 import { bannerReducer } from 'src/app/store/banner/banner.reducers';
 import { loadCategoriesSuccess } from 'src/app/store/category/category.actions';
 import { categoryReducer } from 'src/app/store/category/category.reducers';
-import { loadTrendingsSuccess } from 'src/app/store/trending/trending.actions';
+import { loadTrendingssSuccess } from 'src/app/store/trending/trending.actions';
 import { trendingReducer } from 'src/app/store/trending/trending.reducers';
 import { CategoriesComponent } from './categories/categories.component';
 import { HomePage } from './home.page';
@@ -116,7 +116,7 @@ describe('HomePage', () => {
 
     beforeEach(() => {
       const trendings = [{id: 1}, {id: 2}] as any;
-      store.dispatch(loadTrendingsSuccess({trendings}));
+      store.dispatch(loadTrendingssSuccess({trendings}));
       fixture.detectChanges();
     });
 

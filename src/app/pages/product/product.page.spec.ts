@@ -15,8 +15,8 @@ import { ProductOptionsPipeModule } from 'src/app/pipes/product-options/product-
 import { ProductOptionsPipe } from 'src/app/pipes/product-options/product-options.pipe';
 import { HasSizePipeModule } from 'src/app/pipes/product-has-size/product-has-size.pipe.module';
 import { HasColorPipeModule } from 'src/app/pipes/product-has-color/product-has-color.pipe.module';
-import { HeaderModule } from 'src/app/components/header/header.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 
 describe('ProductPage', () => {
   let component: ProductPage;
@@ -40,7 +40,8 @@ describe('ProductPage', () => {
         RouterTestingModule.withRoutes([]),
         ProductOptionsPipeModule,
         StoreModule.forRoot([]),
-        StoreModule.forFeature('product', productReducer)
+        StoreModule.forFeature('product', productReducer),
+        StoreModule.forFeature('shoppingCart', shoppingCartReducer)
       ],
       providers: [
         ProductOptionsPipe
@@ -168,18 +169,82 @@ describe('ProductPage', () => {
 
   })
 
-  xdescribe('given user clicks on add to shopping cart', () => {
-
-    let product;
+  describe('given user clicks on add to shopping cart', () => {
 
     beforeEach(() => {
-      product = {id: 1} as any;
-      store.dispatch(loadProductSuccess({product}));
       fixture.detectChanges();
+    })
+
+    it('when product doesnt have stock options, then add product to shopping cart without stock options', done => {
+      const product = dispatchLoadProductSuccessWithoutStockOptions();
+
+      addToShoppingCart();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.products[0]).toEqual({amount: 1, product});
+        done();
+      })
+    });
+
+    it('when product has stock options, then add product to shopping cart with stock options', done => {
+      const product = dispatchLoadProductSuccessWithStockOptions("anyColor", "anySize");
+
+      component.selectedColor = "anyColor";
+      component.selectedSize = "anySize";
+      fixture.detectChanges();
+
+      addToShoppingCart();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.products[0]).toEqual({
+          amount: 1, product, stockOption: {
+            id: "anyStockOptionId", color: "anyColor", size: "anySize"
+          }
+        });
+        done();
+      })
+    });
+
+    it('when product has stock options with only color, then add product to shopping cart with stock option', done => {
+      const product = dispatchLoadProductSuccessWithStockOptions("anyColor", undefined);
+
+      component.selectedColor = "anyColor";
+      fixture.detectChanges();
+
+      addToShoppingCart();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.products[0]).toEqual({
+          amount: 1, product, stockOption: {
+            id: "anyStockOptionId", color: "anyColor", size: undefined
+          }
+        });
+        done();
+      })
+    });
+
+    it('when product has stock options with only size, then add product to shopping cart with stock option', done => {
+      const product = dispatchLoadProductSuccessWithStockOptions(undefined, "anySize");
+
+      component.selectedSize = "anySize";
+      fixture.detectChanges();
+
+      addToShoppingCart();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.products[0]).toEqual({
+          amount: 1, product, stockOption: {
+            id: "anyStockOptionId", size: "anySize", color: undefined
+          }
+        });
+        done();
+      })
     });
 
     it('then show success message', done => {
-      addToShoppintCart();
+      dispatchLoadProductSuccessWithoutStockOptions();
+
+      addToShoppingCart();
 
       setTimeout(() => {
         expect(toastController.isPresented).toBeTruthy();
@@ -187,42 +252,30 @@ describe('ProductPage', () => {
       }, 100);
     });
 
-    describe('when product has size', () => {
-
-      beforeEach(() => {
-        product = {id: 1, stockOptions: [{size: 'P'}, {size: 'M'}, {size: 'G'}]} as any;
-        store.dispatch(loadProductSuccess({product}));
-        fixture.detectChanges();
-      });
-
-      describe('and size is not informed', () => {
-
-        beforeEach(() => {
-          addToShoppintCart();
-        });
-
-      });
-
-      describe('and size is informed', () => {
-
-        beforeEach(() => {
-          component.setSize({target: {value: 'M'}} as any);
-          fixture.detectChanges();
-
-          addToShoppintCart();
-        });
-
-        it('then hide size required message', () => {
-          expect(page.querySelector('[test-id="size-required-error"]')).toBeNull();
-        });
-
-      });
-
-    });
-
-    const addToShoppintCart = () => {
+    function addToShoppingCart() {
       page.querySelector('[test-id="add-product-button"]').click();
       fixture.detectChanges();
+    };
+
+    function dispatchLoadProductSuccessWithStockOptions(color: string, size: string) {
+      const product = {
+        id: 1,
+        stockOptions: [{id: "anyStockOptionId", color, size, quantity: 10}]
+      } as any;
+      store.dispatch(loadProductSuccess({product}));
+      fixture.detectChanges();
+
+      return product;
+    };
+
+    function dispatchLoadProductSuccessWithoutStockOptions() {
+      const product = {
+        id: 1
+      } as any;
+      store.dispatch(loadProductSuccess({product}));
+      fixture.detectChanges();
+
+      return product;
     };
 
   });

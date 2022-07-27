@@ -21,15 +21,14 @@
         </ion-buttons>
       </ion-item>
     </ion-list>
-    <ion-list>
-      <ion-item *ngFor="let shoppingCartProduct of (products$ | async); trackBy:identify"
-        test-id="product">
+    <ion-list *ngFor="let shoppingCartProduct of (products$ | async); trackBy:identify">
+      <ion-item lines="none" test-id="product">
         <ion-thumbnail slot="start">
-          <ion-img [src]="shoppingCartProduct.product.images[0]"></ion-img>
+          <ion-img [src]="shoppingCartProduct.product.images[0].imageUrl"></ion-img>
         </ion-thumbnail>
+
         <ion-label>
-          <!-- <h2>{{shoppingCartProduct.quantity}}x {{shoppingCartProduct.product.title}}</h2> -->
-          <p>{{shoppingCartProduct | productOptions}}</p>
+          <h2>{{shoppingCartProduct.amount}}x {{shoppingCartProduct.product.name}}</h2>
           <p class="price" *ngIf="shoppingCartProduct.product.priceWithDiscount">
             <ion-text>{{shoppingCartProduct.product.priceWithDiscount | currency: "R$ "}}</ion-text>
             <ion-text class="discount">
@@ -40,23 +39,35 @@
             <ion-text>{{shoppingCartProduct.product.price | currency: "R$ "}}</ion-text>
           </p>
         </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label class="color-label">
+          <div *ngIf="shoppingCartProduct.stockOption?.color">
+            <div class="color" [style.background-color]="shoppingCartProduct.stockOption.color">
+              {{shoppingCartProduct.stockOption.size}}
+            </div>
+          </div>
+          <p *ngIf="!shoppingCartProduct.stockOption?.color && shoppingCartProduct.stockOption.size">
+            Tamanho: {{shoppingCartProduct.stockOption.size}}
+          </p>
+        </ion-label>
         <div slot="end">
           <div align="right">
             <ion-button fill="clear">
               {{shoppingCartProduct | productTotalPrice | currency: "R$ "}}
             </ion-button>
           </div>
-          <div class="totalizers" align="right">
-            <ion-button fill="clear" color="medium" (click)="minus(shoppingCartProduct)">
-              <!-- *ngIf="shoppingCartProduct.quantity > 1" test-id="minus-item" -->
+          <div class="totalizers" align="center">
+            <ion-button fill="clear" color="medium" (click)="minus(shoppingCartProduct)"
+              *ngIf="shoppingCartProduct.amount > 1" test-id="minus-item">
               <ion-icon name="remove-circle-outline"></ion-icon>
             </ion-button>
-            <ion-button fill="clear" color="danger" (click)="askRemove(shoppingCartProduct)">
-              <!-- *ngIf="shoppingCartProduct.quantity === 1" test-id="remove-item" -->
+            <ion-button fill="clear" color="danger" (click)="askRemove(shoppingCartProduct)"
+              *ngIf="shoppingCartProduct.amount === 1" test-id="remove-item">
               <ion-icon name="close-circle-outline"></ion-icon>
             </ion-button>
             <ion-button fill="clear" color="dark" class="amount">
-              <!-- {{shoppingCartProduct.quantity}} -->
+              {{shoppingCartProduct.amount}}
             </ion-button>
             <ion-button fill="clear" color="medium" (click)="add(shoppingCartProduct)"
               test-id="add-item">

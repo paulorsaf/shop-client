@@ -5,7 +5,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { ProductCardComponent } from 'src/app/components/product-card/product-card.component';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { AppState } from 'src/app/store/app-state';
-import { loadTrendingsSuccess } from 'src/app/store/trending/trending.actions';
+import { loadTrendingssSuccess } from 'src/app/store/trending/trending.actions';
 import { trendingReducer } from 'src/app/store/trending/trending.reducers';
 import { TrendingComponent } from './trending.component';
 
@@ -36,7 +36,7 @@ describe('TrendingComponent', () => {
     page = fixture.debugElement.nativeElement;
 
     const trendings = [{id: 1}, {id: 2}] as any;
-    store.dispatch(loadTrendingsSuccess({trendings}));
+    store.dispatch(loadTrendingssSuccess({trendings}));
 
     fixture.detectChanges();
   }));

@@ -5,7 +5,7 @@ import { Trending } from 'src/app/model/trending/trending';
 import { AppState } from 'src/app/store/app-state';
 import { loadBanners } from 'src/app/store/banner/banner.actions';
 import { loadCategories } from 'src/app/store/category/category.actions';
-import { loadTrendings } from 'src/app/store/trending/trending.actions';
+import { loadTrendingss } from 'src/app/store/trending/trending.actions';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +33,7 @@ export class HomePage implements OnInit {
 
     this.store.dispatch(loadBanners());
     this.store.dispatch(loadCategories());
-    this.store.dispatch(loadTrendings());
+    this.store.dispatch(loadTrendingss());
   }
 
 };

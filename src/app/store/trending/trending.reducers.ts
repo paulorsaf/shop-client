@@ -2,13 +2,13 @@ import { actionSheetController } from '@ionic/core';
 import { createReducer, on } from '@ngrx/store';
 import { appInitialState } from '../app-initial-state';
 import { TrendingState } from './trending-state';
-import { loadTrendings, loadTrendingsFail, loadTrendingsSuccess } from './trending.actions';
+import { loadTrendingss, loadTrendingssFail, loadTrendingssSuccess } from './trending.actions';
 
 const initialState: TrendingState = appInitialState.trending;
 
 const _trendingReducer = createReducer(
   initialState,
-  on(loadTrendings, (state) => {
+  on(loadTrendingss, (state) => {
     return {
       ...state,
       error: null,
@@ -17,7 +17,7 @@ const _trendingReducer = createReducer(
       trendings: []
     };
   }),
-  on(loadTrendingsSuccess, (state, action) => {
+  on(loadTrendingssSuccess, (state, action) => {
     return {
       ...state,
       isLoaded: true,
@@ -25,7 +25,7 @@ const _trendingReducer = createReducer(
       trendings: action.trendings
     };
   }),
-  on(loadTrendingsFail, (state, action) => {
+  on(loadTrendingssFail, (state, action) => {
     return {
       ...state,
       error: action.error,

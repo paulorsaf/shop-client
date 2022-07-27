@@ -1,13 +1,13 @@
 import { Product } from '../product/product';
 
 export type ShoppingCartProduct = {
+    amount?: number;
     product: Product;
-    stockOption: ShoppingCartProductStockOption;
+    stockOption?: ShoppingCartProductStockOption;
 };
 
 export type ShoppingCartProductStockOption = {
     color?: string;
     id: string;
-    quantity?: number;
     size?: string;
 };
