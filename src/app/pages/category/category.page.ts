@@ -1,5 +1,7 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/model/category/category';
@@ -19,10 +21,16 @@ export class CategoryPage implements OnInit {
   isLoading$: Observable<boolean>;
   products$: Observable<Product[]>;
 
+  hasBackButton = true;
+
   constructor(
     private activatedRoute: ActivatedRoute,
+    private location: Location,
+    private navController: NavController,
     private store: Store<AppState>
-  ) { }
+  ) {
+    this.hasBackButton = (this.location.getState() as any)?.navigationId !== 1;
+  }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -33,6 +41,10 @@ export class CategoryPage implements OnInit {
 
     this.store.dispatch(loadCategories());
     this.store.dispatch(loadProductsByCategory({id}));
+  }
+
+  goHome() {
+    this.navController.navigateRoot('/');
   }
 
 }

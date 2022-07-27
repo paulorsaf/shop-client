@@ -1,14 +1,15 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Product } from 'src/app/model/product/product';
-import { ProductOptionsPipe } from 'src/app/pipes/product-options/product-options.pipe';
 import { AppState } from 'src/app/store/app-state';
 import { loadProduct } from 'src/app/store/product/product.actions';
 import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { selectTotalPrice } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
   selector: 'app-product',
@@ -23,21 +24,25 @@ export class ProductPage implements OnInit {
   
   selectedSize$ = new BehaviorSubject<string>("");
 
+  hasBackButton = true;
   hasTriedToAdd = false;
   selectedColor = '';
   selectedSize = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private productOptionsPipe: ProductOptionsPipe,
+    private location: Location,
+    private navController: NavController,
     private store: Store<AppState>,
     private toastController: ToastController
-  ) { }
+  ) {
+    this.hasBackButton = (this.location.getState() as any)?.navigationId !== 1;
+  }
 
   ngOnInit() {
     this.isLoading$ = this.store.select(state => state.product.isLoading);
     this.product$ = this.store.select(state => state.product.product);
-    this.totalPrice$ = of(0);//this.store.select(totalPrice);
+    this.totalPrice$ = this.store.select(selectTotalPrice);
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.store.dispatch(loadProduct({id}));
@@ -65,6 +70,10 @@ export class ProductPage implements OnInit {
 
       this.showMessage();
     })
+  }
+
+  goHome() {
+    this.navController.navigateRoot('/');
   }
 
   private async showMessage() {

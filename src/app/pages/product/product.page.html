@@ -1,7 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" *ngIf="hasBackButton">
       <ion-back-button fill="clear" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="!hasBackButton">
+      <ion-button (click)="goHome()">
+        <ion-icon name="home" color="light"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <app-header></app-header>
