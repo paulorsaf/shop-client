@@ -6,9 +6,9 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { UserEffects } from './user.effects';
 import { AuthServiceMock } from 'src/app/model/mocks/auth.service.mock';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { loginUserByToken, loginUserByTokenFail, loginUserByTokenSuccess, logout, logoutFail, logoutSuccess } from './user.actions';
+import { loginUserByToken, loginUserByTokenFail, loginUserByTokenSuccess, logout, logoutFail, logoutSuccess, setUser } from './user.actions';
 
-fdescribe('User effects', () => {
+describe('User effects', () => {
   let effects: UserEffects;
   let actions$: Observable<Action>;
   let authService: AuthServiceMock;
@@ -51,6 +51,23 @@ fdescribe('User effects', () => {
 
       effects.logoutEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(logoutFail({error}));
+        done();
+      });
+    });
+
+  })
+
+  describe('given logout success', () => {
+
+    beforeEach(() => {
+      actions$ = of(logoutSuccess());
+    })
+
+    it('then set user as null', (done) => {
+      authService.response = of({});
+
+      effects.logoutSuccess$.subscribe((newAction) => {
+        expect(newAction).toEqual(setUser({user: null}));
         done();
       });
     });

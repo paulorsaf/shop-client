@@ -3,7 +3,7 @@ import { loginUserByToken, loginUserByTokenFail, loginUserByTokenSuccess, logout
 import { userReducer } from "./user.reducers"
 import { UserState } from "./user.state"
 
-fdescribe('User store', () => {
+describe('User store', () => {
 
     it('setUser', () => {
         const initialState: UserState = {

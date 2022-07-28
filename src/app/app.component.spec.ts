@@ -10,7 +10,7 @@ import { AppState } from './store/app-state';
 import { loginUserByTokenFail, loginUserByTokenSuccess, setUser } from './store/user/user.actions';
 import { userReducer } from './store/user/user.reducers';
 
-fdescribe('AppComponent', () => {
+describe('AppComponent', () => {
 
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;

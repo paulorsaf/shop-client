@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { loginUserByToken, loginUserByTokenFail, loginUserByTokenSuccess, logout, logoutFail, logoutSuccess } from './user.actions';
+import { loginUserByToken, loginUserByTokenFail, loginUserByTokenSuccess, logout, logoutFail, logoutSuccess, setUser } from './user.actions';
 
 @Injectable()
 export class UserEffects {
@@ -17,6 +17,13 @@ export class UserEffects {
           catchError(error => of(logoutFail({error})))
         )
       )
+    )
+  );
+
+  logoutSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(logoutSuccess),
+      switchMap(() => of(setUser({user: null})))
     )
   );
 
