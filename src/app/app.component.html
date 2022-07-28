@@ -6,17 +6,22 @@
           <ion-note>{{(user$ | async).email}}</ion-note>
           <ion-item lines="none" test-id="logout-menu" (click)="logout()">
             <ion-icon name="log-out" slot="start"></ion-icon>
-            <ion-label>Logout</ion-label>
+            <ion-label>Entrar</ion-label>
           </ion-item>
         </ion-list>
         <ion-list *ngIf="(user$ | async) === null">
           <ion-item lines="none" test-id="login-menu" (click)="openLogin()">
             <ion-icon name="person" slot="start"></ion-icon>
-            <ion-label>Login</ion-label>
+            <ion-label>Sair</ion-label>
           </ion-item>
         </ion-list>
       </ion-content>
     </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
+    <div [hidden]="isLoggingUserByToken$ | async" class="centralize" test-id="app">
+      <ion-router-outlet id="main-content"></ion-router-outlet>
+    </div>
+    <div [hidden]="(isLoggingUserByToken$ | async) === false" class="centralize" test-id="app-loader">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
   </ion-split-pane>
 </ion-app>

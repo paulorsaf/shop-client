@@ -6,7 +6,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { UserEffects } from './user.effects';
 import { AuthServiceMock } from 'src/app/model/mocks/auth.service.mock';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { logout, logoutFail, logoutSuccess } from './user.actions';
+import { loginUserByToken, loginUserByTokenFail, loginUserByTokenSuccess, logout, logoutFail, logoutSuccess } from './user.actions';
 
 fdescribe('User effects', () => {
   let effects: UserEffects;
@@ -51,6 +51,33 @@ fdescribe('User effects', () => {
 
       effects.logoutEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(logoutFail({error}));
+        done();
+      });
+    });
+
+  })
+
+  describe('given login by token', () => {
+
+    beforeEach(() => {
+      actions$ = of(loginUserByToken());
+    })
+
+    it('when success, then return login by token success', (done) => {
+      const user = {id: 1} as any;
+      authService.response = of(user);
+
+      effects.loginUserByTokenEffect$.subscribe((newAction) => {
+        expect(newAction).toEqual(loginUserByTokenSuccess({user}));
+        done();
+      });
+    });
+  
+    it('when fail, then return login by token fail', (done) => {
+      authService.response = throwError(error);
+
+      effects.loginUserByTokenEffect$.subscribe((newAction) => {
+        expect(newAction).toEqual(loginUserByTokenFail());
         done();
       });
     });

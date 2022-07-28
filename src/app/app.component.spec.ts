@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { ModalControllerMock } from './model/mocks/modal-controller.mock';
 import { PageMock } from './model/mocks/page.mock';
 import { AppState } from './store/app-state';
-import { setUser } from './store/user/user.actions';
+import { loginUserByTokenFail, loginUserByTokenSuccess, setUser } from './store/user/user.actions';
 import { userReducer } from './store/user/user.reducers';
 
 fdescribe('AppComponent', () => {
@@ -42,7 +42,70 @@ fdescribe('AppComponent', () => {
     fixture.detectChanges();
   }));
 
+  describe('given app starts', () => {
+
+    it('then try to login user by token', done => {
+      store.select('user').subscribe(state => {
+        expect(state.isLoggingInByToken).toBeTruthy();
+        done();
+      })
+    })
+
+    describe('when logging in user by token', () => {
+
+      it('then hide page', () => {
+        expect(page.querySelector('[test-id="app"][hidden]')).not.toBeNull();
+      })
+  
+      it('then show app loader', () => {
+        expect(page.querySelector('[test-id="app-loader"]')).not.toBeNull();
+      })
+
+    })
+
+    describe('when user logged in by token', () => {
+
+      beforeEach(() => {
+        const user = {id: 1} as any;
+        store.dispatch(loginUserByTokenSuccess({user}));
+        fixture.detectChanges();
+      })
+
+      it('then show page', () => {
+        expect(page.querySelector('[test-id="app"]')).not.toBeNull();
+      })
+  
+      it('then hide app loader', () => {
+        expect(page.querySelector('[test-id="app-loader"][hidden]')).not.toBeNull();
+      })
+
+    })
+
+    describe('when user not logged by token', () => {
+
+      beforeEach(() => {
+        store.dispatch(loginUserByTokenFail());
+        fixture.detectChanges();
+      })
+
+      it('then show page', () => {
+        expect(page.querySelector('[test-id="app"]')).not.toBeNull()
+      })
+  
+      it('then hide app loader', () => {
+        expect(page.querySelector('[test-id="app-loader"][hidden]')).not.toBeNull();
+      })
+
+    })
+    
+  })
+
   describe('given user is not logged', () => {
+
+    beforeEach(() => {
+      store.dispatch(loginUserByTokenFail());
+      fixture.detectChanges();
+    })
 
     it('then show login button', () => {
       expect(page.querySelector('[test-id="login-menu"]')).not.toBeNull();
@@ -68,7 +131,7 @@ fdescribe('AppComponent', () => {
 
     beforeEach(() => {
       const user = {id: 1} as any;
-      store.dispatch(setUser({user}));
+      store.dispatch(loginUserByTokenSuccess({user}));
       fixture.detectChanges();
     })
 

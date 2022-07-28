@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { LoginComponent } from './components/login/login.component';
 import { User } from './model/user/user';
 import { AppState } from './store/app-state';
-import { logout } from './store/user/user.actions';
+import { loginUserByToken, logout } from './store/user/user.actions';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -13,6 +13,7 @@ import { logout } from './store/user/user.actions';
 })
 export class AppComponent implements OnInit {
 
+  isLoggingUserByToken$!: Observable<boolean>;
   user$: Observable<User>;
 
   constructor(
@@ -22,7 +23,10 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoggingUserByToken$ = this.store.select(state => state.user.isLoggingInByToken);
     this.user$ = this.store.select(state => state.user.user);
+
+    this.store.dispatch(loginUserByToken());
   }
 
   async openLogin() {

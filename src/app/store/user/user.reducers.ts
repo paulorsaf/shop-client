@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { appInitialState } from '../app-initial-state';
-import { logout, logoutFail, logoutSuccess, setUser } from './user.actions';
+import { loginUserByToken, loginUserByTokenFail, loginUserByTokenSuccess, logout, logoutFail, logoutSuccess, setUser } from './user.actions';
 import { UserState } from './user.state';
 
 const initialState: UserState = appInitialState.user;
@@ -27,6 +27,24 @@ const _userReducer = createReducer(
     error: action.error,
     isLoggedOut: false,
     isLoggingOut: false
+  })),
+  on(loginUserByToken, (state) => ({
+    ...state,
+    user: null,
+    isLoggedInByToken: false,
+    isLoggingInByToken: true
+  })),
+  on(loginUserByTokenSuccess, (state, action) => ({
+    ...state,
+    user: action.user,
+    isLoggedInByToken: true,
+    isLoggingInByToken: false
+  })),
+  on(loginUserByTokenFail, (state) => ({
+    ...state,
+    user: null,
+    isLoggedInByToken: true,
+    isLoggingInByToken: false
   }))
 );
 

@@ -1,5 +1,5 @@
 import { appInitialState } from "../app-initial-state"
-import { logout, logoutFail, logoutSuccess, setUser } from "./user.actions"
+import { loginUserByToken, loginUserByTokenFail, loginUserByTokenSuccess, logout, logoutFail, logoutSuccess, setUser } from "./user.actions"
 import { userReducer } from "./user.reducers"
 import { UserState } from "./user.state"
 
@@ -67,6 +67,58 @@ fdescribe('User store', () => {
             error,
             isLoggedOut: false,
             isLoggingOut: false
+        })
+    })
+
+    it('loginUserByToken', () => {
+        const initialState: UserState = {
+            ...appInitialState.user,
+            user: {id: 1} as any,
+            isLoggedInByToken: true,
+            isLoggingInByToken: false
+        }
+
+        const newState = userReducer(initialState, loginUserByToken());
+
+        expect(newState).toEqual({
+            ...appInitialState.user,
+            user: null,
+            isLoggedInByToken: false,
+            isLoggingInByToken: true
+        })
+    })
+
+    it('loginUserByTokenSuccess', () => {
+        const initialState: UserState = {
+            ...appInitialState.user,
+            isLoggingInByToken: true
+        }
+
+        const user = {id: 1} as any;
+        const newState = userReducer(initialState, loginUserByTokenSuccess({user}));
+
+        expect(newState).toEqual({
+            ...appInitialState.user,
+            user,
+            isLoggedInByToken: true,
+            isLoggingInByToken: false
+        })
+    })
+
+    it('loginUserByTokenFail', () => {
+        const initialState: UserState = {
+            ...appInitialState.user,
+            user: {id: 1} as any,
+            isLoggingInByToken: true
+        }
+
+        const newState = userReducer(initialState, loginUserByTokenFail());
+
+        expect(newState).toEqual({
+            ...appInitialState.user,
+            user: null,
+            isLoggedInByToken: true,
+            isLoggingInByToken: false
         })
     })
 

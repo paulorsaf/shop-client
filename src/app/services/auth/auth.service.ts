@@ -23,6 +23,23 @@ export class AuthService {
     )
   }
 
+  loginByToken(): Observable<User> {
+    return new Observable<User>(observer => {
+      this.auth.onAuthStateChanged(user => {
+        if (user) {
+          observer.next({
+            email: user.email,
+            id: user.uid,
+            name: "any name"
+          })
+        } else {
+          observer.error({});
+        }
+        observer.complete();
+      })
+    })
+  }
+
   logout(): Observable<void> {
     return from(this.auth.signOut());
   }

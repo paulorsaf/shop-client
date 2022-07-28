@@ -44,6 +44,8 @@ export const appInitialState: AppState = {
     },
     user: {
         error: null,
+        isLoggedInByToken: false,
+        isLoggingInByToken: false,
         isLoggedOut: false,
         isLoggingOut: false,
         user: null

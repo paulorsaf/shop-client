@@ -6,6 +6,9 @@ export class AuthServiceMock {
     login(email: string, password: string) {
         return this.response || of({});
     }
+    loginByToken() {
+        return this.response || of({});
+    }
     logout() {
         return this.response || of({});
     }
