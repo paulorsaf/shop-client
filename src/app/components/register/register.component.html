@@ -1,3 +1,70 @@
-<p>
-  register works!
-</p>
+<ion-content>
+  <div class="centralize">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Cadastro</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form [formGroup]="form" *ngIf="form">
+          <ion-list>
+            <ion-item>
+              <ion-label position="floating">Nome *</ion-label>
+              <ion-input formControlName="name"></ion-input>
+            </ion-item>
+            <div class="form-error" *ngIf="form.get('name').touched && form.get('name').errors?.required">
+              Nome é obrigatório
+            </div>
+            <ion-item>
+              <ion-label position="floating">Email *</ion-label>
+              <ion-input type="email" formControlName="email"></ion-input>
+            </ion-item>
+            <div class="form-error" *ngIf="form.get('email').touched && form.get('email').errors?.required">
+              Email é obrigatório
+            </div>
+            <div class="form-error" *ngIf="form.get('email').touched && form.get('email').errors?.email">
+              Email é inválido
+            </div>
+            <ion-item>
+              <ion-label position="floating">Senha *</ion-label>
+              <ion-input type="password" formControlName="password"></ion-input>
+            </ion-item>
+            <div class="form-error" *ngIf="form.get('password').touched && form.get('password').errors?.required">
+              Senha é obrigatória
+            </div>
+            <div class="form-error" *ngIf="form.get('password').touched && form.get('password').errors?.minlength">
+              Senha deve ter pelo menos 6 caracteres
+            </div>
+            <ion-item>
+              <ion-label position="floating">CPF/CNPJ *</ion-label>
+              <ion-input type="tel" formControlName="cpfCnpj" [brmasker]="{person: true}"></ion-input>
+            </ion-item>
+            <div class="form-error" *ngIf="form.get('cpfCnpj').touched && form.get('cpfCnpj').errors?.required">
+              CPF/CNPJ é obrigatório
+            </div>
+            <div class="form-error" *ngIf="form.get('cpfCnpj').touched && form.get('cpfCnpj').errors?.invalidCpf">
+              CPF inválido
+            </div>
+            <div class="form-error" *ngIf="form.get('cpfCnpj').touched && form.get('cpfCnpj').errors?.invalidCnpj">
+              CNPJ inválido
+            </div>
+            <ion-item>
+              <ion-label position="floating">Telefone *</ion-label>
+              <ion-input type="tel" formControlName="phone" [brmasker]="{phone: true}"></ion-input>
+            </ion-item>
+            <div class="form-error" *ngIf="form.get('phone').touched && form.get('phone').errors?.required">
+              Telefone é obrigatório
+            </div>
+          </ion-list>
+          <ion-button color="primary" size="full" [disabled]="!form.valid" (click)="register()"
+            test-id="register-button">
+            Cadastrar
+          </ion-button>
+          <ion-button color="primary" size="full" fill="clear" (click)="login()"
+            test-id="login-button">
+            Voltar para Login
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

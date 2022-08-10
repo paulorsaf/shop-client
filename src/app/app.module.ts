@@ -19,6 +19,8 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AddCompanyHeaderHttpRequestInterceptor } from './interceptors/add-company-header-http-request.interceptor';
 import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrMaskDirective, BrMaskerModule } from 'br-mask';
+import { RegisterComponent } from './components/register/register.component';
 
 registerLocaleData(localePt);
 
@@ -26,6 +28,7 @@ registerLocaleData(localePt);
   declarations: [
     AppComponent,
     LoginComponent,
+    RegisterComponent,
     ShoppingCartComponent
   ],
   imports: [
@@ -39,10 +42,13 @@ registerLocaleData(localePt);
     ProductTotalPricePipeModule,
 
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+
+    BrMaskerModule
   ],
   providers: [
     ProductOptionsPipe,
+    BrMaskDirective,
     {
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy
@@ -68,6 +74,7 @@ registerLocaleData(localePt);
   ],
   exports: [
     LoginComponent,
+    RegisterComponent,
     ShoppingCartComponent
   ],
   bootstrap: [AppComponent],

@@ -12,6 +12,8 @@ import { ProductEffects } from './product/product.effects';
 import { productReducer } from './product/product.reducers';
 import { ProductsEffects } from './products/products.effects';
 import { productsReducer } from './products/products.reducers';
+import { RegisterEffects } from './register/register.effects';
+import { registerReducer } from './register/register.reducers';
 import { ShoppingCartEffects } from './shopping-cart/shopping-cart.effects';
 import { shoppingCartReducer } from './shopping-cart/shopping-cart.reducers';
 import { TrendingEffects } from './trending/trending.effects';
@@ -27,6 +29,7 @@ import { userReducer } from './user/user.reducers';
     StoreModule.forFeature('login', loginReducer),
     StoreModule.forFeature('product', productReducer),
     StoreModule.forFeature('products', productsReducer),
+    StoreModule.forFeature('register', registerReducer),
     StoreModule.forFeature('shoppingCart', shoppingCartReducer),
     StoreModule.forFeature('trending', trendingReducer),
     StoreModule.forFeature('user', userReducer),
@@ -36,6 +39,7 @@ import { userReducer } from './user/user.reducers';
       LoginEffects,
       ProductEffects,
       ProductsEffects,
+      RegisterEffects,
       ShoppingCartEffects,
       TrendingEffects,
       UserEffects

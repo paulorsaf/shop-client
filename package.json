@@ -30,6 +30,7 @@
     "@ngrx/effects": "^14.0.0",
     "@ngrx/store": "^14.0.0",
     "@ngrx/store-devtools": "^14.0.0",
+    "br-mask": "0.0.10",
     "firebase": "^9.9.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",

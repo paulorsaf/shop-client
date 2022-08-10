@@ -3,7 +3,7 @@ import { of } from "rxjs";
 export class AuthServiceMock {
     response = of({});
 
-    login(email: string, password: string) {
+    login() {
         return this.response || of({});
     }
     loginByToken() {
@@ -12,7 +12,10 @@ export class AuthServiceMock {
     logout() {
         return this.response || of({});
     }
-    recoverPassword(email: string) {
+    recoverPassword() {
+        return this.response || of({});
+    }
+    register() {
         return this.response || of({});
     }
 }
