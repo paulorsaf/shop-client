@@ -1,9 +1,11 @@
 import { createSelector } from '@ngrx/store';
+import { Address } from 'src/app/model/address/address';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from '../app-state';
 
 export type ShoppingCartState = {
     isOpen: boolean;
+    deliveryAddress: Address;
     products: ShoppingCartProduct[];
 }
 

@@ -1,7 +1,7 @@
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
-import { addProduct, closeShoppingCart, decreaseProduct, openShoppingCart, removeProduct } from './shopping-cart.actions';
+import { addProduct, closeShoppingCart, decreaseProduct, openShoppingCart, removeProduct, setDeliveryAddress } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { selectTotalPrice, selectTotalQuantity, ShoppingCartState } from './shopping-cart.state';
 
@@ -183,6 +183,20 @@ describe('Products store', () => {
         expect(newState).toEqual({
             ...appInitialState.shoppingCart,
             isOpen: false
+        });
+    })
+
+    it('setDeliveryAddress', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart
+        };
+
+        const address = {id: 1} as any;
+        const newState = shoppingCartReducer(initialState, setDeliveryAddress({address}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            deliveryAddress: address
         });
     })
 

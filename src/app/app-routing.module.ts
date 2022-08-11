@@ -18,6 +18,14 @@ const routes: Routes = [
   {
     path: 'categories/:id',
     loadChildren: () => import('./pages/category/category.module').then( m => m.CategoryPageModule)
+  },
+  {
+    path: 'delivery-address',
+    loadChildren: () => import('./pages/delivery-address/delivery-address.module').then( m => m.DeliveryAddressPageModule)
+  },
+  {
+    path: 'payment',
+    loadChildren: () => import('./pages/payment/payment.module').then( m => m.PaymentPageModule)
   }
 ];
 

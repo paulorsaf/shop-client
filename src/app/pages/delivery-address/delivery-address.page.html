@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button fill="clear" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="light">Endereço de entrega</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form" *ngIf="form">
+    <ion-list class="delivery-method">
+      <ion-radio-group formControlName="deliveryType">
+        <ion-item>
+          <ion-label>Entrega à domicílio</ion-label>
+          <ion-radio slot="start" value="DELIVERY"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Retirar na loja</ion-label>
+          <ion-radio slot="start" value="PICK_UP"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+
+    <ion-card *ngIf="form.value.deliveryType === 'DELIVERY'" test-id="address-form">
+      <ion-card-header>
+        <ion-card-title>Endereço</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-label position="floating">Logradouro*</ion-label>
+            <ion-input formControlName="street"></ion-input>
+          </ion-item>
+          <div class="form-error" *ngIf="form.get('street').touched && form.get('street').errors?.required">
+            Logradouro é obrigatório
+          </div>
+          <ion-item>
+            <ion-label position="floating">Número*</ion-label>
+            <ion-input formControlName="number"></ion-input>
+          </ion-item>
+          <div class="form-error" *ngIf="form.get('number').touched && form.get('number').errors?.required">
+            Número é obrigatório
+          </div>
+          <ion-item>
+            <ion-label position="floating">Complemento*</ion-label>
+            <ion-input formControlName="complement"></ion-input>
+          </ion-item>
+          <div class="form-error" *ngIf="form.get('complement').touched && form.get('complement').errors?.required">
+            Complemento é obrigatório
+          </div>
+          <ion-item>
+            <ion-label position="floating">Bairro*</ion-label>
+            <ion-input formControlName="neighborhood"></ion-input>
+          </ion-item>
+          <div class="form-error" *ngIf="form.get('neighborhood').touched && form.get('neighborhood').errors?.required">
+            Bairro é obrigatório
+          </div>
+          <ion-item>
+            <ion-label position="floating">CEP*</ion-label>
+            <ion-input formControlName="zipCode" [brmasker]="{mask:'00.000-000', len:10}"></ion-input>
+          </ion-item>
+          <div class="form-error" *ngIf="form.get('zipCode').touched && form.get('zipCode').errors?.required">
+            CEP é obrigatório
+          </div>
+          <ion-item>
+            <ion-label position="floating">Cidade*</ion-label>
+            <ion-input formControlName="city"></ion-input>
+          </ion-item>
+          <div class="form-error" *ngIf="form.get('city').touched && form.get('city').errors?.required">
+            Cidade é obrigatória
+          </div>
+          <ion-item>
+            <ion-label position="floating">Estado*</ion-label>
+            <ion-input formControlName="state"></ion-input>
+          </ion-item>
+          <div class="form-error" *ngIf="form.get('state').touched && form.get('state').errors?.required">
+            Estado é obrigatório
+          </div>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+    <div class="ion-padding">
+      <ion-button size="full" (click)="goToPayment()" test-id="next-button">Próximo</ion-button>
+    </div>
+  </form>
+</ion-content>

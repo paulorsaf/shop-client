@@ -1,8 +1,11 @@
+import { Location } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
 import { take } from 'rxjs/operators';
 import { AlertControllerMock } from 'src/app/model/mocks/alert-controller.mock';
+import { BlankMockComponent } from 'src/app/model/mocks/blank-mock/blank-mock.component';
 import { ModalControllerMock } from 'src/app/model/mocks/modal-controller.mock';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
@@ -11,14 +14,16 @@ import { ProductTotalPricePipeModule } from 'src/app/pipes/product-total-price/p
 import { AppState } from 'src/app/store/app-state';
 import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
+import { setUser } from 'src/app/store/user/user.actions';
 import { userReducer } from 'src/app/store/user/user.reducers';
 import { ShoppingCartComponent } from './shopping-cart.component';
 
-describe('ShoppingCartComponent', () => {
+fdescribe('ShoppingCartComponent', () => {
   let component: ShoppingCartComponent;
   let fixture: ComponentFixture<ShoppingCartComponent>;
   let page: PageMock;
   let store: Store<AppState>;
+  let location: Location;
   let alertController: AlertControllerMock;
   let modalController: ModalControllerMock;
 
@@ -32,6 +37,9 @@ describe('ShoppingCartComponent', () => {
         IonicModule.forRoot(),
         ProductOptionsPipeModule,
         ProductTotalPricePipeModule,
+        RouterTestingModule.withRoutes([{
+          path: 'delivery-address', component: BlankMockComponent
+        }]),
         StoreModule.forRoot([]),
         StoreModule.forFeature('shoppingCart', shoppingCartReducer),
         StoreModule.forFeature('user', userReducer)
@@ -43,6 +51,7 @@ describe('ShoppingCartComponent', () => {
 
     fixture = TestBed.createComponent(ShoppingCartComponent);
     store = TestBed.inject(Store);
+    location = TestBed.inject(Location);
 
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
@@ -186,17 +195,41 @@ describe('ShoppingCartComponent', () => {
     beforeEach(() => {
       store.dispatch(addProduct({product: shoppingCartProduct1}));
       fixture.detectChanges();
-
-      page.querySelector('[test-id="finish-button"]').click();
-      fixture.detectChanges();
     });
 
     it('when user is not logged, then show login page', done => {
+      page.querySelector('[test-id="finish-button"]').click();
+      fixture.detectChanges();
+
       setTimeout(() => {
         expect(modalController.isPresented).toBeTruthy();
         done();
       }, 100)
     });
+
+    describe('when user is logged', () => {
+
+      beforeEach(() => {
+        const user = {id: 1} as any;
+        store.dispatch(setUser({user}));
+        fixture.detectChanges();
+
+        page.querySelector('[test-id="finish-button"]').click();
+        fixture.detectChanges();
+      })
+
+      it('then hide modal', () => {
+        expect(modalController.isDismissed).toBeTruthy();
+      });
+
+      it('then delivery address page', done => {
+        setTimeout(() => {
+          expect(location.path()).toEqual('/delivery-address');
+          done();
+        }, 100)
+      });
+
+    })
 
   });
 

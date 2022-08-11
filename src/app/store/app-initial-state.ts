@@ -38,6 +38,7 @@ export const appInitialState: AppState = {
         isRegistering: false
     },
     shoppingCart: {
+        deliveryAddress: null,
         isOpen: false,
         products: []
     },

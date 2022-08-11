@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
@@ -23,6 +24,7 @@ export class ShoppingCartComponent implements OnInit {
   constructor(
     private alertController: AlertController,
     private modalController: ModalController,
+    private router: Router,
     private store: Store<AppState>
   ) { }
 
@@ -59,17 +61,28 @@ export class ShoppingCartComponent implements OnInit {
   onFinishPurchase() {
     this.store.select('user').pipe(take(1)).subscribe(state => {
       if (!state.user) {
-        this.modalController.create({
-          component: LoginComponent
-        }).then(modal => {
-          modal.present();
-        })
+        this.openLogin();
+      } else {
+        this.showDeliveryAddressPage();
       }
     })
   }
 
   identify(index: number, item: ShoppingCartProduct){
     return `${index}${item.product.id}`;
+  }
+
+  private openLogin() {
+    this.modalController.create({
+      component: LoginComponent
+    }).then(modal => {
+      modal.present();
+    })
+  }
+
+  private showDeliveryAddressPage() {
+    this.modalController.dismiss();
+    this.router.navigate(['delivery-address']);
   }
 
 }
