@@ -1,9 +1,53 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>payment</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button fill="clear" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="light">Pagamento</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <form [formGroup]="form" *ngIf="form">
+    <ion-list class="payment-method">
+      <ion-item lines="none" class="total-price">
+        <ion-label>Valor total</ion-label>
+        <ion-button fill="clear" color="success" slot="end">
+          {{totalPrice$ | async | currency: "R$ "}}
+        </ion-button>
+      </ion-item>
+    </ion-list>
 
+    <ion-list>
+      <ion-radio-group formControlName="paymentType">
+        <ion-item>
+          <ion-label>PIX</ion-label>
+          <ion-radio slot="start" [value]="PaymentType.PIX"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Dinheiro (ao receber produto)</ion-label>
+          <ion-radio slot="start" [value]="PaymentType.MONEY"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+
+    <ion-card *ngIf="form.value.paymentType === 'PIX'" test-id="pix-key">
+      <ion-card-header>
+        <ion-card-title>Chave PIX</ion-card-title>
+        <ion-card-subtitle>003.363.303-75</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content align="right">* Clique para copiar</ion-card-content>
+    </ion-card>
+
+    <div class="ion-padding">
+      <ion-button size="full" (click)="finishPurchase()" *ngIf="form.value.paymentType !== 'PIX'"
+        test-id="finish-purchase-button">
+        Finalizar pedido
+      </ion-button>
+      <ion-button size="full" *ngIf="form.value.paymentType === 'PIX'" test-id="receipt-button">
+        <input type="file" (change)="uploadReceipt($event)" accept=".png, .jpg, .pdf"/>
+        Enviar comprovante
+      </ion-button>
+    </div>
+  </form>
 </ion-content>

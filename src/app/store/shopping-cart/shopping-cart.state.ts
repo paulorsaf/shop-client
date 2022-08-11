@@ -4,8 +4,11 @@ import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shoppin
 import { AppState } from '../app-state';
 
 export type ShoppingCartState = {
-    isOpen: boolean;
     deliveryAddress: Address;
+    error: any;
+    isOpen: boolean;
+    isPaid: boolean;
+    isPaying: boolean;
     products: ShoppingCartProduct[];
 }
 

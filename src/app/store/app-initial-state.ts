@@ -39,7 +39,10 @@ export const appInitialState: AppState = {
     },
     shoppingCart: {
         deliveryAddress: null,
+        error: null,
         isOpen: false,
+        isPaid: false,
+        isPaying: false,
         products: []
     },
     trending: {

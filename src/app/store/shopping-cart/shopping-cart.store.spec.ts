@@ -1,7 +1,7 @@
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
-import { addProduct, closeShoppingCart, decreaseProduct, openShoppingCart, removeProduct, setDeliveryAddress } from './shopping-cart.actions';
+import { addProduct, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { selectTotalPrice, selectTotalQuantity, ShoppingCartState } from './shopping-cart.state';
 
@@ -197,6 +197,60 @@ describe('Products store', () => {
         expect(newState).toEqual({
             ...appInitialState.shoppingCart,
             deliveryAddress: address
+        });
+    })
+
+    it('makePurchase', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            error: {},
+            isPaid: true,
+            isPaying: false
+        };
+
+        const purchase = {
+            paymentType: "anyType",
+            receipt: {id: 1} as any
+        }
+        const newState = shoppingCartReducer(initialState, makePurchase({purchase}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            error: null,
+            isPaid: false,
+            isPaying: true
+        });
+    })
+
+    it('makePurchaseSuccess', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isPaying: true
+        };
+
+        const newState = shoppingCartReducer(initialState, makePurchaseSuccess());
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            isPaid: true,
+            isPaying: false
+        });
+    })
+
+    it('makePurchaseFail', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isPaying: true
+        };
+
+        const error = {error: "error"};
+        const newState = shoppingCartReducer(initialState, makePurchaseFail({error}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            error,
+            isPaid: false,
+            isPaying: false
         });
     })
 

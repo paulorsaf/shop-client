@@ -18,7 +18,7 @@ import { setUser } from 'src/app/store/user/user.actions';
 import { userReducer } from 'src/app/store/user/user.reducers';
 import { ShoppingCartComponent } from './shopping-cart.component';
 
-fdescribe('ShoppingCartComponent', () => {
+describe('ShoppingCartComponent', () => {
   let component: ShoppingCartComponent;
   let fixture: ComponentFixture<ShoppingCartComponent>;
   let page: PageMock;
