@@ -7,6 +7,7 @@
     "ng": "ng",
     "start": "ng serve --port 4210",
     "build": "ng build",
+    "build:production": "ng build --configuration=production",
     "build:stiggo": "ng build --configuration=stiggo",
     "test": "ng test",
     "lint": "ng lint",

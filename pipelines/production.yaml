@@ -6,7 +6,7 @@ steps:
     args: ['install']
   - name: 'node:16.10'
     entrypoint: 'npm'
-    args: ['run', 'build']
+    args: ['run', 'build:production']
   - name: 'gcr.io/${_FIREBASE_PROJECT_ID}/firebase'
     args: ['use', '${_FIREBASE_PROJECT_ID}', '--token', '${_FIREBASE_TOKEN}']
   - name: 'gcr.io/${_FIREBASE_PROJECT_ID}/firebase'
