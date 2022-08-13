@@ -87,9 +87,9 @@ export class PaymentPage implements OnInit, OnDestroy {
     if (error) {
       const toast = await this.toastController.create({
         color: "danger",
-        message: error.message,
+        message: error.error.message,
         position: "bottom",
-        duration: 2000
+        duration: 10000
       });
       toast.present();
     }

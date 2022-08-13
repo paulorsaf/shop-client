@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Address } from 'src/app/model/address/address';
+import { PaymentType } from 'src/app/model/payment/payment';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { environment } from 'src/environments/environment';
 
@@ -15,12 +16,20 @@ export class PaymentService {
   ) { }
 
   payByMoney(paymentDetails: PaymentByMoney): Observable<void> {
-    const url = `${environment.api}/payments/money`;
-    return this.http.post<void>(url, paymentDetails);
+    const url = `${environment.api}/purchases`;
+    return this.http.post<void>(url, {
+      deliveryAddress: paymentDetails.deliveryAddress,
+      paymentType: PaymentType.MONEY,
+      products: paymentDetails.shoppingCart.map(s => ({
+        amount: s.amount,
+        productId: s.product.id,
+        stockOptionId: s.stockOption?.id
+      }))
+    });
   }
 
   payByPix(paymentDetails: PaymentByPix): Observable<void> {
-    const url = `${environment.api}/payments/pix`;
+    const url = `${environment.api}/purchases`;
     return this.http.post<void>(url, paymentDetails);
   }
 
