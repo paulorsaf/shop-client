@@ -5,9 +5,9 @@ import { Product } from 'src/app/model/product/product';
 @Injectable()
 export class HasSizePipe implements PipeTransform {
     transform(product: Product): boolean {
-        if (!product || !product.stockOptions) {
+        if (!product || !product.stock) {
             return false;
         }
-        return product.stockOptions.some(s => s.size);
+        return product.stock.some(s => s.size);
     }
 };

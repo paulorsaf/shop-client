@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, iif, Observable, of } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
-import { Product, StockOption } from 'src/app/model/product/product';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { Product, Stock } from 'src/app/model/product/product';
 import { AppState } from 'src/app/store/app-state';
 
 @Component({
@@ -39,13 +39,13 @@ export class ProductColorsComponent implements OnInit {
     return this.selectedSize$.pipe(
       switchMap((size: string) => 
         this.store.select(state => 
-          this.filterColors(size, state.product.product.stockOptions)
+          this.filterColors(size, state.product.product.stock)
         )
       )
     );
   }
 
-  private filterColors(size: string, stockOptions: StockOption[]) {
+  private filterColors(size: string, stockOptions: Stock[]) {
     const colors: string[] = [];
     stockOptions?.forEach(stockOption => {
       if (!size || size === stockOption.size) {

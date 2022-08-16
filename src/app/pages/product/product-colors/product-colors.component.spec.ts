@@ -32,7 +32,7 @@ describe('ProductColorsComponent', () => {
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
 
-    const product = {id: 1, stockOptions: [
+    const product = {id: 1, stock: [
       {color: 'Amarelo'}, {color: 'Verde'}, {color: 'Vermelho'}
     ]} as any;
     store.dispatch(loadProductSuccess({product}));
@@ -51,7 +51,7 @@ describe('ProductColorsComponent', () => {
   describe('given stock options have size', () => {
 
     beforeEach(() => {
-      const product = {id: 1, stockOptions: [
+      const product = {id: 1, stock: [
         {size: 'P', color: 'Amarelo'}, {size: 'P', color: 'Verde'}, {size: 'M', color: 'Vermelho'}
       ]} as any;
       store.dispatch(loadProductSuccess({product}));

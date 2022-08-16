@@ -29,7 +29,7 @@ describe('ProductSizesComponent', () => {
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
 
-    const product = {id: 1, stockOptions: [
+    const product = {id: 1, stock: [
       {size: 'P'}, {size: 'M'}, {size: 'M'}, {size: 'G'}, {size: 'G'}
     ]} as any;
     store.dispatch(loadProductSuccess({product}));

@@ -101,7 +101,7 @@ describe('ProductPage', () => {
     });
 
     it('when product has colors, then show colors', () => {
-      const product = {id: 1, stockOptions: [
+      const product = {id: 1, stock: [
         {color: 'Amarelo'}, {color: 'Verde'}, {color: 'Vermelho'}
       ]} as any;
       store.dispatch(loadProductSuccess({product}));
@@ -115,7 +115,7 @@ describe('ProductPage', () => {
     });
 
     it('when product has sizes, then show sizes', () => {
-      const product = {id: 1, stockOptions: [{size: 'M'}]} as any;
+      const product = {id: 1, stock: [{size: 'M'}]} as any;
       store.dispatch(loadProductSuccess({product}));
       fixture.detectChanges();
 
@@ -139,7 +139,7 @@ describe('ProductPage', () => {
   describe('given product has colors and sizes', () => {
 
     beforeEach(() => {
-      const product = {id: 1, stockOptions: [
+      const product = {id: 1, stock: [
         {color: 'Amarelo', size: 'M'}, {color: 'Verde', size: 'P'}, {color: 'Vermelho', size: 'G'}
       ]} as any;
       store.dispatch(loadProductSuccess({product}));
@@ -260,7 +260,7 @@ describe('ProductPage', () => {
     function dispatchLoadProductSuccessWithStockOptions(color: string, size: string) {
       const product = {
         id: 1,
-        stockOptions: [{id: "anyStockOptionId", color, size, quantity: 10}]
+        stock: [{id: "anyStockOptionId", color, size, quantity: 10}]
       } as any;
       store.dispatch(loadProductSuccess({product}));
       fixture.detectChanges();

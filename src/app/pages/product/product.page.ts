@@ -62,7 +62,7 @@ export class ProductPage implements OnInit {
     this.hasTriedToAdd = true;
 
     this.product$.pipe(take(1)).subscribe(product => {
-      if (product.stockOptions?.length) {
+      if (product.stock?.length) {
         this.addProductToShoppingCartWithStockOption(product);
       } else {
         this.store.dispatch(addProduct({product: {product}}));
@@ -101,7 +101,7 @@ export class ProductPage implements OnInit {
   }
 
   private findSelectedStockOption(product: Product) {
-    const stockOption = product.stockOptions.find(s => {
+    const stockOption = product.stock.find(s => {
       if (s.color && s.size) {
         return s.color === this.selectedColor && s.size === this.selectedSize;
       }

@@ -5,10 +5,10 @@ export type Product = {
     price: number;
     priceWithDiscount: number;
     name: string;
-    stockOptions?: StockOption[];
+    stock?: Stock[];
 };
 
-export type StockOption = {
+export type Stock = {
     color: string;
     id: string;
     quantity: number;

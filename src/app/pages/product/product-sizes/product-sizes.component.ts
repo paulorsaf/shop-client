@@ -35,7 +35,7 @@ export class ProductSizesComponent implements OnInit {
   private filterSizes() {
     return this.store.select(state => {
       const sizes: string[] = [];
-      state.product.product?.stockOptions?.forEach(stockOption => {
+      state.product.product?.stock?.forEach(stockOption => {
         if (!sizes.some(s => s === stockOption.size)) {
           sizes.push(stockOption.size);
         }
