@@ -19,7 +19,9 @@ export class PaymentService {
     const url = `${environment.api}/purchases`;
     return this.http.post<void>(url, {
       deliveryAddress: paymentDetails.deliveryAddress,
-      paymentType: PaymentType.MONEY,
+      payment: {
+        type: PaymentType.MONEY
+      },
       products: paymentDetails.shoppingCart.map(s => ({
         amount: s.amount,
         productId: s.product.id,
@@ -30,7 +32,18 @@ export class PaymentService {
 
   payByPix(paymentDetails: PaymentByPix): Observable<void> {
     const url = `${environment.api}/purchases`;
-    return this.http.post<void>(url, paymentDetails);
+    return this.http.post<void>(url, {
+      deliveryAddress: paymentDetails.deliveryAddress,
+      payment: {
+        type: PaymentType.PIX,
+        receipt: paymentDetails.receipt
+      },
+      products: paymentDetails.shoppingCart.map(s => ({
+        amount: s.amount,
+        productId: s.product.id,
+        stockOptionId: s.stockOption?.id
+      }))
+    });
   }
 
 }
