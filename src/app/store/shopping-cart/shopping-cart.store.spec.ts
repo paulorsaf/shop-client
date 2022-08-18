@@ -1,7 +1,7 @@
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
-import { addProduct, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress } from './shopping-cart.actions';
+import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { selectTotalPrice, selectTotalQuantity, ShoppingCartState } from './shopping-cart.state';
 
@@ -208,17 +208,18 @@ describe('Products store', () => {
             isPaying: false
         };
 
-        const purchase = {
+        const payment = {
             paymentType: "anyType",
             receipt: {id: 1} as any
         }
-        const newState = shoppingCartReducer(initialState, makePurchase({purchase}));
+        const newState = shoppingCartReducer(initialState, makePurchase({payment}));
 
         expect(newState).toEqual({
             ...appInitialState.shoppingCart,
             error: null,
             isPaid: false,
-            isPaying: true
+            isPaying: true,
+            payment
         });
     })
 
@@ -251,6 +252,25 @@ describe('Products store', () => {
             error,
             isPaid: false,
             isPaying: false
+        });
+    })
+
+    it('clear', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            deliveryAddress: {} as any,
+            error: {} as any,
+            isOpen: true,
+            isPaid: true,
+            isPaying: true,
+            payment: {} as any,
+            products: [{} as any]
+        };
+
+        const newState = shoppingCartReducer(initialState, clear());
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart
         });
     })
 

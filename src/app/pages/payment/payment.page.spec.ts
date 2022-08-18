@@ -32,7 +32,7 @@ describe('PaymentPage', () => {
       imports: [
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([{
-          path: 'success', component: BlankMockComponent
+          path: 'payment/purchase-success', component: BlankMockComponent
         }]),
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
@@ -127,7 +127,7 @@ describe('PaymentPage', () => {
       fixture.detectChanges();
 
       expect(store.dispatch).toHaveBeenCalledWith(
-        makePurchase({purchase: {paymentType: PaymentType.PIX, receipt: file}})
+        makePurchase({payment: {paymentType: PaymentType.PIX, receipt: file}})
       );
     })
 
@@ -157,7 +157,7 @@ describe('PaymentPage', () => {
       fixture.detectChanges();
 
       expect(store.dispatch).toHaveBeenCalledWith(
-        makePurchase({purchase: {paymentType: "MONEY"}})
+        makePurchase({payment: {paymentType: "MONEY"}})
       );
     })
 
@@ -176,7 +176,7 @@ describe('PaymentPage', () => {
   describe('given payment', () => {
 
     beforeEach(() => {
-      store.dispatch(makePurchase({purchase: {
+      store.dispatch(makePurchase({payment: {
         paymentType: "ANY", receipt: {id: 1} as any
       }}));
       fixture.detectChanges();
@@ -205,7 +205,7 @@ describe('PaymentPage', () => {
 
       it('then go to success page', done => {
         setTimeout(() => {
-          expect(location.path()).toEqual('/success');
+          expect(location.path()).toEqual('/payment/purchase-success');
           done();
         }, 100)
       })

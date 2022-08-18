@@ -43,6 +43,7 @@ export const appInitialState: AppState = {
         isOpen: false,
         isPaid: false,
         isPaying: false,
+        payment: null,
         products: []
     },
     trending: {

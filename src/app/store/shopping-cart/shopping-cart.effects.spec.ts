@@ -64,21 +64,21 @@ describe('Products effects', () => {
   describe('given make purchase', () => {
 
     it('when pix, then return make purchase with pix', (done) => {
-      const purchase = {paymentType: PaymentType.PIX}
-      actions$ = of(makePurchase({purchase}));
+      const payment = {paymentType: PaymentType.PIX, receipt: {id: 1} as any}
+      actions$ = of(makePurchase({payment}));
 
       effects.makePurchaseEffect$.subscribe(action => {
-        expect(action).toEqual(makePurchaseByPix({purchase}));
+        expect(action).toEqual(makePurchaseByPix({receipt: {id: 1} as any}));
         done();
       });
     });
 
     it('when money, then return make purchase with money', (done) => {
-      const purchase = {paymentType: PaymentType.MONEY}
-      actions$ = of(makePurchase({purchase}));
+      const payment = {paymentType: PaymentType.MONEY}
+      actions$ = of(makePurchase({payment}));
 
       effects.makePurchaseEffect$.subscribe(action => {
-        expect(action).toEqual(makePurchaseByMoney({purchase}));
+        expect(action).toEqual(makePurchaseByMoney());
         done();
       });
     });
@@ -87,11 +87,12 @@ describe('Products effects', () => {
 
   describe('given make purchase by pix', () => {
 
+    const receipt = {id: 1} as any;
+
     it('when success, then return make purchase success', (done) => {
       paymentService.response = of({});
 
-      const purchase = {paymentType: PaymentType.PIX}
-      actions$ = of(makePurchaseByPix({purchase}));
+      actions$ = of(makePurchaseByPix({receipt}));
 
       effects.makePurchaseByPixEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseSuccess());
@@ -102,8 +103,7 @@ describe('Products effects', () => {
     it('when fail, then return make purchase fail', (done) => {
       paymentService.response = throwError(error)
 
-      const purchase = {paymentType: PaymentType.MONEY}
-      actions$ = of(makePurchaseByPix({purchase}));
+      actions$ = of(makePurchaseByPix({receipt}));
 
       effects.makePurchaseByPixEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseFail({error}));
@@ -118,8 +118,7 @@ describe('Products effects', () => {
     it('when success, then return make purchase success', (done) => {
       paymentService.response = of({});
 
-      const purchase = {paymentType: PaymentType.MONEY}
-      actions$ = of(makePurchaseByMoney({purchase}));
+      actions$ = of(makePurchaseByMoney());
 
       effects.makePurchaseByMoneyEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseSuccess());
@@ -130,8 +129,7 @@ describe('Products effects', () => {
     it('when fail, then return make purchase fail', (done) => {
       paymentService.response = throwError(error)
 
-      const purchase = {paymentType: PaymentType.MONEY}
-      actions$ = of(makePurchaseByMoney({purchase}));
+      actions$ = of(makePurchaseByMoney());
 
       effects.makePurchaseByMoneyEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseFail({error}));

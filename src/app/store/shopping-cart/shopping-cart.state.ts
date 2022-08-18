@@ -1,5 +1,6 @@
 import { createSelector } from '@ngrx/store';
 import { Address } from 'src/app/model/address/address';
+import { Payment } from 'src/app/model/payment/payment';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from '../app-state';
 
@@ -9,6 +10,7 @@ export type ShoppingCartState = {
     isOpen: boolean;
     isPaid: boolean;
     isPaying: boolean;
+    payment: Payment;
     products: ShoppingCartProduct[];
 }
 

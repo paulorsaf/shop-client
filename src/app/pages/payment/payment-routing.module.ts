@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: PaymentPage
+  },
+  {
+    path: 'purchase-success',
+    loadChildren: () => import('./purchase-success/purchase-success.module').then( m => m.PurchaseSuccessPageModule)
   }
 ];
 

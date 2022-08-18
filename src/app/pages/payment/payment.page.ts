@@ -44,14 +44,14 @@ export class PaymentPage implements OnInit, OnDestroy {
   }
 
   finishPurchase() {
-    this.store.dispatch(makePurchase({purchase: {
+    this.store.dispatch(makePurchase({payment: {
       paymentType: this.form.value.paymentType
     }}))
   }
 
   uploadReceipt($event) {
     const receipt = $event.target.files[0];
-    this.store.dispatch(makePurchase({purchase: {
+    this.store.dispatch(makePurchase({payment: {
       paymentType: this.form.value.paymentType, receipt
     }}));
 
@@ -69,7 +69,7 @@ export class PaymentPage implements OnInit, OnDestroy {
 
   private onPaymentSuccess(state: ShoppingCartState) {
     if (state.isPaid) {
-      this.router.navigate(['/success']);
+      this.router.navigate(['/payment/purchase-success']);
     }
   }
 

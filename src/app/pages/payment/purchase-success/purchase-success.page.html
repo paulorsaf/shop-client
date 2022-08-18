@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title color="light">Dados da compra</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <section class="purchase">
+    <ion-icon color="primary" name="bag-check"></ion-icon>
+    
+    <span *ngIf="(payment$ | async)?.paymentType === 'MONEY'" test-id="purchase-success">
+      <ion-text color="primary">
+        <h1>Pedido feito com sucesso!</h1>
+      </ion-text>
+      <ion-text>
+        <p>Aguarde enquanto preparamos o seu pedido.</p>
+      </ion-text>
+    </span>
+
+    <span *ngIf="(payment$ | async)?.paymentType === 'PIX'" test-id="payment-confirmation">
+      <ion-text color="primary">
+        <h1>Pedido feito com sucesso!</h1>
+      </ion-text>
+      <ion-text>
+        <p>Aguarde enquanto confirmamos o seu pagamento.<p>
+      </ion-text>
+    </span>
+
+    <ion-text>
+      <p>Como isso pode demorar, enviaremos uma mensagem quando terminarmos.</p>
+    </ion-text>
+  </section>
+
+  <section>
+    <!-- <ion-button size="full" (click)="myPurchases()" test-id="my-purchases-button">
+      Ver minhas compras
+    </ion-button> -->
+    <ion-button fill="clear" (click)="home()" size="full" test-id="home-button">
+      Ir para página principal
+    </ion-button>
+  </section>
+  
+  <section test-id="purchase-details">
+    
+  </section>
+</ion-content>
