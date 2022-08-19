@@ -59,7 +59,7 @@ describe('PurchaseSuccessPage', () => {
       expect(page.querySelector('[test-id="payment-confirmation"]')).toBeNull();
     });
     
-    xit('then show my purchases button', () => {
+    it('then show my purchases button', () => {
       expect(page.querySelector('[test-id="my-purchases-button"]')).not.toBeNull();
     });
     
@@ -93,7 +93,7 @@ describe('PurchaseSuccessPage', () => {
     })
   })
 
-  xit('given user clicks on my purchases button, then go to my purchases', done => {
+  it('given user clicks on my purchases button, then go to my purchases', done => {
     page.querySelector('[test-id="my-purchases-button"]').click();
     fixture.detectChanges();
 
@@ -103,7 +103,7 @@ describe('PurchaseSuccessPage', () => {
     }, 200)
   })
 
-  xit('given user clicks on my purchases button, then clear purchase details', done => {
+  it('given user clicks on my purchases button, then clear purchase details', done => {
     page.querySelector('[test-id="my-purchases-button"]').click();
     fixture.detectChanges();
 
@@ -134,7 +134,7 @@ describe('PurchaseSuccessPage', () => {
       expect(page.querySelector('[test-id="home-button"]')).not.toBeNull();
     });
     
-    xit('then show my purchases button', () => {
+    it('then show my purchases button', () => {
       expect(page.querySelector('[test-id="my-purchases-button"]')).not.toBeNull();
     });
 

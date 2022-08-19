@@ -4,6 +4,10 @@
       <ion-content>
         <ion-list *ngIf="user$ | async">
           <ion-note>{{(user$ | async).email}}</ion-note>
+          <ion-item lines="none" test-id="purchases-menu" (click)="goToPage('purchases')">
+            <ion-icon name="bag-check" color="primary" slot="start"></ion-icon>
+            <ion-label>Minhas compras</ion-label>
+          </ion-item>
           <ion-item lines="none" test-id="logout-menu" (click)="logout()">
             <ion-icon name="log-out" slot="start"></ion-icon>
             <ion-label>Sair</ion-label>

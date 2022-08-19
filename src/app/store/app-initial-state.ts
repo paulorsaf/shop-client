@@ -32,6 +32,12 @@ export const appInitialState: AppState = {
         isLoading: false,
         products: []
     },
+    purchases: {
+        error: null,
+        isLoaded: false,
+        isLoading: false,
+        purchases: []
+    },
     register: {
         error: null,
         isRegistered: false,

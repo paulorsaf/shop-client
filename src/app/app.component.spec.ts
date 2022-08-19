@@ -1,9 +1,11 @@
+import { Location } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ModalController } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
 import { AppComponent } from './app.component';
+import { BlankMockComponent } from './model/mocks/blank-mock/blank-mock.component';
 import { ModalControllerMock } from './model/mocks/modal-controller.mock';
 import { PageMock } from './model/mocks/page.mock';
 import { AppState } from './store/app-state';
@@ -17,6 +19,7 @@ describe('AppComponent', () => {
   let page: PageMock;
   let store: Store<AppState>;
   let modalController: ModalControllerMock;
+  let location: Location;
 
   beforeEach(waitForAsync(() => {
     modalController = new ModalControllerMock();
@@ -25,7 +28,9 @@ describe('AppComponent', () => {
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
-        RouterTestingModule.withRoutes([]),
+        RouterTestingModule.withRoutes([
+          { path: "purchases", component: BlankMockComponent }
+        ]),
         StoreModule.forRoot([]),
         StoreModule.forFeature('user', userReducer)
       ],
@@ -35,6 +40,7 @@ describe('AppComponent', () => {
 
     fixture = TestBed.createComponent(AppComponent);
     store = TestBed.inject(Store);
+    location = TestBed.inject(Location);
 
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
@@ -115,6 +121,10 @@ describe('AppComponent', () => {
       expect(page.querySelector('[test-id="logout-menu"]')).toBeNull();
     })
 
+    it('then hide purchases button', () => {
+      expect(page.querySelector('[test-id="purchases-menu"]')).toBeNull();
+    })
+
     it('when user clicks on login button, then show login', done => {
       page.querySelector('[test-id="login-menu"]').click();
       fixture.detectChanges();
@@ -141,6 +151,20 @@ describe('AppComponent', () => {
 
     it('then show logout button', () => {
       expect(page.querySelector('[test-id="logout-menu"]')).not.toBeNull();
+    })
+
+    it('then show purchases button', () => {
+      expect(page.querySelector('[test-id="purchases-menu"]')).not.toBeNull();
+    })
+
+    it('when user clicks on purchase button, then go to my purchases page', done => {
+      page.querySelector('[test-id="purchases-menu"]').click();
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        expect(location.path()).toEqual('/purchases');
+        done();
+      }, 100)
     })
 
     describe('when user clicks on logout button', () => {

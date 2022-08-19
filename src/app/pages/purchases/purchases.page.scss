@@ -1,0 +1,46 @@
+ion-content {
+    --padding-top: 7rem;
+}
+
+ion-card {
+    ion-card-subtitle {
+        color: black;
+    }
+    &.loader {
+        ion-card-content {
+            padding: 0;
+        }
+        ion-skeleton-text {
+            margin: 0;
+            height: 20rem;
+        }
+    }
+    &.CREATED {
+        border-top: 5px solid transparent;
+    }
+}
+
+.empty-results {
+    margin: 10rem 0;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.status {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.4rem;
+
+    ion-icon {
+        font-size: 2rem;
+    }
+
+    .status-item {
+        text-align: center;
+
+        &.selected {
+            color: var(--ion-color-primary);
+            font-weight: 600;
+        }
+    }
+}

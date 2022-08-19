@@ -1,9 +1,63 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>purchases</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button fill="clear" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="light">Minhas compras</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <section *ngIf="isLoading$ | async" test-id="purchases-loader">
+    <ion-card class="loader" *ngFor="let i of [1, 2, 3]">
+      <ion-card-content>
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+  </section>
+  <section *ngIf="(isLoading$ | async) === false" test-id="purchases">
+    <div *ngIf="(purchases$ | async)?.length > 0" test-id="purchases-list">
+      <ion-card *ngFor="let purchase of (purchases$ | async)"
+        [ngClass]="purchase.status">
+        <ion-card-content>
+          <div class="status">
+            <div class="status-item" [ngClass]="purchase.status === 'CREATED' ? 'selected' : ''"
+              test-id="created">
+              <ion-icon name="bag-check-outline"></ion-icon>
+              <div>Pedido</div>
+            </div>
+            <div class="status-item" *ngIf="purchase.payment?.type !== 'MONEY'" test-id="payment">
+              <ion-icon name="wallet-outline"></ion-icon>
+              <div>Pagamento</div>
+            </div>
+            <div class="status-item" test-id="separating">
+              <ion-icon name="archive-outline"></ion-icon>
+              <div>Separando</div>
+            </div>
+            <div class="status-item" *ngIf="purchase.address" test-id="deliverying">
+              <ion-icon name="car-outline"></ion-icon>
+              <div>Enviando</div>
+            </div>
+            <div class="status-item" *ngIf="!purchase.address" test-id="ready-for-pick-up">
+              <ion-icon name="car-outline"></ion-icon>
+              <div>Pronto</div>
+            </div>
+            <div class="status-item" test-id="finished">
+              <ion-icon name="bag-check"></ion-icon>
+              <div>Finalizado</div>
+            </div>
+          </div>
+        </ion-card-content>
+        <ion-card-content>
+          <p>Pedido criado em {{purchase.createdAt | date: "dd/MM/yyyy HH:mm"}}</p>
+          <p *ngIf="purchase.address">Entrega à domicílio</p>
+          <p *ngIf="!purchase.address">Busca na loja</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div *ngIf="(purchases$ | async)?.length === 0" class="empty-results"
+      test-id="purchases-empty">
+      <ion-text>Nenhuma compra encontrada</ion-text>
+    </div>
+  </section>
 </ion-content>

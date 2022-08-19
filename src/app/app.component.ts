@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuController, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
   constructor(
     private menu: MenuController,
     private modalController: ModalController,
+    private router: Router,
     private store: Store<AppState>
   ) {}
 
@@ -40,6 +42,11 @@ export class AppComponent implements OnInit {
   logout() {
     this.menu.close();
     this.store.dispatch(logout());
+  }
+
+  goToPage(page: string) {
+    this.router.navigate([page]);
+    this.menu.close();
   }
 
 }
