@@ -10,6 +10,7 @@ import { PageMock } from 'src/app/model/mocks/page.mock';
 import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
 import { PaymentType } from 'src/app/model/payment/payment';
 import { AppState } from 'src/app/store/app-state';
+import { companyReducer } from 'src/app/store/company/company.reducers';
 import { makePurchase, makePurchaseFail, makePurchaseSuccess } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { PaymentPage } from './payment.page';
@@ -36,6 +37,7 @@ describe('PaymentPage', () => {
         }]),
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
+        StoreModule.forFeature('company', companyReducer),
         StoreModule.forFeature('shoppingCart', shoppingCartReducer)
       ]
     })

@@ -8,7 +8,7 @@ import { loadCompany, loadCompanyFail, loadCompanySuccess } from './company.acti
 import { CompanyServiceMock } from 'src/app/model/mocks/company.service.mock';
 import { CompanyService } from 'src/app/services/company/company.service';
 
-fdescribe('Company effects', () => {
+describe('Company effects', () => {
   let effects: CompanyEffects;
   let actions$: Observable<Action>;
   let companyService: CompanyServiceMock;

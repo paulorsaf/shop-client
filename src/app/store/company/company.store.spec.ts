@@ -3,7 +3,7 @@ import { loadCompany, loadCompanyFail, loadCompanySuccess } from "./company.acti
 import { companyReducer } from "./company.reducers";
 import { CompanyState } from "./company.state";
 
-fdescribe('Company store', () => {
+describe('Company store', () => {
 
     it('loadCompany', () => {
         const initialState: CompanyState = {
