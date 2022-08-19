@@ -31,10 +31,13 @@
       </ion-radio-group>
     </ion-list>
 
-    <ion-card *ngIf="form.value.paymentType === 'PIX'" test-id="pix-key">
+    <ion-card *ngIf="form.value.paymentType === 'PIX'" (click)="copyPix()" test-id="pix-key">
       <ion-card-header>
         <ion-card-title>Chave PIX</ion-card-title>
-        <ion-card-subtitle>003.363.303-75</ion-card-subtitle>
+        <ion-card-subtitle>
+          <ion-skeleton-text *ngIf="!(company$ | async)?.pixKey" [animated]="true"></ion-skeleton-text>
+          <span *ngIf="(company$ | async)?.pixKey">{{(company$ | async).pixKey}}</span>
+        </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content align="right">* Clique para copiar</ion-card-content>
     </ion-card>

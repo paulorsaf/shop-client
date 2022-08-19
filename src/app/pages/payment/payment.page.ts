@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { Company } from 'src/app/model/company/company';
 import { PaymentType } from 'src/app/model/payment/payment';
 import { AppState } from 'src/app/store/app-state';
 import { makePurchase } from 'src/app/store/shopping-cart/shopping-cart.actions';
@@ -19,6 +21,8 @@ export class PaymentPage implements OnInit, OnDestroy {
   form: FormGroup;
 
   wasPaying = false;
+
+  company$: Observable<Company>;
   totalPrice$: Observable<number>;
 
   paymentSubscription: Subscription;
@@ -32,6 +36,7 @@ export class PaymentPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.company$ = this.store.select(state => state.company.company);
     this.totalPrice$ = this.store.select(selectTotalPrice);
 
     this.createForm();
@@ -56,6 +61,34 @@ export class PaymentPage implements OnInit, OnDestroy {
     }}));
 
     $event.target.value = "";
+  }
+
+  copyPix() {
+    this.company$.pipe(take(1)).subscribe(company => {
+      this.copyText(company.pixKey);
+    })
+  }
+
+  private copyText(text: string) {
+    const el = document.createElement("textarea");
+    el.value = text;
+    el.setAttribute("readonly", "");
+    document.body.appendChild(el);
+
+    el.select();
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        document.body.removeChild(el);
+        this.toastController.create({
+          color: "success",
+          message: "PIX copiado com sucesso",
+          position: "bottom",
+          duration: 3000
+        }).then(toast => toast.present());
+      }
+    } catch (err) {
+    }
   }
 
   private onPaying() {
