@@ -9,10 +9,11 @@ import { BlankMockComponent } from './model/mocks/blank-mock/blank-mock.componen
 import { ModalControllerMock } from './model/mocks/modal-controller.mock';
 import { PageMock } from './model/mocks/page.mock';
 import { AppState } from './store/app-state';
+import { companyReducer } from './store/company/company.reducers';
 import { loginUserByTokenFail, loginUserByTokenSuccess, setUser } from './store/user/user.actions';
 import { userReducer } from './store/user/user.reducers';
 
-describe('AppComponent', () => {
+fdescribe('AppComponent', () => {
 
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
@@ -32,6 +33,7 @@ describe('AppComponent', () => {
           { path: "purchases", component: BlankMockComponent }
         ]),
         StoreModule.forRoot([]),
+        StoreModule.forFeature('company', companyReducer),
         StoreModule.forFeature('user', userReducer)
       ],
     })
@@ -102,6 +104,13 @@ describe('AppComponent', () => {
         expect(page.querySelector('[test-id="app-loader"][hidden]')).not.toBeNull();
       })
 
+    })
+
+    it('then load company details', done => {
+      store.select('company').subscribe(state => {
+        expect(state.isLoading).toBeTruthy();
+        done();
+      })
     })
     
   })

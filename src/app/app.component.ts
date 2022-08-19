@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { LoginComponent } from './components/login/login.component';
 import { User } from './model/user/user';
 import { AppState } from './store/app-state';
+import { loadCompany } from './store/company/company.action';
 import { loginUserByToken, logout } from './store/user/user.actions';
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
     this.user$ = this.store.select(state => state.user.user);
 
     this.store.dispatch(loginUserByToken());
+    this.store.dispatch(loadCompany());
   }
 
   async openLogin() {

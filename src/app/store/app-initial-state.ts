@@ -13,6 +13,12 @@ export const appInitialState: AppState = {
         isLoaded: false,
         isLoading: false
     },
+    company: {
+        company: null,
+        error: null,
+        isLoaded: false,
+        isLoading: false
+    },
     login: {
         error: null,
         isLoggedIn: false,
