@@ -159,6 +159,26 @@ describe('PurchasesPage', () => {
       })
 
     })
+    
+    describe('given purchase status', () => {
+
+      it('when status is not verifying payment, then hide verifying payment message', () => {
+        const purchases = [{status: "ANY"}] as any;
+        store.dispatch(loadPurchasesSuccess({purchases}));
+        fixture.detectChanges();
+
+        expect(page.querySelector('[test-id="verifying-payment-message"]')).toBeNull();
+      })
+
+      it('when status is verifying payment, then show verifying payment message', () => {
+        const purchases = [{status: "VERIFYING_PAYMENT"}] as any;
+        store.dispatch(loadPurchasesSuccess({purchases}));
+        fixture.detectChanges();
+
+        expect(page.querySelector('[test-id="verifying-payment-message"]')).not.toBeNull();
+      })
+
+    })
 
   })
 

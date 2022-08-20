@@ -26,7 +26,9 @@
               <ion-icon name="bag-check-outline"></ion-icon>
               <div>Pedido</div>
             </div>
-            <div class="status-item" *ngIf="purchase.payment?.type !== 'MONEY'" test-id="payment">
+            <div class="status-item" *ngIf="purchase.payment?.type !== 'MONEY'"
+              [ngClass]="purchase.status === 'VERIFYING_PAYMENT' ? 'selected' : ''"
+              test-id="payment">
               <ion-icon name="wallet-outline"></ion-icon>
               <div>Pagamento</div>
             </div>
@@ -49,10 +51,18 @@
           </div>
         </ion-card-content>
         <ion-card-content>
-          <p>Pedido criado em {{purchase.createdAt | date: "dd/MM/yyyy HH:mm"}}</p>
+          <p *ngIf="purchase.status === 'VERIFYING_PAYMENT'" class="main-message">
+            <ion-text color="primary" test-id="verifying-payment-message">
+              Por favor, aguarde enquanto verificamos o seu pagamento.
+            </ion-text>
+          </p>
           <p *ngIf="purchase.address">Entrega à domicílio</p>
           <p *ngIf="!purchase.address">Busca na loja</p>
-          <p>Pagamento com <b>{{purchase.payment?.type | paymentType}}</b></p>
+          <p>
+            Pagamento com
+            <b><ion-text color="primary">{{purchase.payment?.type | paymentType}}</ion-text></b>.
+          </p>
+          <p>Pedido criado em {{purchase.createdAt | date: "dd/MM/yyyy HH:mm"}}</p>
         </ion-card-content>
       </ion-card>
     </div>
