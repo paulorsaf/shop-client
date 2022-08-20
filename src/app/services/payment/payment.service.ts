@@ -32,18 +32,42 @@ export class PaymentService {
 
   payByPix(paymentDetails: PaymentByPix): Observable<void> {
     const url = `${environment.api}/purchases`;
-    return this.http.post<void>(url, {
-      deliveryAddress: paymentDetails.deliveryAddress,
-      payment: {
-        type: PaymentType.PIX,
-        receipt: paymentDetails.receipt
-      },
-      products: paymentDetails.shoppingCart.map(s => ({
-        amount: s.amount,
-        productId: s.product.id,
-        stockOptionId: s.stockOption?.id
-      }))
+
+    return new Observable<void>(observer => {
+      this.toBase64(paymentDetails.receipt).then(result => {
+        this.http.post<void>(url, {
+          deliveryAddress: paymentDetails.deliveryAddress,
+          payment: {
+            type: PaymentType.PIX
+          },
+          products: paymentDetails.shoppingCart.map(s => ({
+            amount: s.amount,
+            productId: s.product.id,
+            stockOptionId: s.stockOption?.id
+          })),
+          file: result,
+          name: paymentDetails.receipt.name
+        }).subscribe(() => {
+          observer.next();
+          observer.complete();
+        }, error => {
+          observer.error(error);
+          observer.complete();
+        });
+      }).catch(error => {
+        observer.error(error);
+        observer.complete();
+      })
     });
+  }
+
+  private toBase64(image: File) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    })
   }
 
 }
