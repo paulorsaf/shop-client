@@ -52,7 +52,7 @@
           <p>Pedido criado em {{purchase.createdAt | date: "dd/MM/yyyy HH:mm"}}</p>
           <p *ngIf="purchase.address">Entrega à domicílio</p>
           <p *ngIf="!purchase.address">Busca na loja</p>
-          <p>Pagamento com {{purchase.payment?.type}}</p>
+          <p>Pagamento com <b>{{purchase.payment?.type | paymentType}}</b></p>
         </ion-card-content>
       </ion-card>
     </div>

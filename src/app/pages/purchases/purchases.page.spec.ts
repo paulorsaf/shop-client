@@ -5,6 +5,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
 import { PaymentType } from 'src/app/model/payment/payment';
+import { PaymentTypePipeModule } from 'src/app/pipes/payment-type/payment-type.pipe.module';
 import { AppState } from 'src/app/store/app-state';
 import { loadPurchasesFail, loadPurchasesSuccess } from 'src/app/store/purchases/purchases.actions';
 import { purchasesReducer } from 'src/app/store/purchases/purchases.reducers';
@@ -23,6 +24,7 @@ describe('PurchasesPage', () => {
     TestBed.configureTestingModule({
       declarations: [ PurchasesPage ],
       imports: [
+        PaymentTypePipeModule,
         RouterTestingModule.withRoutes([]),
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
