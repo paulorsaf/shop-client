@@ -18,6 +18,9 @@ ion-card {
     &.CREATED {
         border-top: 5px solid transparent;
     }
+    &.payment-error {
+        border-top: 5px solid var(--ion-color-danger);
+    }
 }
 
 .empty-results {

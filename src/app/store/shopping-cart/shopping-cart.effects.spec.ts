@@ -64,7 +64,7 @@ describe('Products effects', () => {
   describe('given make purchase', () => {
 
     it('when pix, then return make purchase with pix', (done) => {
-      const payment = {paymentType: PaymentType.PIX, receipt: {id: 1} as any}
+      const payment = {type:  PaymentType.PIX, receiptUrl: {id: 1} as any}
       actions$ = of(makePurchase({payment}));
 
       effects.makePurchaseEffect$.subscribe(action => {
@@ -74,7 +74,7 @@ describe('Products effects', () => {
     });
 
     it('when money, then return make purchase with money', (done) => {
-      const payment = {paymentType: PaymentType.MONEY}
+      const payment = {type:  PaymentType.MONEY}
       actions$ = of(makePurchase({payment}));
 
       effects.makePurchaseEffect$.subscribe(action => {

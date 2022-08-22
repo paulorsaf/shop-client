@@ -17,10 +17,10 @@ export class ShoppingCartEffects {
     this.actions$.pipe(
       ofType(makePurchase),
       switchMap((params: {payment: Payment}) => {
-        if (params.payment.paymentType === PaymentType.PIX) {
-          return of(makePurchaseByPix({receipt: params.payment.receipt}));
+        if (params.payment.type === PaymentType.PIX) {
+          return of(makePurchaseByPix({receipt: params.payment.receiptUrl}));
         }
-        if (params.payment.paymentType === PaymentType.MONEY) {
+        if (params.payment.type === PaymentType.MONEY) {
           return of(makePurchaseByMoney());
         }
       })

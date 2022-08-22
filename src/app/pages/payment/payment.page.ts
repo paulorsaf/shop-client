@@ -50,14 +50,14 @@ export class PaymentPage implements OnInit, OnDestroy {
 
   finishPurchase() {
     this.store.dispatch(makePurchase({payment: {
-      paymentType: this.form.value.paymentType
+      type: this.form.value.paymentType
     }}))
   }
 
   uploadReceipt($event) {
-    const receipt = $event.target.files[0];
+    const receiptUrl = $event.target.files[0];
     this.store.dispatch(makePurchase({payment: {
-      paymentType: this.form.value.paymentType, receipt
+      type: this.form.value.paymentType, receiptUrl
     }}));
 
     $event.target.value = "";

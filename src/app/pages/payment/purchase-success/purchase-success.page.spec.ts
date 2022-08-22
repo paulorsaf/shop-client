@@ -50,7 +50,7 @@ describe('PurchaseSuccessPage', () => {
 
     beforeEach(() => {
       store.dispatch(makePurchase({
-        payment: {paymentType: "MONEY"}
+        payment: {type: "MONEY"}
       }));
       fixture.detectChanges();
     })
@@ -117,7 +117,7 @@ describe('PurchaseSuccessPage', () => {
 
     beforeEach(() => {
       store.dispatch(makePurchase({
-        payment: {paymentType: "PIX"}
+        payment: {type: "PIX"}
       }));
       fixture.detectChanges();
     })

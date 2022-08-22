@@ -8,7 +8,7 @@
   <section class="purchase">
     <ion-icon color="primary" name="bag-check"></ion-icon>
     
-    <span *ngIf="(payment$ | async)?.paymentType === 'MONEY'" test-id="purchase-success">
+    <span *ngIf="(payment$ | async)?.type === 'MONEY'" test-id="purchase-success">
       <ion-text color="primary">
         <h1>Pedido feito com sucesso!</h1>
       </ion-text>
@@ -17,7 +17,7 @@
       </ion-text>
     </span>
 
-    <span *ngIf="(payment$ | async)?.paymentType === 'PIX'" test-id="payment-confirmation">
+    <span *ngIf="(payment$ | async)?.type === 'PIX'" test-id="payment-confirmation">
       <ion-text color="primary">
         <h1>Pedido feito com sucesso!</h1>
       </ion-text>

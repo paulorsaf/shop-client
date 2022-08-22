@@ -1,6 +1,7 @@
 export type Payment = {
-    paymentType: string;
-    receipt?: File;
+    type: string;
+    error?: any;
+    receiptUrl?: File;
 }
 
 export enum PaymentType {

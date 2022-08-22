@@ -10,5 +10,6 @@ export type Purchase = {
 }
 
 export type Payment = {
+    error: any;
     type: string;
 }

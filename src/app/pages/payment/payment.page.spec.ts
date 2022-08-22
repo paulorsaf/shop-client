@@ -129,7 +129,7 @@ describe('PaymentPage', () => {
       fixture.detectChanges();
 
       expect(store.dispatch).toHaveBeenCalledWith(
-        makePurchase({payment: {paymentType: PaymentType.PIX, receipt: file}})
+        makePurchase({payment: {type: PaymentType.PIX, receiptUrl: file}})
       );
     })
 
@@ -159,7 +159,7 @@ describe('PaymentPage', () => {
       fixture.detectChanges();
 
       expect(store.dispatch).toHaveBeenCalledWith(
-        makePurchase({payment: {paymentType: "MONEY"}})
+        makePurchase({payment: {type:  "MONEY"}})
       );
     })
 
@@ -179,7 +179,7 @@ describe('PaymentPage', () => {
 
     beforeEach(() => {
       store.dispatch(makePurchase({payment: {
-        paymentType: "ANY", receipt: {id: 1} as any
+        type: "ANY", receiptUrl: {id: 1} as any
       }}));
       fixture.detectChanges();
     })

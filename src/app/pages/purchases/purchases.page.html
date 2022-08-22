@@ -18,7 +18,7 @@
   <section *ngIf="(isLoading$ | async) === false" test-id="purchases">
     <div *ngIf="(purchases$ | async)?.length > 0" test-id="purchases-list">
       <ion-card *ngFor="let purchase of (purchases$ | async)"
-        [ngClass]="purchase.status">
+        [ngClass]="purchase.status + ' ' + (purchase.payment?.error ? 'payment-error' : '')">
         <ion-card-content>
           <div class="status">
             <div class="status-item" [ngClass]="purchase.status === 'CREATED' ? 'selected' : ''"
@@ -54,6 +54,11 @@
           <p *ngIf="purchase.status === 'VERIFYING_PAYMENT'" class="main-message">
             <ion-text color="primary" test-id="verifying-payment-message">
               Por favor, aguarde enquanto verificamos o seu pagamento.
+            </ion-text>
+          </p>
+          <p *ngIf="purchase.payment?.error" class="main-message">
+            <ion-text color="danger" test-id="payment-error">
+              Não conseguimos processar o seu pagamento.
             </ion-text>
           </p>
           <p *ngIf="purchase.address">Entrega à domicílio</p>

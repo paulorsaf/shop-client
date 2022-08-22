@@ -179,6 +179,26 @@ describe('PurchasesPage', () => {
       })
 
     })
+    
+    describe('given payment', () => {
+
+      it('when error on payment, then show error message', () => {
+        const purchases = [{status: "ANY", payment: {error: {}}}] as any;
+        store.dispatch(loadPurchasesSuccess({purchases}));
+        fixture.detectChanges();
+
+        expect(page.querySelector('[test-id="payment-error"]')).not.toBeNull();
+      })
+
+      it('when no error on payment, then hide error message', () => {
+        const purchases = [{status: "ANY", payment: {}}] as any;
+        store.dispatch(loadPurchasesSuccess({purchases}));
+        fixture.detectChanges();
+
+        expect(page.querySelector('[test-id="payment-error"]')).toBeNull();
+      })
+
+    })
 
   })
 

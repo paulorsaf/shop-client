@@ -209,7 +209,7 @@ describe('Products store', () => {
         };
 
         const payment = {
-            paymentType: "anyType",
+            type:  "anyType",
             receipt: {id: 1} as any
         }
         const newState = shoppingCartReducer(initialState, makePurchase({payment}));
