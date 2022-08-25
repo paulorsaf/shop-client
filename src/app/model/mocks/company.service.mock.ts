@@ -6,4 +6,7 @@ export class CompanyServiceMock {
     find() {
         return this.response || of({});
     }
+    findById() {
+        return this.response || of({});
+    }
 }

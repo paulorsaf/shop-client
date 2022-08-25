@@ -16,12 +16,17 @@ export class ShoppingCartEffects {
   makePurchaseEffect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(makePurchase),
-      switchMap((params: {payment: Payment}) => {
+      switchMap((params: {payment: Payment, purchaseId?: string}) => {
         if (params.payment.type === PaymentType.PIX) {
-          return of(makePurchaseByPix({receipt: params.payment.receiptUrl}));
+          return of(makePurchaseByPix({
+            purchaseId: params.purchaseId,
+            receipt: params.payment.receiptUrl
+          }));
         }
         if (params.payment.type === PaymentType.MONEY) {
-          return of(makePurchaseByMoney());
+          return of(makePurchaseByMoney({
+            purchaseId: params.purchaseId
+          }));
         }
       })
     )
@@ -34,6 +39,7 @@ export class ShoppingCartEffects {
       switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
         this.paymentService.payByPix({
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
+          purchaseId: action.purchaseId,
           receipt: action.receipt,
           shoppingCart: storeState.shoppingCart.products
         }).pipe(
@@ -51,6 +57,7 @@ export class ShoppingCartEffects {
       switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
         this.paymentService.payByMoney({
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
+          purchaseId: action.purchaseId,
           shoppingCart: storeState.shoppingCart.products
         }).pipe(
           map(() => makePurchaseSuccess()),

@@ -4,7 +4,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { CompanyEffects } from './company.effects';
-import { loadCompany, loadCompanyFail, loadCompanySuccess } from './company.action';
+import { loadCompany, loadCompanyById, loadCompanyByIdFail, loadCompanyByIdSuccess, loadCompanyFail, loadCompanySuccess } from './company.action';
 import { CompanyServiceMock } from 'src/app/model/mocks/company.service.mock';
 import { CompanyService } from 'src/app/services/company/company.service';
 
@@ -52,6 +52,33 @@ describe('Company effects', () => {
 
       effects.loadCompanyEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(loadCompanyFail({error}));
+        done();
+      });
+    });
+
+  })
+
+  describe('given load company by id', () => {
+
+    beforeEach(() => {
+      actions$ = of(loadCompanyById({id: "anyId"}));
+    })
+
+    it('when success, then return login success', (done) => {
+      const company = <any> {id: 1};
+      companyService.response = of(company);
+
+      effects.loadCompanyByIdEffect$.subscribe((newAction) => {
+        expect(newAction).toEqual(loadCompanyByIdSuccess({company}));
+        done();
+      });
+    });
+  
+    it('when fail, then return login fail', (done) => {
+      companyService.response = throwError(error);
+
+      effects.loadCompanyByIdEffect$.subscribe((newAction) => {
+        expect(newAction).toEqual(loadCompanyByIdFail({error}));
         done();
       });
     });

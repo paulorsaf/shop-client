@@ -18,4 +18,9 @@ export class CompanyService {
     return this.http.get<Company>(url);
   }
 
+  findById(id: string): Observable<Company> {
+    const url = `${environment.api}/companies/${id}`;
+    return this.http.get<Company>(url);
+  }
+
 }

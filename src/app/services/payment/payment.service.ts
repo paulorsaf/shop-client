@@ -16,6 +16,20 @@ export class PaymentService {
   ) { }
 
   payByMoney(paymentDetails: PaymentByMoney): Observable<void> {
+    if (paymentDetails.purchaseId) {
+      return this.retryPaymentByMoney(paymentDetails);
+    }
+    return this.makePaymentByMoney(paymentDetails);
+  }
+
+  payByPix(paymentDetails: PaymentByPix): Observable<void> {
+    if (paymentDetails.purchaseId) {
+      return this.retryPaymentByPix(paymentDetails);
+    }
+    return this.makePaymentByPix(paymentDetails);
+  }
+
+  private makePaymentByMoney(paymentDetails: PaymentByMoney) {
     const url = `${environment.api}/purchases`;
     return this.http.post<void>(url, {
       deliveryAddress: paymentDetails.deliveryAddress,
@@ -30,11 +44,10 @@ export class PaymentService {
     });
   }
 
-  payByPix(paymentDetails: PaymentByPix): Observable<void> {
-    const url = `${environment.api}/purchases`;
-
+  private makePaymentByPix(paymentDetails: PaymentByPix) {
     return new Observable<void>(observer => {
       this.toBase64(paymentDetails.receipt).then(result => {
+        const url = `${environment.api}/purchases`;
         this.http.post<void>(url, {
           deliveryAddress: paymentDetails.deliveryAddress,
           payment: {
@@ -45,6 +58,39 @@ export class PaymentService {
             productId: s.product.id,
             stockOptionId: s.stockOption?.id
           })),
+          file: result,
+          name: paymentDetails.receipt.name
+        }).subscribe(() => {
+          observer.next();
+          observer.complete();
+        }, error => {
+          observer.error(error);
+          observer.complete();
+        });
+      }).catch(error => {
+        observer.error(error);
+        observer.complete();
+      })
+    });
+  }
+
+  private retryPaymentByMoney(paymentDetails: PaymentByMoney) {
+    const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
+    return this.http.patch<void>(url, {
+      payment: {
+        type: PaymentType.MONEY
+      }
+    });
+  }
+
+  private retryPaymentByPix(paymentDetails: PaymentByPix) {
+    const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
+    return new Observable<void>(observer => {
+      this.toBase64(paymentDetails.receipt).then(result => {
+        this.http.patch<void>(url, {
+          payment: {
+            type: PaymentType.PIX
+          },
           file: result,
           name: paymentDetails.receipt.name
         }).subscribe(() => {
@@ -74,7 +120,8 @@ export class PaymentService {
 
 type PaymentByMoney = {
   deliveryAddress: Address;
-  shoppingCart: ShoppingCartProduct[]
+  purchaseId?: string;
+  shoppingCart: ShoppingCartProduct[];
 }
 
 type PaymentByPix = {

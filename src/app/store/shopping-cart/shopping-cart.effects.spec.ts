@@ -68,7 +68,7 @@ describe('Products effects', () => {
       actions$ = of(makePurchase({payment}));
 
       effects.makePurchaseEffect$.subscribe(action => {
-        expect(action).toEqual(makePurchaseByPix({receipt: {id: 1} as any}));
+        expect(action).toEqual(makePurchaseByPix({purchaseId: undefined, receipt: {id: 1} as any}));
         done();
       });
     });
@@ -78,7 +78,7 @@ describe('Products effects', () => {
       actions$ = of(makePurchase({payment}));
 
       effects.makePurchaseEffect$.subscribe(action => {
-        expect(action).toEqual(makePurchaseByMoney());
+        expect(action).toEqual(makePurchaseByMoney({purchaseId: undefined}));
         done();
       });
     });
@@ -118,7 +118,7 @@ describe('Products effects', () => {
     it('when success, then return make purchase success', (done) => {
       paymentService.response = of({});
 
-      actions$ = of(makePurchaseByMoney());
+      actions$ = of(makePurchaseByMoney({}));
 
       effects.makePurchaseByMoneyEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseSuccess());
@@ -129,7 +129,7 @@ describe('Products effects', () => {
     it('when fail, then return make purchase fail', (done) => {
       paymentService.response = throwError(error)
 
-      actions$ = of(makePurchaseByMoney());
+      actions$ = of(makePurchaseByMoney({}));
 
       effects.makePurchaseByMoneyEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseFail({error}));

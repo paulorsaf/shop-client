@@ -51,16 +51,24 @@
           </div>
         </ion-card-content>
         <ion-card-content>
-          <p *ngIf="purchase.status === 'VERIFYING_PAYMENT'" class="main-message">
-            <ion-text color="primary" test-id="verifying-payment-message">
-              Por favor, aguarde enquanto verificamos o seu pagamento.
-            </ion-text>
-          </p>
-          <p *ngIf="purchase.payment?.error" class="main-message">
-            <ion-text color="danger" test-id="payment-error">
-              Não conseguimos processar o seu pagamento.
-            </ion-text>
-          </p>
+          <div *ngIf="!purchase.payment?.error">
+            <p *ngIf="purchase.status === 'VERIFYING_PAYMENT'" class="main-message">
+              <ion-text color="primary" test-id="verifying-payment-message">
+                Por favor, aguarde enquanto verificamos o seu pagamento.
+              </ion-text>
+            </p>
+          </div>
+          <div *ngIf="purchase.payment?.error" class="main-message">
+            <p>
+              <ion-text color="danger" test-id="payment-error">
+                Não conseguimos processar o seu pagamento.
+              </ion-text>
+            </p>
+            <ion-button color="danger" size="full" (click)="retryPayment(purchase)"
+              test-id="retry-payment-button">
+              Tentar novamente
+            </ion-button>
+          </div>
           <p *ngIf="purchase.address">Entrega à domicílio</p>
           <p *ngIf="!purchase.address">Busca na loja</p>
           <p>

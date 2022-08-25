@@ -17,7 +17,10 @@ export const appInitialState: AppState = {
         company: null,
         error: null,
         isLoaded: false,
-        isLoading: false
+        isLoading: false,
+        isLoadedById: false,
+        isLoadingById: false,
+        selectedCompany: null
     },
     login: {
         error: null,

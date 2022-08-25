@@ -1,0 +1,20 @@
+ion-list.payment-method {
+    padding-top: 70px;
+}
+
+.total-price ion-button {
+    font-size: 18px;
+}
+
+input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    opacity: 0;
+}
+
+ion-skeleton-text {
+    height: 15px;
+}

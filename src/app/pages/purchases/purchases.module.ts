@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { PurchasesPageRoutingModule } from './purchases-routing.module';
 import { PurchasesPage } from './purchases.page';
-import { PaymentTypePipe } from 'src/app/pipes/payment-type/payment-type.pipe';
 import { PaymentTypePipeModule } from 'src/app/pipes/payment-type/payment-type.pipe.module';
+import { RetryPaymentPage } from './retry-payment/retry-payment.page';
+import { PaymentComponentModule } from 'src/app/components/payment/payment.module';
 
 @NgModule({
   imports: [
@@ -13,8 +14,12 @@ import { PaymentTypePipeModule } from 'src/app/pipes/payment-type/payment-type.p
     FormsModule,
     IonicModule,
     PurchasesPageRoutingModule,
-    PaymentTypePipeModule
+    PaymentTypePipeModule,
+    PaymentComponentModule
   ],
-  declarations: [PurchasesPage]
+  declarations: [
+    RetryPaymentPage,
+    PurchasesPage
+  ]
 })
 export class PurchasesPageModule {}

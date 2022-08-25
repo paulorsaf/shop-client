@@ -12,11 +12,14 @@ export const closeShoppingCart = createAction('[Shopping cart] close');
 
 export const setDeliveryAddress = createAction('[Shopping cart] set delivery address', props<{address: Address}>());
 
-export const makePurchase = createAction('[Shopping cart] pucharse', props<{payment: Payment}>());
+export const makePurchase =
+    createAction('[Shopping cart] pucharse', props<{payment: Payment, purchaseId?: string}>());
 export const makePurchaseSuccess = createAction('[Shopping cart] pucharse success');
 export const makePurchaseFail = createAction('[Shopping cart] pucharse fail', props<{error: any}>());
 
-export const makePurchaseByPix = createAction('[Shopping cart] pucharse by pix', props<{receipt: File}>());
-export const makePurchaseByMoney = createAction('[Shopping cart] pucharse by money');
+export const makePurchaseByPix =
+    createAction('[Shopping cart] pucharse by pix', props<{purchaseId?: string, receipt: File}>());
+export const makePurchaseByMoney =
+    createAction('[Shopping cart] pucharse by money', props<{purchaseId?: string}>());
 
 export const clear = createAction('[Shopping cart] clear');

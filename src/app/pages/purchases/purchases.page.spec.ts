@@ -1,12 +1,14 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
+import { ModalControllerMock } from 'src/app/model/mocks/modal-controller.mock';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
 import { PaymentType } from 'src/app/model/payment/payment';
 import { PaymentTypePipeModule } from 'src/app/pipes/payment-type/payment-type.pipe.module';
 import { AppState } from 'src/app/store/app-state';
+import { companyReducer } from 'src/app/store/company/company.reducers';
 import { loadPurchasesFail, loadPurchasesSuccess } from 'src/app/store/purchases/purchases.actions';
 import { purchasesReducer } from 'src/app/store/purchases/purchases.reducers';
 import { PurchasesPage } from './purchases.page';
@@ -16,9 +18,11 @@ describe('PurchasesPage', () => {
   let fixture: ComponentFixture<PurchasesPage>;
   let store: Store<AppState>;
   let page: PageMock;
+  let modalController: ModalControllerMock;
   let toastController: ToastControllerMock;
 
   beforeEach(waitForAsync(() => {
+    modalController = new ModalControllerMock();
     toastController = new ToastControllerMock();
 
     TestBed.configureTestingModule({
@@ -28,9 +32,11 @@ describe('PurchasesPage', () => {
         RouterTestingModule.withRoutes([]),
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
+        StoreModule.forFeature('company', companyReducer),
         StoreModule.forFeature('purchases', purchasesReducer)
       ]
     })
+    .overrideProvider(ModalController, {useValue: modalController})
     .overrideProvider(ToastController, {useValue: toastController})
     .compileComponents();
 
@@ -182,20 +188,56 @@ describe('PurchasesPage', () => {
     
     describe('given payment', () => {
 
-      it('when error on payment, then show error message', () => {
-        const purchases = [{status: "ANY", payment: {error: {}}}] as any;
-        store.dispatch(loadPurchasesSuccess({purchases}));
-        fixture.detectChanges();
+      describe('when error on payment', () => {
 
-        expect(page.querySelector('[test-id="payment-error"]')).not.toBeNull();
+        beforeEach(() => {
+          const purchases = [{status: "ANY", payment: {error: {}}}] as any;
+          store.dispatch(loadPurchasesSuccess({purchases}));
+          fixture.detectChanges();
+        })
+
+        it('then show error message', () => {
+          expect(page.querySelector('[test-id="payment-error"]')).not.toBeNull();
+        })
+
+        it('then show retry payment again button', () => {
+          expect(page.querySelector('[test-id="retry-payment-button"]')).not.toBeNull();
+        })
+
+        describe('and user clicks on retry payment button', () => {
+
+          beforeEach(() => {
+            page.querySelector('[test-id="retry-payment-button"]').click();
+            fixture.detectChanges();
+          })
+
+          it('then open retry payment page', done => {
+            setTimeout(() => {
+              expect(modalController.isPresented).toBeTruthy();
+              done();
+            }, 100)
+          })
+
+        })
+
       })
 
-      it('when no error on payment, then hide error message', () => {
-        const purchases = [{status: "ANY", payment: {}}] as any;
-        store.dispatch(loadPurchasesSuccess({purchases}));
-        fixture.detectChanges();
+      describe('when there is no error on payment', () => {
 
-        expect(page.querySelector('[test-id="payment-error"]')).toBeNull();
+        beforeEach(() => {
+          const purchases = [{status: "ANY", payment: {}}] as any;
+          store.dispatch(loadPurchasesSuccess({purchases}));
+          fixture.detectChanges();
+        })
+
+        it('then hide error message', () => {
+          expect(page.querySelector('[test-id="payment-error"]')).toBeNull();
+        })
+
+        it('then hide retry payment button', () => {
+          expect(page.querySelector('[test-id="retry-payment-button"]')).toBeNull();
+        })
+
       })
 
     })

@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button fill="clear" color="light"></ion-back-button>
+      <ion-button fill="clear" color="light" (click)="close()" test-id="close-button">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title color="light">Pagamento</ion-title>
   </ion-toolbar>
@@ -10,6 +12,7 @@
 <ion-content>
   <app-payment-form
     [company]="company$ | async"
-    [totalPrice]="totalPrice$ | async">
-  </app-payment-form>
+    [totalPrice]="totalPrice"
+    [purchase]="purchase"
+  ></app-payment-form>
 </ion-content>
