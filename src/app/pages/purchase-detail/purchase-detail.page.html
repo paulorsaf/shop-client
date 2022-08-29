@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button fill="clear" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="light">Detalhes da compra</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <section *ngIf="isLoading$ | async" test-id="purchase-detail-loader">
+    loading...
+  </section>
+  <section *ngIf="(isLoading$ | async) === false" test-id="purchase-detail">
+    loaded...
+  </section>
+</ion-content>

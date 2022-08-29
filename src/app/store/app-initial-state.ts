@@ -41,6 +41,12 @@ export const appInitialState: AppState = {
         isLoading: false,
         products: []
     },
+    purchaseDetail: {
+        error: null,
+        isLoaded: false,
+        isLoading: false,
+        purchase: undefined
+    },
     purchases: {
         error: null,
         isLoaded: false,

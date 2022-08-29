@@ -3,13 +3,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { Action, StoreModule } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { PurchasesEffects } from './purchases.effects';
+import { PurchaseDetailEffects } from './purchase-detail.effects';
 import { PurchaseServiceMock } from 'src/app/model/mocks/purchase.service.mock';
 import { PurchaseService } from 'src/app/services/purchase/purchase.service';
-import { loadPurchases, loadPurchasesFail, loadPurchasesSuccess } from './purchases.actions';
+import { loadPurchaseDetail, loadPurchaseDetailFail, loadPurchaseDetailSuccess } from './purchase-detail.action';
 
-describe('Purchase effects', () => {
-  let effects: PurchasesEffects;
+fdescribe('Purchase detail effects', () => {
+  let effects: PurchaseDetailEffects;
   let actions$: Observable<Action>;
   let purchaseService: PurchaseServiceMock;
 
@@ -22,36 +22,36 @@ describe('Purchase effects', () => {
       imports: [
         StoreModule.forRoot([]),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([PurchasesEffects]),
+        EffectsModule.forFeature([PurchaseDetailEffects]),
       ],
       providers: [provideMockActions(() => actions$)],
     })
     .overrideProvider(PurchaseService, { useValue: purchaseService });
 
-    effects = TestBed.get(PurchasesEffects);
+    effects = TestBed.get(PurchaseDetailEffects);
   });
 
-  describe('given load purchases', () => {
+  describe('given load purchase detail', () => {
 
     beforeEach(() => {
-      actions$ = of(loadPurchases());
+      actions$ = of(loadPurchaseDetail({id: "anyId"}));
     })
 
-    it('when success, then return load purchases success', (done) => {
-      const purchases = [{id: 1}] as any;
-      purchaseService.response = of(purchases);
+    it('when success, then return load purchase detail success', (done) => {
+      const purchase = {id: 1} as any;
+      purchaseService.response = of(purchase);
 
       effects.loadPurchasesEffect$.subscribe((newAction) => {
-        expect(newAction).toEqual(loadPurchasesSuccess({purchases}));
+        expect(newAction).toEqual(loadPurchaseDetailSuccess({purchase}));
         done();
       });
     });
   
-    it('when fail, then return load purchases fail', (done) => {
+    it('when fail, then return load purchase fail', (done) => {
       purchaseService.response = throwError(error);
 
       effects.loadPurchasesEffect$.subscribe((newAction) => {
-        expect(newAction).toEqual(loadPurchasesFail({error}));
+        expect(newAction).toEqual(loadPurchaseDetailFail({error}));
         done();
       });
     });

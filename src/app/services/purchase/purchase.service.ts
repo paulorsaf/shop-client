@@ -17,4 +17,9 @@ export class PurchaseService {
     return this.http.get<Purchase[]>(url);
   }
 
+  findById(id: string) {
+    const url = `${environment.api}/purchases/${id}`;
+    return this.http.get<Purchase>(url);
+  }
+
 }

@@ -1,5 +1,8 @@
+import { Location } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { BlankMockComponent } from 'src/app/model/mocks/blank-mock/blank-mock.component';
 import { ModalControllerMock } from 'src/app/model/mocks/modal-controller.mock';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { PaymentType } from 'src/app/model/payment/payment';
@@ -11,6 +14,7 @@ describe('PurchaseCardComponent', () => {
   let fixture: ComponentFixture<PurchaseCardComponent>;
   let page: PageMock;
   let modalController: ModalControllerMock;
+  let location: Location;
 
   beforeEach(waitForAsync(() => {
     modalController = new ModalControllerMock();
@@ -19,6 +23,9 @@ describe('PurchaseCardComponent', () => {
       declarations: [ PurchaseCardComponent ],
       imports: [
         IonicModule.forRoot(),
+        RouterTestingModule.withRoutes([
+          {path: 'purchases/:id', component: BlankMockComponent}
+        ]),
         PaymentTypePipeModule
       ]
     })
@@ -26,11 +33,25 @@ describe('PurchaseCardComponent', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(PurchaseCardComponent);
+    location = TestBed.inject(Location);
 
     component = fixture.componentInstance;
 
     page = fixture.debugElement.nativeElement;
   }));
+
+  it('given user clicks on purchase, then go to purchase detail page', done => {
+    component.purchase = {id: 1} as any;
+    fixture.detectChanges();
+
+    page.querySelector('[test-id="purchase-card"]').click();
+    fixture.detectChanges();
+
+    setTimeout(() => {
+      expect(location.path()).toEqual('/purchases/1');
+      done();
+    }, 100);
+  });
 
   describe('given payment type', () => {
 

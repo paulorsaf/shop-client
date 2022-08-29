@@ -1,4 +1,6 @@
-<ion-card [ngClass]="purchase.status + ' ' + (purchase.payment?.error ? 'payment-error' : '')">
+<ion-card (click)="goToPurchaseDetail()"
+  [ngClass]="purchase.status + ' ' + (purchase.payment?.error ? 'payment-error' : '')"
+  test-id="purchase-card">
   <ion-card-content>
     <div class="status">
       <div class="status-item" [ngClass]="purchase.status === 'CREATED' ? 'selected' : ''">

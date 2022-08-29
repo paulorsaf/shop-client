@@ -17,7 +17,9 @@
   </section>
   <section *ngIf="(isLoading$ | async) === false" test-id="purchases">
     <div *ngIf="(purchases$ | async)?.length > 0" test-id="purchases-list">
-      <app-purchase-card [purchase]="purchase" *ngFor="let purchase of (purchases$ | async)"></app-purchase-card>
+      <app-purchase-card
+        [purchase]="purchase" *ngFor="let purchase of (purchases$ | async)">
+      </app-purchase-card>
     </div>
     <div *ngIf="(purchases$ | async)?.length === 0" class="empty-results"
       test-id="purchases-empty">

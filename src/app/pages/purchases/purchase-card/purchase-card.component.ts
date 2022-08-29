@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Purchase } from 'src/app/model/purchase/purchase';
 import { RetryPaymentPage } from '../retry-payment/retry-payment.page';
@@ -13,7 +14,8 @@ export class PurchaseCardComponent implements OnInit {
   @Input() purchase: Purchase;
 
   constructor(
-    private modalController: ModalController
+    private modalController: ModalController,
+    private router: Router
   ) { }
 
   ngOnInit() {}
@@ -25,6 +27,10 @@ export class PurchaseCardComponent implements OnInit {
         purchase
       }
     }).then(modal => modal.present());
+  }
+
+  goToPurchaseDetail() {
+    this.router.navigate([`purchases/${this.purchase.id}`]);
   }
 
 }

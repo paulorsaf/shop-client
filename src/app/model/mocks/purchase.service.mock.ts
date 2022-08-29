@@ -6,4 +6,7 @@ export class PurchaseServiceMock {
     findAll() {
         return this.response || of({});
     }
+    findById() {
+        return this.response || of({});
+    }
 }

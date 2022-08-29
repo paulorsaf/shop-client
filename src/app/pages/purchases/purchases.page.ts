@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
@@ -7,7 +8,6 @@ import { Company } from 'src/app/model/company/company';
 import { Purchase } from 'src/app/model/purchase/purchase';
 import { AppState } from 'src/app/store/app-state';
 import { loadPurchases } from 'src/app/store/purchases/purchases.actions';
-import { RetryPaymentPage } from './retry-payment/retry-payment.page';
 
 @Component({
   selector: 'app-purchases',
@@ -23,7 +23,6 @@ export class PurchasesPage implements OnInit, OnDestroy {
   errorSubscription: Subscription;
 
   constructor(
-    private modalController: ModalController,
     private store: Store<AppState>,
     private toastController: ToastController
   ) { }
