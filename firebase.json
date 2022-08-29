@@ -27,5 +27,19 @@
         "destination": "/index.html"
       }
     ]
+  }, {
+    "target": "thegardenbr",
+    "public": "www",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }]
 }
