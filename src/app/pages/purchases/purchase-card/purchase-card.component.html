@@ -1,0 +1,81 @@
+<ion-card [ngClass]="purchase.status + ' ' + (purchase.payment?.error ? 'payment-error' : '')">
+  <ion-card-content>
+    <div class="status">
+      <div class="status-item" [ngClass]="purchase.status === 'CREATED' ? 'selected' : ''">
+        <ion-icon name="bag-check-outline"></ion-icon>
+        <div>Pedido</div>
+      </div>
+      <div class="status-item" *ngIf="purchase.payment?.type !== 'MONEY'"
+        [ngClass]="purchase.status === 'VERIFYING_PAYMENT' || purchase.status === 'PAID' ? 'selected' : ''"
+        test-id="payment">
+        <ion-icon name="wallet-outline"></ion-icon>
+        <div>Pagamento</div>
+      </div>
+      <div class="status-item" [ngClass]="purchase.status === 'SORTING_OUT' ? 'selected' : ''">
+        <ion-icon name="archive-outline"></ion-icon>
+        <div>Separando</div>
+      </div>
+      <div class="status-item" *ngIf="!purchase.address"
+        [ngClass]="purchase.status === 'READY' ? 'selected' : ''" test-id="ready-for-pick-up">
+        <ion-icon name="car-outline"></ion-icon>
+        <div>Pronto</div>
+      </div>
+      <div class="status-item" *ngIf="purchase.address"
+        [ngClass]="purchase.status === 'DELIVERYING' || purchase.status === 'READY' ? 'selected' : ''"
+        test-id="deliverying">
+        <ion-icon name="car-outline"></ion-icon>
+        <div>Enviando</div>
+      </div>
+      <div class="status-item" [ngClass]="purchase.status === 'FINISHED' ? 'selected' : ''">
+        <ion-icon name="bag-check"></ion-icon>
+        <div>Finalizado</div>
+      </div>
+    </div>
+  </ion-card-content>
+  <ion-card-content>
+    <div *ngIf="!purchase.payment?.error" test-id="purchase-message">
+      <p class="main-message" *ngIf="purchase.status !== 'FINISHED'">
+        <ion-text color="primary" *ngIf="purchase.status === 'CREATED'" test-id="created-payment-message">
+          Por favor, aguarde enquanto atendemos o seu pedido.
+        </ion-text>
+        <ion-text color="primary" *ngIf="purchase.status === 'VERIFYING_PAYMENT'" test-id="verifying-payment-message">
+          Por favor, aguarde enquanto confirmamos o seu pagamento.
+        </ion-text>
+        <ion-text color="primary" *ngIf="purchase.status === 'PAID'" test-id="paid-message">
+          Pagamento confirmado. Em breve iniciaremos a separação da sua compra.
+        </ion-text>
+        <ion-text color="primary" *ngIf="purchase.status === 'SORTING_OUT'" test-id="sorting-out-message">
+          Estamos separando a sua compra. Em breve ela estará pronta para
+          <span *ngIf="purchase.address">entrega.</span>
+          <span *ngIf="!purchase.address">você buscar na loja.</span>
+        </ion-text>
+        <ion-text color="primary" *ngIf="purchase.status === 'READY'" test-id="ready-message">
+          Sua compra está pronta.
+          <span *ngIf="purchase.address">Em breve você receberá os seus produtos.</span>
+          <span *ngIf="!purchase.address">Você já pode buscar os seus produtos na loja.</span>
+        </ion-text>
+        <ion-text color="primary" *ngIf="purchase.status === 'DELIVERYING'" test-id="deliverying-message">
+          Sua compra está a caminho e em breve chegará até a sua casa.
+        </ion-text>
+      </p>
+    </div>
+    <div *ngIf="purchase.payment?.error" class="main-message">
+      <p>
+        <ion-text color="danger" test-id="payment-error">
+          Não conseguimos processar o seu pagamento.
+        </ion-text>
+      </p>
+      <ion-button color="danger" size="full" (click)="retryPayment(purchase)"
+        test-id="retry-payment-button">
+        Tentar novamente
+      </ion-button>
+    </div>
+    <p *ngIf="purchase.address">Entrega à domicílio</p>
+    <p *ngIf="!purchase.address">Busca na loja</p>
+    <p>
+      Pagamento com
+      <b><ion-text color="primary">{{purchase.payment?.type | paymentType}}</ion-text></b>.
+    </p>
+    <p>Pedido criado em {{purchase.createdAt | date: "dd/MM/yyyy HH:mm"}}</p>
+  </ion-card-content>
+</ion-card>

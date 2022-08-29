@@ -17,67 +17,7 @@
   </section>
   <section *ngIf="(isLoading$ | async) === false" test-id="purchases">
     <div *ngIf="(purchases$ | async)?.length > 0" test-id="purchases-list">
-      <ion-card *ngFor="let purchase of (purchases$ | async)"
-        [ngClass]="purchase.status + ' ' + (purchase.payment?.error ? 'payment-error' : '')">
-        <ion-card-content>
-          <div class="status">
-            <div class="status-item" [ngClass]="purchase.status === 'CREATED' ? 'selected' : ''"
-              test-id="created">
-              <ion-icon name="bag-check-outline"></ion-icon>
-              <div>Pedido</div>
-            </div>
-            <div class="status-item" *ngIf="purchase.payment?.type !== 'MONEY'"
-              [ngClass]="purchase.status === 'VERIFYING_PAYMENT' ? 'selected' : ''"
-              test-id="payment">
-              <ion-icon name="wallet-outline"></ion-icon>
-              <div>Pagamento</div>
-            </div>
-            <div class="status-item" test-id="separating">
-              <ion-icon name="archive-outline"></ion-icon>
-              <div>Separando</div>
-            </div>
-            <div class="status-item" *ngIf="purchase.address" test-id="deliverying">
-              <ion-icon name="car-outline"></ion-icon>
-              <div>Enviando</div>
-            </div>
-            <div class="status-item" *ngIf="!purchase.address" test-id="ready-for-pick-up">
-              <ion-icon name="car-outline"></ion-icon>
-              <div>Pronto</div>
-            </div>
-            <div class="status-item" test-id="finished">
-              <ion-icon name="bag-check"></ion-icon>
-              <div>Finalizado</div>
-            </div>
-          </div>
-        </ion-card-content>
-        <ion-card-content>
-          <div *ngIf="!purchase.payment?.error">
-            <p *ngIf="purchase.status === 'VERIFYING_PAYMENT'" class="main-message">
-              <ion-text color="primary" test-id="verifying-payment-message">
-                Por favor, aguarde enquanto verificamos o seu pagamento.
-              </ion-text>
-            </p>
-          </div>
-          <div *ngIf="purchase.payment?.error" class="main-message">
-            <p>
-              <ion-text color="danger" test-id="payment-error">
-                Não conseguimos processar o seu pagamento.
-              </ion-text>
-            </p>
-            <ion-button color="danger" size="full" (click)="retryPayment(purchase)"
-              test-id="retry-payment-button">
-              Tentar novamente
-            </ion-button>
-          </div>
-          <p *ngIf="purchase.address">Entrega à domicílio</p>
-          <p *ngIf="!purchase.address">Busca na loja</p>
-          <p>
-            Pagamento com
-            <b><ion-text color="primary">{{purchase.payment?.type | paymentType}}</ion-text></b>.
-          </p>
-          <p>Pedido criado em {{purchase.createdAt | date: "dd/MM/yyyy HH:mm"}}</p>
-        </ion-card-content>
-      </ion-card>
+      <app-purchase-card [purchase]="purchase" *ngFor="let purchase of (purchases$ | async)"></app-purchase-card>
     </div>
     <div *ngIf="(purchases$ | async)?.length === 0" class="empty-results"
       test-id="purchases-empty">

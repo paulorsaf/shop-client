@@ -2,54 +2,18 @@ ion-content {
     --padding-top: 7rem;
 }
 
-ion-card {
-    ion-card-subtitle {
-        color: black;
-    }
-    &.loader {
-        ion-card-content {
-            padding: 0;
-        }
-        ion-skeleton-text {
-            margin: 0;
-            height: 20rem;
-        }
-    }
-    &.CREATED {
-        border-top: 5px solid transparent;
-    }
-    &.payment-error {
-        border-top: 5px solid var(--ion-color-danger);
-    }
-}
-
 .empty-results {
     margin: 10rem 0;
     text-align: center;
     font-size: 1.8rem;
 }
 
-.status {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.4rem;
-
-    ion-icon {
-        font-size: 2rem;
+.loader {
+    ion-card-content {
+        padding: 0;
     }
-
-    .status-item {
-        text-align: center;
-
-        &.selected {
-            color: var(--ion-color-primary);
-            font-weight: 600;
-        }
+    ion-skeleton-text {
+        margin: 0;
+        height: 20rem;
     }
-}
-
-.main-message {
-    font-size: 1.8rem;
-    font-weight: 600;
-    padding: 2rem 0;
 }

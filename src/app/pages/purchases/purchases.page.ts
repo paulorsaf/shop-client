@@ -42,15 +42,6 @@ export class PurchasesPage implements OnInit, OnDestroy {
     this.errorSubscription.unsubscribe();
   }
 
-  retryPayment(purchase: Purchase) {
-    this.modalController.create({
-      component: RetryPaymentPage,
-      componentProps: {
-        purchase
-      }
-    }).then(modal => modal.present());
-  }
-
   private watchError() {
     this.errorSubscription = this.store
       .select(state => state.purchases.error)

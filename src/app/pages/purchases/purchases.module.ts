@@ -7,6 +7,7 @@ import { PurchasesPage } from './purchases.page';
 import { PaymentTypePipeModule } from 'src/app/pipes/payment-type/payment-type.pipe.module';
 import { RetryPaymentPage } from './retry-payment/retry-payment.page';
 import { PaymentComponentModule } from 'src/app/components/payment/payment.module';
+import { PurchaseCardComponent } from './purchase-card/purchase-card.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { PaymentComponentModule } from 'src/app/components/payment/payment.modul
   ],
   declarations: [
     RetryPaymentPage,
-    PurchasesPage
+    PurchasesPage,
+    PurchaseCardComponent
   ]
 })
 export class PurchasesPageModule {}
