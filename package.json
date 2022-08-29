@@ -9,6 +9,7 @@
     "build": "ng build",
     "build:production": "ng build --configuration=production",
     "build:stiggo": "ng build --configuration=stiggo",
+    "build:thegardenbr": "ng build --configuration=thegardenbr",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
