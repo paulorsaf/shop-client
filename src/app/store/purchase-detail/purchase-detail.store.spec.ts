@@ -3,7 +3,7 @@ import { loadPurchaseDetail, loadPurchaseDetailFail, loadPurchaseDetailSuccess }
 import { purchaseDetailReducer } from './purchase-detail.reducers';
 import { PurchaseDetailState } from './purchase-detail.state';
 
-fdescribe('Purchase detail store', () => {
+describe('Purchase detail store', () => {
 
     it('loadPurchaseDetail', () => {
         const initialState: PurchaseDetailState = {
@@ -18,7 +18,7 @@ fdescribe('Purchase detail store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.purchaseDetail,
-            error: null,
+            error: undefined,
             isLoaded: false,
             isLoading: true,
             purchase: undefined

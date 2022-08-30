@@ -3,82 +3,84 @@ import { AppState } from './app-state';
 export const appInitialState: AppState = {
     banner: {
         banners: [],
-        error: null,
+        error: undefined,
         isLoaded: false,
         isLoading: false
     },
     category: {
         categories: [],
-        error: null,
+        error: undefined,
         isLoaded: false,
         isLoading: false
     },
     company: {
-        company: null,
-        error: null,
+        company: undefined,
+        error: undefined,
         isLoaded: false,
         isLoading: false,
         isLoadedById: false,
         isLoadingById: false,
-        selectedCompany: null
+        selectedCompany: undefined
     },
     login: {
-        error: null,
+        error: undefined,
         isLoggedIn: false,
         isLoggingIn: false,
         isRecoveredPassword: false,
         isRecoveringPassword: false
     },
     product: {
-        error: null,
+        error: undefined,
         isLoaded: false,
         isLoading: false,
-        product: null
+        product: undefined,
+        selectedColor: undefined,
+        selectedSize: undefined
     },
     products: {
-        error: null,
+        error: undefined,
         isLoaded: false,
         isLoading: false,
         products: []
     },
     purchaseDetail: {
-        error: null,
+        error: undefined,
         isLoaded: false,
         isLoading: false,
         purchase: undefined
     },
     purchases: {
-        error: null,
+        error: undefined,
         isLoaded: false,
         isLoading: false,
         purchases: []
     },
     register: {
-        error: null,
+        error: undefined,
         isRegistered: false,
         isRegistering: false
     },
     shoppingCart: {
-        deliveryAddress: null,
-        error: null,
+        deliveryAddress: undefined,
+        error: undefined,
         isOpen: false,
         isPaid: false,
         isPaying: false,
-        payment: null,
+        payment: undefined,
         products: []
     },
     trending: {
-        error: null,
+        error: undefined,
         isLoaded: false,
         isLoading: false,
         trendings: []
     },
     user: {
-        error: null,
+        error: undefined,
         isLoggedInByToken: false,
         isLoggingInByToken: false,
         isLoggedOut: false,
         isLoggingOut: false,
-        user: null
+        user: undefined
     }
 };

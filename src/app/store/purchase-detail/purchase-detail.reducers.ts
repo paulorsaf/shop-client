@@ -9,7 +9,7 @@ const _purchaseDetailReducer = createReducer(
   initialState,
   on(loadPurchaseDetail, (state) => ({
     ...state,
-    error: null,
+    error: undefined,
     isLoaded: false,
     isLoading: true,
     purchase: undefined

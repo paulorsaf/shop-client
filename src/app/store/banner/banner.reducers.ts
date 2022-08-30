@@ -11,7 +11,7 @@ const _bannerReducer = createReducer(
     return {
       ...state,
       banners: [],
-      error: null,
+      error: undefined,
       isLoaded: false,
       isLoading: true
     };

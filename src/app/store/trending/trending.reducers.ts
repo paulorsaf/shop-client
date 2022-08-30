@@ -11,7 +11,7 @@ const _trendingReducer = createReducer(
   on(loadTrendingss, (state) => {
     return {
       ...state,
-      error: null,
+      error: undefined,
       isLoaded: false,
       isLoading: true,
       trendings: []

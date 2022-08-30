@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/model/product/product';
 import { AppState } from 'src/app/store/app-state';
+import { setSelectedSize } from 'src/app/store/product/product.actions';
 
 @Component({
   selector: 'app-product-sizes',
@@ -11,12 +12,10 @@ import { AppState } from 'src/app/store/app-state';
 })
 export class ProductSizesComponent implements OnInit {
 
-  @Input() selectedSize: string;
   @Input() showRequiredError: boolean;
 
-  @Output() sizeChanged = new EventEmitter<string>();
-
   product$: Observable<Product>;
+  selectedSize$: Observable<string>;
   sizes$: Observable<string[]>;
 
   constructor(
@@ -25,11 +24,12 @@ export class ProductSizesComponent implements OnInit {
 
   ngOnInit() {
     this.product$ = this.store.select(state => state.product.product);
+    this.selectedSize$ = this.store.select(state => state.product.selectedSize);
     this.sizes$ = this.filterSizes();
   }
 
   setSize($event: any) {
-    this.sizeChanged.emit($event);
+    this.store.dispatch(setSelectedSize({size: $event.detail.value}));
   }
 
   private filterSizes() {

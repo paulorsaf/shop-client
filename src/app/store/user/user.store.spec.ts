@@ -26,7 +26,6 @@ describe('User store', () => {
             isLoggingOut: false
         }
 
-        const user = {id: 1} as any;
         const newState = userReducer(initialState, logout());
 
         expect(newState).toEqual({
@@ -82,7 +81,7 @@ describe('User store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.user,
-            user: null,
+            user: undefined,
             isLoggedInByToken: false,
             isLoggingInByToken: true
         })
@@ -116,7 +115,7 @@ describe('User store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.user,
-            user: null,
+            user: undefined,
             isLoggedInByToken: true,
             isLoggingInByToken: false
         })

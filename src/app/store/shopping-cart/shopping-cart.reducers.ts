@@ -70,7 +70,7 @@ const shoppingCartReduce = createReducer(
   on(makePurchase, (state, action) => {
     return {
       ...state,
-      error: null,
+      error: undefined,
       isPaid: false,
       isPaying: true,
       payment: action.payment

@@ -7,7 +7,7 @@ import { ActivatedRouteMock } from 'src/app/model/mocks/activated-route.mock';
 import { AppState } from 'src/app/store/app-state';
 import { productReducer } from 'src/app/store/product/product.reducers';
 import { ProductPage } from './product.page';
-import { loadProductSuccess } from 'src/app/store/product/product.actions';
+import { loadProductSuccess, setSelectedColor, setSelectedSize } from 'src/app/store/product/product.actions';
 import { ColorPipeModule } from 'src/app/pipes/color/color.pipe.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
@@ -17,6 +17,7 @@ import { HasSizePipeModule } from 'src/app/pipes/product-has-size/product-has-si
 import { HasColorPipeModule } from 'src/app/pipes/product-has-color/product-has-color.pipe.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
+import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
 
 describe('ProductPage', () => {
   let component: ProductPage;
@@ -101,9 +102,7 @@ describe('ProductPage', () => {
     });
 
     it('when product has colors, then show colors', () => {
-      const product = {id: 1, stock: [
-        {color: 'Amarelo'}, {color: 'Verde'}, {color: 'Vermelho'}
-      ]} as any;
+      const product = {id: 1, stock: [{color: 'Amarelo'}]} as any;
       store.dispatch(loadProductSuccess({product}));
       fixture.detectChanges();
 
@@ -151,20 +150,23 @@ describe('ProductPage', () => {
     })
 
     it('when size is selected, then show colors', () => {
-      component.selectedSize = "M";
+      store.dispatch(setSelectedSize({size: "anySize"}));
       fixture.detectChanges();
 
       expect(page.querySelector('[test-id="product-colors"]')).not.toBeNull();
     })
 
-    it('when user changes size, then remove selected color', () => {
-      component.setColor('Verde');
+    it('when user changes size, then remove selected color', done => {
+      store.dispatch(setSelectedColor({color: "anyColor"}));
       fixture.detectChanges();
 
-      component.setSize({target: {value: 'M'}} as any);
+      store.dispatch(setSelectedSize({size: "anySize"}));
       fixture.detectChanges();
 
-      expect(component.selectedColor).toEqual("");
+      store.select('product').subscribe(state => {
+        expect(state.selectedColor).toBeUndefined();
+        done();
+      })
     })
 
   })
@@ -176,9 +178,11 @@ describe('ProductPage', () => {
     })
 
     it('when product doesnt have stock options, then add product to shopping cart without stock options', done => {
-      const product = dispatchLoadProductSuccessWithoutStockOptions();
+      const product = {id: 1} as any;
+      store.dispatch(loadProductSuccess({product}));
+      fixture.detectChanges();
 
-      addToShoppingCart();
+      clickOnAddToShoppingCartButton();
 
       store.select('shoppingCart').subscribe(state => {
         expect(state.products[0]).toEqual({amount: 1, product});
@@ -187,13 +191,16 @@ describe('ProductPage', () => {
     });
 
     it('when product has stock options, then add product to shopping cart with stock options', done => {
-      const product = dispatchLoadProductSuccessWithStockOptions("anyColor", "anySize");
-
-      component.selectedColor = "anyColor";
-      component.selectedSize = "anySize";
+      const product = {
+        id: 1,
+        stock: [{id: "anyStockOptionId", color: "anyColor", size: "anySize", quantity: 10}]
+      } as any;
+      dispatchLoadProductSuccess(product);
+      store.dispatch(setSelectedSize({size: "anySize"}));
+      store.dispatch(setSelectedColor({color: "anyColor"}));
       fixture.detectChanges();
 
-      addToShoppingCart();
+      clickOnAddToShoppingCartButton();
 
       store.select('shoppingCart').subscribe(state => {
         expect(state.products[0]).toEqual({
@@ -206,12 +213,15 @@ describe('ProductPage', () => {
     });
 
     it('when product has stock options with only color, then add product to shopping cart with stock option', done => {
-      const product = dispatchLoadProductSuccessWithStockOptions("anyColor", undefined);
-
-      component.selectedColor = "anyColor";
+      const product = {
+        id: 1,
+        stock: [{id: "anyStockOptionId", color: "anyColor", quantity: 10}]
+      } as any;
+      dispatchLoadProductSuccess(product);
+      store.dispatch(setSelectedColor({color: "anyColor"}));
       fixture.detectChanges();
 
-      addToShoppingCart();
+      clickOnAddToShoppingCartButton();
 
       store.select('shoppingCart').subscribe(state => {
         expect(state.products[0]).toEqual({
@@ -224,12 +234,16 @@ describe('ProductPage', () => {
     });
 
     it('when product has stock options with only size, then add product to shopping cart with stock option', done => {
-      const product = dispatchLoadProductSuccessWithStockOptions(undefined, "anySize");
+      const product = {
+        id: 1,
+        stock: [{id: "anyStockOptionId", size: "anySize", quantity: 10}]
+      } as any;
+      dispatchLoadProductSuccess(product);
 
-      component.selectedSize = "anySize";
+      store.dispatch(setSelectedSize({size: "anySize"}));
       fixture.detectChanges();
 
-      addToShoppingCart();
+      clickOnAddToShoppingCartButton();
 
       store.select('shoppingCart').subscribe(state => {
         expect(state.products[0]).toEqual({
@@ -241,43 +255,74 @@ describe('ProductPage', () => {
       })
     });
 
-    it('then show success message', done => {
-      dispatchLoadProductSuccessWithoutStockOptions();
-
-      addToShoppingCart();
-
-      setTimeout(() => {
-        expect(toastController.isPresented).toBeTruthy();
-        done();
-      }, 100);
-    });
-
-    function addToShoppingCart() {
+    function clickOnAddToShoppingCartButton() {
       page.querySelector('[test-id="add-product-button"]').click();
       fixture.detectChanges();
     };
 
-    function dispatchLoadProductSuccessWithStockOptions(color: string, size: string) {
-      const product = {
-        id: 1,
-        stock: [{id: "anyStockOptionId", color, size, quantity: 10}]
-      } as any;
+    function dispatchLoadProductSuccess(product) {
       store.dispatch(loadProductSuccess({product}));
       fixture.detectChanges();
-
-      return product;
-    };
-
-    function dispatchLoadProductSuccessWithoutStockOptions() {
-      const product = {
-        id: 1
-      } as any;
-      store.dispatch(loadProductSuccess({product}));
-      fixture.detectChanges();
-
-      return product;
     };
 
   });
+
+  describe('given reduce product button', () => {
+
+    beforeEach(() => {
+      const product = {id: "anyProductId1"} as any;
+      store.dispatch(loadProductSuccess({product}));
+      fixture.detectChanges();
+    })
+
+    it('when shopping cart for product has no elements, then disable reduce product button', () => {
+      expect(page.querySelector('[test-id="reduce-product-button"]').disabled).toBeTruthy();
+    })
+  
+    it('when shopping cart for product has elements, then enable reduce product button', () => {
+      store.dispatch(addProduct({product: {product: {id: "anyProductId1"}} as any}));
+      fixture.detectChanges();
+  
+      expect(page.querySelector('[test-id="reduce-product-button"]').disabled).toBeFalsy();
+    })
+
+  })
+
+  describe('given user clicks on remove from shopping cart', () => {
+
+    beforeEach(() => {
+      const product = {id: "anyProductId1"} as any;
+      store.dispatch(loadProductSuccess({product}));
+
+      store.dispatch(addProduct({product: {product: {id: "anyProductId1"}} as any}));
+      fixture.detectChanges();
+    })
+
+    it('when only one product exists on shopping cart, then remove product', done => {
+      page.querySelector('[test-id="reduce-product-button"]').click();
+      fixture.detectChanges();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.products).toEqual([]);
+        done();
+      })
+    })
+
+    it('when multiple products exist on shopping cart, then decrease amount', done => {
+      store.dispatch(addProduct({product: {product: {id: "anyProductId1"}} as any}));
+      fixture.detectChanges();
+
+      page.querySelector('[test-id="reduce-product-button"]').click();
+      fixture.detectChanges();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.products).toEqual([{
+          product: {id: "anyProductId1"}, amount: 1
+        }] as any);
+        done();
+      })
+    })
+
+  })
 
 });

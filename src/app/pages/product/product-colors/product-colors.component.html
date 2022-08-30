@@ -1,14 +1,12 @@
-<div *ngIf="product$ | async; let product">
-  <div class="title">
-    <ion-text>Cor *:</ion-text>
-  </div>
-  <ion-icon name="ellipse" *ngFor="let color of colors$ | async"
-    [ngStyle]="{'color': color}" (click)="setColor(color)"
-    [ngClass]="color === selectedColor ? 'selected' : ''" test-id="color">
-  </ion-icon>
-  <div *ngIf="showRequiredError && !selectedColor">
-    <ion-text color="danger" class="error" test-id="color-required-error">
-      Cor é obrigatória
-    </ion-text>
-  </div>
+<div class="title">
+  <ion-text>Cor *:</ion-text>
+</div>
+<ion-icon name="ellipse" *ngFor="let color of (colors$ | async)"
+  [ngStyle]="{'color': color}" (click)="setColor(color)"
+  [ngClass]="color === (selectedColor$ | async) ? 'selected' : ''" test-id="color">
+</ion-icon>
+<div *ngIf="showRequiredError && !(selectedColor$ | async)">
+  <ion-text color="danger" class="error" test-id="color-required-error">
+    Cor é obrigatória
+  </ion-text>
 </div>

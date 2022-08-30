@@ -3,7 +3,7 @@ import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
 import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
-import { selectTotalPrice, selectTotalQuantity, ShoppingCartState } from './shopping-cart.state';
+import { selectTotalPrice, selectTotalQuantity, selectTotalQuantityForProductStock, ShoppingCartState } from './shopping-cart.state';
 
 describe('Products store', () => {
 
@@ -12,6 +12,47 @@ describe('Products store', () => {
         product: {id: '1'} as any,
         stockOption: {id: '1', color: 'red', size: 'P'}
     };
+
+    describe('selectTotalQuantityForProductStock', () => {
+        let state: AppState;
+
+        beforeEach(() => {
+            state = {
+                product: {
+                    product: {
+                        id: "anyProductId1"
+                    }
+                },
+                shoppingCart: {
+                    products: [
+                        { product: {id: "anyProductId1"}, amount: 2 },
+                        { product: {id: "anyProductId2"}, amount: 3, stockOption: {
+                            id: "stockOption1", color: "anyColor1", size: "anySize1"
+                        } },
+                        { product: {id: "anyProductId2"}, amount: 5, stockOption: {
+                            id: "stockOption2", color: "anyColor2", size: "anySize2"
+                        } }
+                    ]
+                }
+            } as any;
+        })
+
+        it('given product doesnt have stock, then return product amount', () => {
+            expect(selectTotalQuantityForProductStock(state)).toEqual(2);
+        })
+
+        it('given product has stock, then return product stock amount', () => {
+            state.product.product.id = "anyProductId2";
+            state.product.product.stock = [
+                { color: "anyColor1", id: "stockOption1", size: "anySize1" } as any,
+                { color: "anyColor2", id: "stockOption2", size: "anySize2" } as any
+            ];
+            state.product.selectedColor = "anyColor2";
+            state.product.selectedSize = "anySize2";
+
+            expect(selectTotalQuantityForProductStock(state)).toEqual(5);
+        })
+    })
 
     it('selectTotalQuantity', () => {
         const state: AppState = {
@@ -216,7 +257,7 @@ describe('Products store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.shoppingCart,
-            error: null,
+            error: undefined,
             isPaid: false,
             isPaying: true,
             payment

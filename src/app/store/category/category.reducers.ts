@@ -10,7 +10,7 @@ const _categoryReducer = createReducer(
   on(loadCategories, (state) => {
     return {
       ...state,
-      error: null,
+      error: undefined,
       isLoaded: false,
       isLoading: true,
       categories: []

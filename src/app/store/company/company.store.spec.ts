@@ -18,10 +18,10 @@ describe('Company store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.company,
-            error: null,
+            error: undefined,
             isLoaded: false,
             isLoading: true,
-            company: null
+            company: undefined
         })
     })
 
@@ -72,10 +72,10 @@ describe('Company store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.company,
-            error: null,
+            error: undefined,
             isLoadedById: false,
             isLoadingById: true,
-            selectedCompany: null
+            selectedCompany: undefined
         })
     })
 

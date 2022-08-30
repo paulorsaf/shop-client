@@ -81,3 +81,13 @@ section.options {
 .description {
     font-size: 1.8rem;
 }
+
+section.shopping-cart {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    ion-label {
+        font-size: 3rem;
+    }
+}

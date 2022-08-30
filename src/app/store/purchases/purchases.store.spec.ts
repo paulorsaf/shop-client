@@ -17,7 +17,7 @@ describe('Purchases store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.purchases,
-            error: null,
+            error: undefined,
             isLoaded: false,
             isLoading: true,
             purchases: []

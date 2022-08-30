@@ -9,7 +9,7 @@ const _registerReducer = createReducer(
   initialState,
   on(register, (state) => ({
     ...state,
-    error: null,
+    error: undefined,
     isRegistered: false,
     isRegistering: true
   })),

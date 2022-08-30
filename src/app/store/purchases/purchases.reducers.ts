@@ -9,7 +9,7 @@ const _purchasesReducer = createReducer(
   initialState,
   on(loadPurchases, (state) => ({
     ...state,
-    error: null,
+    error: undefined,
     isLoaded: false,
     isLoading: true,
     purchases: []

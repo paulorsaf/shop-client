@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { Product, Stock } from 'src/app/model/product/product';
+import { Observable } from 'rxjs';
 import { AppState } from 'src/app/store/app-state';
+import { setSelectedColor } from 'src/app/store/product/product.actions';
+import { selectColors } from 'src/app/store/product/product.state';
 
 @Component({
   selector: 'app-product-colors',
@@ -12,47 +12,22 @@ import { AppState } from 'src/app/store/app-state';
 })
 export class ProductColorsComponent implements OnInit {
 
-  @Input() selectedColor: string;
-  @Input() selectedSize$: BehaviorSubject<string> = new BehaviorSubject('');
   @Input() showRequiredError: boolean;
   
-  @Output() colorChanged = new EventEmitter<string>();
-  
   colors$: Observable<string[]>;
-  product$: Observable<Product>;
+  selectedColor$: Observable<string>;
 
   constructor(
     private store: Store<AppState>
   ) { }
 
   ngOnInit() {
-    this.colors$ = this.getColors();
-
-    this.product$ = this.store.select(state => state.product.product);
+    this.colors$ = this.store.select(selectColors);
+    this.selectedColor$ = this.store.select(state => state.product.selectedColor);
   }
 
   setColor(color: string) {
-    this.colorChanged.emit(color);
-  }
-
-  private getColors() {
-    return this.selectedSize$.pipe(
-      switchMap((size: string) => 
-        this.store.select(state => 
-          this.filterColors(size, state.product.product.stock)
-        )
-      )
-    );
-  }
-
-  private filterColors(size: string, stockOptions: Stock[]) {
-    const colors: string[] = [];
-    stockOptions?.forEach(stockOption => {
-      if (!size || size === stockOption.size) {
-        colors.push(stockOption.color);
-      }
-    });
-    return colors;;
+    this.store.dispatch(setSelectedColor({color}));
   }
 
 }

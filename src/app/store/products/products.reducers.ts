@@ -9,7 +9,7 @@ const productsReduce = createReducer(
   initialState,
   on(loadProductsByCategory, (state) => ({
     ...state,
-    error: null,
+    error: undefined,
     isLoaded: false,
     isLoading: true,
     products: []

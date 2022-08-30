@@ -41,13 +41,15 @@ describe('ProductSizesComponent', () => {
     expect(page.querySelectorAll('[test-id="size"]').length).toEqual(3);
   });
 
-  it('given user selects size, then emit size changed event', () => {
-    spyOn(component.sizeChanged, 'emit');
+  it('given user clicks on size, then set size as selected', done => {
+    component.setSize({detail: {value: "M"}});
+    fixture.detectChanges();
 
-    component.setSize('M');
-
-    expect(component.sizeChanged.emit).toHaveBeenCalled();
-  });
+    store.select('product').subscribe(state => {
+      expect(state.selectedSize).toEqual("M");
+      done();
+    })
+  })
 
   it('given show required error, when true, then show error', () => {
     component.showRequiredError = true;

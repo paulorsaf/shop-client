@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
-import { BehaviorSubject } from 'rxjs';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { AppState } from 'src/app/store/app-state';
-import { loadProductSuccess } from 'src/app/store/product/product.actions';
+import { loadProductSuccess, setSelectedSize } from 'src/app/store/product/product.actions';
 import { productReducer } from 'src/app/store/product/product.reducers';
 import { ProductColorsComponent } from './product-colors.component';
 
@@ -55,7 +54,7 @@ describe('ProductColorsComponent', () => {
         {size: 'P', color: 'Amarelo'}, {size: 'P', color: 'Verde'}, {size: 'M', color: 'Vermelho'}
       ]} as any;
       store.dispatch(loadProductSuccess({product}));
-      component.selectedSize$.next('P');
+      store.dispatch(setSelectedSize({size: 'P'}));
 
       fixture.detectChanges();
     })
@@ -66,20 +65,14 @@ describe('ProductColorsComponent', () => {
 
   });
 
-  it('given user selects color, then emit color changed event', () => {
-    spyOn(component.colorChanged, 'emit');
-
+  it('given user selects color, then set color as selected', done => {
     page.querySelectorAll('ion-icon')[1].click();
     fixture.detectChanges();
 
-    expect(component.colorChanged.emit).toHaveBeenCalled();
-  });
-
-  it('given color selected, then mark color as selected', () => {
-    component.selectedColor = "Verde";
-    fixture.detectChanges();
-
-    expect(page.querySelectorAll('ion-icon')[1]).toHaveClass('selected');
+    store.select('product').subscribe(state => {
+      expect(state.selectedColor).toEqual("Verde");
+      done();
+    })
   });
 
   it('given show required error, when true, then show error', () => {

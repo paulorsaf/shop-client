@@ -9,8 +9,8 @@ const _companyReducer = createReducer(
   initialState,
   on(loadCompany, (state) => ({
     ...state,
-    company: null,
-    error: null,
+    company: undefined,
+    error: undefined,
     isLoaded: false,
     isLoading: true
   })),
@@ -28,10 +28,10 @@ const _companyReducer = createReducer(
   })),
   on(loadCompanyById, (state) => ({
     ...state,
-    error: null,
+    error: undefined,
     isLoadedById: false,
     isLoadingById: true,
-    selectedCompany: null
+    selectedCompany: undefined
   })),
   on(loadCompanyByIdSuccess, (state, action) => ({
     ...state,

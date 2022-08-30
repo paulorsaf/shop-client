@@ -9,7 +9,7 @@ const _loginReducer = createReducer(
   initialState,
   on(recoverPassword, (state) => ({
     ...state,
-    error: null,
+    error: undefined,
     isLoggedIn: false,
     isLoggingIn: false,
     isRecoveredPassword: false,
@@ -28,7 +28,7 @@ const _loginReducer = createReducer(
   })),
   on(login, (state) => ({
     ...state,
-    error: null,
+    error: undefined,
     isLoggedIn: false,
     isLoggingIn: true,
     isRecoveredPassword: false,

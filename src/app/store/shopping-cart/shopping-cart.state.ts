@@ -1,8 +1,10 @@
 import { createSelector } from '@ngrx/store';
 import { Address } from 'src/app/model/address/address';
 import { Payment } from 'src/app/model/payment/payment';
+import { Product, Stock } from 'src/app/model/product/product';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from '../app-state';
+import { selectStockOptionSelected } from '../product/product.state';
 
 export type ShoppingCartState = {
     deliveryAddress: Address;
@@ -32,5 +34,26 @@ export const selectTotalPrice = createSelector(
             total += (p.amount * price);
         });
         return total;
+    }
+);
+export const selectTotalQuantityForProductStock = createSelector(
+    (state: AppState) => ({
+        product: state.product.product,
+        stock: selectStockOptionSelected(state),
+        shoppingCartProducts: state.shoppingCart.products
+    }),
+    (state: {product: Product, stock: Stock, shoppingCartProducts: ShoppingCartProduct[]}) => {
+        if (state.stock) {
+            const shoppingCartProduct = state.shoppingCartProducts.find(
+                s => s.stockOption?.id === state.stock?.id
+            );
+            return shoppingCartProduct?.amount || 0;
+        }
+        const hasStock = state.product?.stock?.length >= 0;
+
+        if (!hasStock) {
+            return state.shoppingCartProducts?.length ? state.shoppingCartProducts[0].amount : 0;
+        }
+        return 0;
     }
 );

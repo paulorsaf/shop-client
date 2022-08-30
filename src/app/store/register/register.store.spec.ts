@@ -18,7 +18,7 @@ describe('Register store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.register,
-            error: null,
+            error: undefined,
             isRegistered: false,
             isRegistering: true
         });

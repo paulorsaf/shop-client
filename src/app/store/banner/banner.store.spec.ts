@@ -19,7 +19,7 @@ describe('Banner store', () => {
         expect(newState).toEqual({
             ...appInitialState.banner,
             banners: [],
-            error: null,
+            error: undefined,
             isLoaded: false,
             isLoading: true
         })

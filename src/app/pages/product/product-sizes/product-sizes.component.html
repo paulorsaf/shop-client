@@ -9,7 +9,7 @@
       </ion-segment-button>
     </ion-segment>
   </div>
-  <div *ngIf="showRequiredError && !selectedSize">
+  <div *ngIf="showRequiredError && !(selectedSize$ | async)">
     <ion-text color="danger" class="error" test-id="size-required-error">
       Tamanho é obrigatório
     </ion-text>

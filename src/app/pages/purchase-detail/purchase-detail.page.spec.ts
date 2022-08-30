@@ -11,7 +11,7 @@ import { PageMock } from 'src/app/model/mocks/page.mock';
 import { loadPurchaseDetailFail, loadPurchaseDetailSuccess } from 'src/app/store/purchase-detail/purchase-detail.action';
 import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
 
-fdescribe('PurchaseDetailPage', () => {
+describe('PurchaseDetailPage', () => {
   let component: PurchaseDetailPage;
   let fixture: ComponentFixture<PurchaseDetailPage>;
   let store: Store<AppState>;

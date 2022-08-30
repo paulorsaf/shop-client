@@ -13,7 +13,7 @@ const _userReducer = createReducer(
   })),
   on(logout, (state) => ({
     ...state,
-    error: null,
+    error: undefined,
     isLoggedOut: false,
     isLoggingOut: true
   })),
@@ -30,7 +30,7 @@ const _userReducer = createReducer(
   })),
   on(loginUserByToken, (state) => ({
     ...state,
-    user: null,
+    user: undefined,
     isLoggedInByToken: false,
     isLoggingInByToken: true
   })),
@@ -42,7 +42,7 @@ const _userReducer = createReducer(
   })),
   on(loginUserByTokenFail, (state) => ({
     ...state,
-    user: null,
+    user: undefined,
     isLoggedInByToken: true,
     isLoggingInByToken: false
   }))

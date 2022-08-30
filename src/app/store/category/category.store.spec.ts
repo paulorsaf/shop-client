@@ -19,7 +19,7 @@ describe('Trending store', () => {
         expect(newState).toEqual({
             ...appInitialState.category,
             categories: [],
-            error: null,
+            error: undefined,
             isLoaded: false,
             isLoading: true
         });

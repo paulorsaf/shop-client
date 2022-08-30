@@ -19,7 +19,7 @@ describe('Login store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.login,
-            error: null,
+            error: undefined,
             isLoggedIn: false,
             isLoggingIn: false,
             isRecoveredPassword: false,
@@ -73,7 +73,7 @@ describe('Login store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.login,
-            error: null,
+            error: undefined,
             isLoggedIn: false,
             isLoggingIn: true,
             isRecoveredPassword: false,

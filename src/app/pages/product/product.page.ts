@@ -3,13 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { Product } from 'src/app/model/product/product';
+import { Product, Stock } from 'src/app/model/product/product';
 import { AppState } from 'src/app/store/app-state';
 import { loadProduct } from 'src/app/store/product/product.actions';
-import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
-import { selectTotalPrice } from 'src/app/store/shopping-cart/shopping-cart.state';
+import { selectHasStockOptions, selectProduct, selectStockOptionSelected } from 'src/app/store/product/product.state';
+import { addProduct, decreaseProduct, removeProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { selectTotalPrice, selectTotalQuantityForProductStock } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
   selector: 'app-product',
@@ -20,14 +21,12 @@ export class ProductPage implements OnInit {
 
   isLoading$: Observable<boolean>;
   product$: Observable<Product>;
+  selectedAmount$: Observable<number>;
+  selectedSize$: Observable<string>;
   totalPrice$: Observable<number>;
   
-  selectedSize$ = new BehaviorSubject<string>("");
-
   hasBackButton = true;
   hasTriedToAdd = false;
-  selectedColor = '';
-  selectedSize = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -42,78 +41,84 @@ export class ProductPage implements OnInit {
   ngOnInit() {
     this.isLoading$ = this.store.select(state => state.product.isLoading);
     this.product$ = this.store.select(state => state.product.product);
+    this.selectedAmount$ = this.store.select(selectTotalQuantityForProductStock)
+    this.selectedSize$ = this.store.select(state => state.product.selectedSize);
     this.totalPrice$ = this.store.select(selectTotalPrice);
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.store.dispatch(loadProduct({id}));
   }
 
-  setColor(color: string) {
-    this.selectedColor = color;
-  }
-
-  setSize(event: any) {
-    this.selectedColor = "";
-    this.selectedSize = event.target.value;
-    this.selectedSize$.next(this.selectedSize);
+  goHome() {
+    this.navController.navigateRoot('/');
   }
 
   addToShoppingCart() {
     this.hasTriedToAdd = true;
 
-    this.product$.pipe(take(1)).subscribe(product => {
-      if (product.stock?.length) {
-        this.addProductToShoppingCartWithStockOption(product);
+    this.store.select(selectHasStockOptions)
+      .pipe(take(1))
+      .subscribe(hasStockOption => {
+        if (hasStockOption) {
+          this.addStock();
+        } else {
+          this.addProduct();
+        }
+      })
+  }
+
+  reduceFromShoppingCart() {
+    this.store.select(state => ({
+      product: state.product.product,
+      stock: selectStockOptionSelected(state),
+      shoppingCartProducts: state.shoppingCart.products
+    }))
+    .pipe(take(1))
+    .subscribe(state => {
+      const shoppingCartProduct = state.shoppingCartProducts.find(s =>
+        s.product.id === state.product.id &&
+        state.stock?.id === s.stockOption?.id
+      );
+
+      if (shoppingCartProduct.amount === 1) {
+        this.store.dispatch(removeProduct({product: shoppingCartProduct}));
       } else {
-        this.store.dispatch(addProduct({product: {product}}));
-        this.showMessage();
+        this.store.dispatch(decreaseProduct({product: shoppingCartProduct}));
       }
     })
   }
 
-  goHome() {
-    this.navController.navigateRoot('/');
-  }
-
-  private async showMessage() {
-    const toast = await this.toastController.create({
-      color: "warning",
-      message: "Produto adicionado ao carrinho",
-      position: "bottom",
-      duration: 1000
-    });
-    toast.present();
-  }
-
-  private addProductToShoppingCartWithStockOption(product: Product) {
-    const stockOption = this.findSelectedStockOption(product);
-    if (stockOption) {
-      this.store.dispatch(addProduct({product: {
-        product: product,
-        stockOption: {
-          id: stockOption.id,
-          color: stockOption.color,
-          size: stockOption.size
+  private addStock() {
+    this.store.select(selectStockOptionSelected)
+      .pipe(take(1))
+      .subscribe(stock => {
+        if (stock) {
+          this.addProductToShoppingCartWithStockOption(stock);
         }
-      }}));
-      this.showMessage();
-    }
+      })
   }
 
-  private findSelectedStockOption(product: Product) {
-    const stockOption = product.stock.find(s => {
-      if (s.color && s.size) {
-        return s.color === this.selectedColor && s.size === this.selectedSize;
-      }
-      if (s.color) {
-        return s.color === this.selectedColor;
-      }
-      if (s.size) {
-        return s.size === this.selectedSize;
-      }
-    });
+  private addProduct() {
+    this.store.select(selectProduct)
+      .pipe(take(1))
+      .subscribe(product => {
+        this.store.dispatch(addProduct({product: {product}}));
+      });
+  }
 
-    return stockOption;
+  private addProductToShoppingCartWithStockOption(stockOption: Stock) {
+    this.store.select(selectProduct)
+      .pipe(take(1))
+      .subscribe(product => {
+        this.store.dispatch(addProduct({product: {
+          product: product,
+          stockOption: {
+            id: stockOption.id,
+            color: stockOption.color,
+            size: stockOption.size
+          }
+        }}));
+      })
   }
 
 }

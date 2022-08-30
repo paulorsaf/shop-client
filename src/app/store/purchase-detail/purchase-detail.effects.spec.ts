@@ -8,7 +8,7 @@ import { PurchaseServiceMock } from 'src/app/model/mocks/purchase.service.mock';
 import { PurchaseService } from 'src/app/services/purchase/purchase.service';
 import { loadPurchaseDetail, loadPurchaseDetailFail, loadPurchaseDetailSuccess } from './purchase-detail.action';
 
-fdescribe('Purchase detail effects', () => {
+describe('Purchase detail effects', () => {
   let effects: PurchaseDetailEffects;
   let actions$: Observable<Action>;
   let purchaseService: PurchaseServiceMock;

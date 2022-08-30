@@ -41,18 +41,26 @@
       </section>
 
       <section class="options" *ngIf="product | productHasSize" test-id="product-sizes">
-        <app-product-sizes [selectedSize]="selectedSize" [showRequiredError]="hasTriedToAdd"
-          (sizeChanged)="setSize($event)">
-        </app-product-sizes>
+        <app-product-sizes [showRequiredError]="hasTriedToAdd"></app-product-sizes>
       </section>
 
-      <div *ngIf="!(product | productHasSize) || selectedSize">
+      <div *ngIf="!(product | productHasSize) || (selectedSize$ | async)">
         <section class="options" *ngIf="product | productHasColor" test-id="product-colors">
-          <app-product-colors [selectedColor]="selectedColor" [selectedSize$]="selectedSize$"
-            [showRequiredError]="hasTriedToAdd" (colorChanged)="setColor($event)">
-          </app-product-colors>
+          <app-product-colors [showRequiredError]="hasTriedToAdd"></app-product-colors>
         </section>
       </div>
+
+      <section class="shopping-cart">
+        <ion-fab-button (click)="reduceFromShoppingCart()"
+          [disabled]="(selectedAmount$ | async) === 0" test-id="reduce-product-button">
+          <ion-icon name="close" *ngIf="(selectedAmount$ | async) === 1"></ion-icon>
+          <ion-icon name="remove" *ngIf="(selectedAmount$ | async) > 1"></ion-icon>
+        </ion-fab-button>
+        <ion-label color="primary">{{selectedAmount$ | async}}</ion-label>
+        <ion-fab-button (click)="addToShoppingCart()" test-id="add-product-button">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </section>
 
       <section class="options" *ngIf="product.description" test-id="product-description">
         <div class="title">
@@ -68,11 +76,10 @@
   </div>
 </ion-content>
 
-<ion-footer *ngIf="(isLoading$ | async) === false">
+<!-- <ion-footer *ngIf="(isLoading$ | async) === false">
   <ion-toolbar color="primary">
-    <ion-title align="middle" (click)="addToShoppingCart()" class="opacity"
-      test-id="add-product-button">
+    <ion-title align="middle" class="opacity">
       Adicionar ao carrinho
     </ion-title>
   </ion-toolbar>
-</ion-footer>
+</ion-footer> -->
