@@ -1,0 +1,24 @@
+<p class="main-message" *ngIf="status !== 'FINISHED'">
+  <ion-text color="primary" *ngIf="status === 'CREATED'" test-id="created-payment-message">
+    Por favor, aguarde enquanto atendemos o seu pedido.
+  </ion-text>
+  <ion-text color="primary" *ngIf="status === 'VERIFYING_PAYMENT'" test-id="verifying-payment-message">
+    Por favor, aguarde enquanto confirmamos o seu pagamento.
+  </ion-text>
+  <ion-text color="primary" *ngIf="status === 'PAID'" test-id="paid-message">
+    Pagamento confirmado. Em breve iniciaremos a separação da sua compra.
+  </ion-text>
+  <ion-text color="primary" *ngIf="status === 'SORTING_OUT'" test-id="sorting-out-message">
+    Estamos separando a sua compra. Em breve ela estará pronta para
+    <span *ngIf="purchase.address">entrega.</span>
+    <span *ngIf="!purchase.address">você buscar na loja.</span>
+  </ion-text>
+  <ion-text color="primary" *ngIf="status === 'READY'" test-id="ready-message">
+    Sua compra está pronta.
+    <span *ngIf="purchase.address">Em breve você receberá os seus produtos.</span>
+    <span *ngIf="!purchase.address">Você já pode buscar os seus produtos na loja.</span>
+  </ion-text>
+  <ion-text color="primary" *ngIf="status === 'DELIVERYING'" test-id="deliverying-message">
+    Sua compra está a caminho e em breve chegará até a sua casa.
+  </ion-text>
+</p>

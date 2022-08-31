@@ -14,6 +14,7 @@ export type Purchase = {
 
 export type Payment = {
     error: any;
+    receiptUrl: string;
     type: string;
 }
 

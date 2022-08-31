@@ -21,6 +21,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrMaskDirective, BrMaskerModule } from 'br-mask';
 import { RegisterComponent } from './components/register/register.component';
+import { PurchaseStockOptionModule } from './components/purchase-stock-option/purchase-stock-option.module';
 
 registerLocaleData(localePt);
 
@@ -40,6 +41,7 @@ registerLocaleData(localePt);
     ReactiveFormsModule,
     ProductOptionsPipeModule,
     ProductTotalPricePipeModule,
+    PurchaseStockOptionModule,
 
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,

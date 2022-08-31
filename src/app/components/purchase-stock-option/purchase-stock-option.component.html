@@ -1,0 +1,10 @@
+<ion-label class="color-label">
+  <div *ngIf="stockOption?.color">
+    <div class="color" [style.background-color]="stockOption.color">
+      {{stockOption.size}}
+    </div>
+  </div>
+  <p *ngIf="!stockOption?.color && stockOption?.size">
+    Tamanho: {{stockOption.size}}
+  </p>
+</ion-label>

@@ -1,0 +1,31 @@
+<div class="status">
+  <div class="status-item" [ngClass]="purchase.status === 'CREATED' ? 'selected' : ''">
+    <ion-icon name="bag-check-outline"></ion-icon>
+    <div>Pedido</div>
+  </div>
+  <div class="status-item" *ngIf="purchase.payment?.type !== 'MONEY'"
+    [ngClass]="purchase.status === 'VERIFYING_PAYMENT' || purchase.status === 'PAID' ? 'selected' : ''"
+    test-id="payment">
+    <ion-icon name="wallet-outline"></ion-icon>
+    <div>Pagamento</div>
+  </div>
+  <div class="status-item" [ngClass]="purchase.status === 'SORTING_OUT' ? 'selected' : ''">
+    <ion-icon name="archive-outline"></ion-icon>
+    <div>Separando</div>
+  </div>
+  <div class="status-item" *ngIf="!purchase.address"
+    [ngClass]="purchase.status === 'READY' ? 'selected' : ''" test-id="ready-for-pick-up">
+    <ion-icon name="car-outline"></ion-icon>
+    <div>Pronto</div>
+  </div>
+  <div class="status-item" *ngIf="purchase.address"
+    [ngClass]="purchase.status === 'DELIVERYING' || purchase.status === 'READY' ? 'selected' : ''"
+    test-id="deliverying">
+    <ion-icon name="car-outline"></ion-icon>
+    <div>Enviando</div>
+  </div>
+  <div class="status-item" [ngClass]="purchase.status === 'FINISHED' ? 'selected' : ''">
+    <ion-icon name="bag-check"></ion-icon>
+    <div>Finalizado</div>
+  </div>
+</div>

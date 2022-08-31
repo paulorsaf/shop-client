@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
+import { Purchase } from 'src/app/model/purchase/purchase';
 import { AppState } from 'src/app/store/app-state';
 import { loadPurchaseDetail } from 'src/app/store/purchase-detail/purchase-detail.action';
+import { RetryPaymentPage } from '../purchases/retry-payment/retry-payment.page';
 
 @Component({
   selector: 'app-purchase-detail',
@@ -15,17 +17,20 @@ import { loadPurchaseDetail } from 'src/app/store/purchase-detail/purchase-detai
 export class PurchaseDetailPage implements OnInit, OnDestroy {
 
   isLoading$: Observable<boolean>;
+  purchase$: Observable<Purchase>;
   
   errorSubscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private modalController: ModalController,
     private toastController: ToastController,
     private store: Store<AppState>
   ) { }
 
   ngOnInit() {
     this.isLoading$ = this.store.select(state => state.purchaseDetail.isLoading);
+    this.purchase$ = this.store.select(state => state.purchaseDetail.purchase);
 
     this.onError();
 
@@ -35,6 +40,23 @@ export class PurchaseDetailPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.errorSubscription.unsubscribe();
+  }
+
+  showReceipt() {
+    this.purchase$.pipe(take(1)).subscribe(purchase => {
+      window.open(purchase?.payment?.receiptUrl, '_blank');
+    })
+  }
+
+  retryPayment() {
+    this.purchase$.pipe(take(1)).subscribe(purchase => {
+      this.modalController.create({
+        component: RetryPaymentPage,
+        componentProps: {
+          purchase
+        }
+      }).then(modal => modal.present());
+    });
   }
 
   private onError() {
@@ -47,7 +69,8 @@ export class PurchaseDetailPage implements OnInit, OnDestroy {
   private async showError(error) {
     const toast = await this.toastController.create({
       header: "Erro ao recuperar compra",
-      message: error?.error?.message
+      message: error?.error?.message,
+      duration: 5000
     })
     
     toast.present();

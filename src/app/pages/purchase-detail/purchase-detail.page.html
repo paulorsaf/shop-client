@@ -12,6 +12,102 @@
     loading...
   </section>
   <section *ngIf="(isLoading$ | async) === false" test-id="purchase-detail">
-    loaded...
+    <div *ngIf="purchase$ | async; let purchase">
+      <ion-card (click)="goToPurchaseDetail()">
+        <ion-card-content>
+          <app-purchase-statuses [purchase]="purchase"></app-purchase-statuses>
+        </ion-card-content>
+        <ion-card-content *ngIf="purchase.status !== 'FINISHED'">
+          <app-purchase-status-message
+            [status]="purchase.status">
+          </app-purchase-status-message>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="product-list">
+        <ion-card-header>
+          <ion-card-title>Produtos</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            <ion-item *ngFor="let product of purchase.products">
+              <ion-label>
+                <h2>{{product.amount}} x {{product.name}}</h2>
+                <ion-text class="prices">
+                  <p class="price">
+                    <span *ngIf="product.priceWithDiscount">
+                      {{product.priceWithDiscount | currency: "R$ "}}
+                    </span>
+                    <span [ngClass]="product.priceWithDiscount ? 'discount' : ''">
+                      {{product.price | currency: "R$ "}}
+                    </span>
+                  </p>
+                  <p>{{product.totalPrice | currency: "R$ "}}</p>
+                </ion-text>
+
+                <app-purchase-stock-option *ngIf="product.stock"
+                  [stockOption]="product.stock">
+                </app-purchase-stock-option>
+              </ion-label>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label>
+                <h2>Total</h2>
+                <div class="prices">
+                  <p class="price">
+                    {{purchase.totalAmount}} {{purchase.totalAmount == 1 ? 'produto' : 'produtos'}}
+                  </p>
+                  <p>{{purchase.totalPrice | currency: "R$ "}}</p>
+                </div>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Dados da entrega</ion-card-title>
+        </ion-card-header>
+        <ion-card-content *ngIf="purchase.address">
+          <p>Rua: {{purchase.address.address}}</p>
+          <p>Número: {{purchase.address.number}}</p>
+          <p>Bairro: {{purchase.address.neighborhood}}</p>
+          <p>CEP: {{purchase.address.zipCode}}</p>
+          <p>Complemento: {{purchase.address.complement}}</p>
+          <p>Cidade: {{purchase.address.city}}</p>
+          <p>Estado: {{purchase.address.state}}</p>
+        </ion-card-content>
+        <ion-card-content *ngIf="!purchase.address">
+          <p>Buscar na loja</p>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card *ngIf="purchase.payment">
+        <ion-card-header>
+          <ion-card-title>Dados do pagamento</ion-card-title>
+          <ion-card-subtitle>{{purchase.payment.type | paymentType}}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-text *ngIf="purchase.payment.type === 'MONEY'">
+            Pagamento na entrega do produto.
+          </ion-text>
+          <ion-text *ngIf="purchase.payment.type === 'PIX'">
+            <ion-button *ngIf="purchase?.payment?.receiptUrl" fill="clear" size="full"
+              (click)="showReceipt()">
+              Ver recibo
+            </ion-button>
+          </ion-text>
+
+          <ion-text *ngIf="purchase.payment.error" color="danger">
+            Erro ao realizar pagamento: {{purchase.payment.error}}
+
+            <ion-button color="danger" size="full" (click)="retryPayment(purchase)">
+              Tentar novamente
+            </ion-button>
+          </ion-text>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </section>
 </ion-content>

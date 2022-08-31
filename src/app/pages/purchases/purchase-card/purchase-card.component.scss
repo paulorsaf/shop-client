@@ -9,28 +9,3 @@ ion-card {
         border-top: 5px solid var(--ion-color-danger);
     }
 }
-
-.status {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.4rem;
-
-    ion-icon {
-        font-size: 2rem;
-    }
-
-    .status-item {
-        text-align: center;
-
-        &.selected {
-            color: var(--ion-color-primary);
-            font-weight: 600;
-        }
-    }
-}
-
-.main-message {
-    font-size: 1.8rem;
-    font-weight: 600;
-    padding: 2rem 0;
-}

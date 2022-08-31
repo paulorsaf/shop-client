@@ -1,3 +1,18 @@
 ion-content {
     --padding-top: 7rem;
 }
+
+.prices {
+    display: flex;
+    justify-content: space-between;
+
+    .discount {
+        font-size: 1.4rem;
+    }
+}
+
+ion-card.product-list {
+    ion-card-content {
+        padding: 0;
+    }
+}

@@ -4,13 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { PurchaseDetailPageRoutingModule } from './purchase-detail-routing.module';
 import { PurchaseDetailPage } from './purchase-detail.page';
+import { PurchaseStockOptionModule } from 'src/app/components/purchase-stock-option/purchase-stock-option.module';
+import { PaymentTypePipeModule } from 'src/app/pipes/payment-type/payment-type.pipe.module';
+import { PurchaseStatusMessageModule } from 'src/app/components/purchase-status-message/purchase-status-message.module';
+import { PurchaseStatusesModule } from 'src/app/components/purchase-statuses/purchase-statuses.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PurchaseDetailPageRoutingModule
+    PurchaseDetailPageRoutingModule,
+    PurchaseStockOptionModule,
+    PaymentTypePipeModule,
+    PurchaseStatusMessageModule,
+    PurchaseStatusesModule
   ],
   declarations: [PurchaseDetailPage]
 })
