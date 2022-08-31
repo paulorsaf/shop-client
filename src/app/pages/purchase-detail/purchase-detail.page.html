@@ -13,14 +13,12 @@
   </section>
   <section *ngIf="(isLoading$ | async) === false" test-id="purchase-detail">
     <div *ngIf="purchase$ | async; let purchase">
-      <ion-card (click)="goToPurchaseDetail()">
+      <ion-card>
         <ion-card-content>
           <app-purchase-statuses [purchase]="purchase"></app-purchase-statuses>
         </ion-card-content>
         <ion-card-content *ngIf="purchase.status !== 'FINISHED'">
-          <app-purchase-status-message
-            [status]="purchase.status">
-          </app-purchase-status-message>
+          <app-purchase-status-message [purchase]="purchase"></app-purchase-status-message>
         </ion-card-content>
       </ion-card>
 
@@ -70,7 +68,7 @@
           <ion-card-title>Dados da entrega</ion-card-title>
         </ion-card-header>
         <ion-card-content *ngIf="purchase.address">
-          <p>Rua: {{purchase.address.address}}</p>
+          <p>Rua: {{purchase.address.street}}</p>
           <p>Número: {{purchase.address.number}}</p>
           <p>Bairro: {{purchase.address.neighborhood}}</p>
           <p>CEP: {{purchase.address.zipCode}}</p>
@@ -102,7 +100,7 @@
           <ion-text *ngIf="purchase.payment.error" color="danger">
             Erro ao realizar pagamento: {{purchase.payment.error}}
 
-            <ion-button color="danger" size="full" (click)="retryPayment(purchase)">
+            <ion-button color="danger" size="full" (click)="retryPayment()">
               Tentar novamente
             </ion-button>
           </ion-text>

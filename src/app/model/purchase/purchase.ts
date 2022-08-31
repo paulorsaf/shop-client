@@ -10,6 +10,8 @@ export type Purchase = {
     payment: Payment;
     products: PurchaseProduct[];
     status: string;
+    totalAmount: number;
+    totalPrice: number;
 }
 
 export type Payment = {
@@ -25,4 +27,6 @@ export type PurchaseProduct = {
     priceWithDiscount: number;
     name: string;
     stock: Stock;
+    totalAmount: number;
+    totalPrice: number;
 };

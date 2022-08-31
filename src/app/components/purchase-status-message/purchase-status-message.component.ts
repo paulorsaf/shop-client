@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Purchase } from 'src/app/model/purchase/purchase';
 
 @Component({
   selector: 'app-purchase-status-message',
@@ -7,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PurchaseStatusMessageComponent implements OnInit {
 
-  @Input() status: string;
+  @Input() purchase: Purchase;
 
   constructor() { }
 

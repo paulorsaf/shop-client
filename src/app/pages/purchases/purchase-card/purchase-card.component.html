@@ -6,7 +6,7 @@
   </ion-card-content>
   <ion-card-content>
     <div *ngIf="!purchase.payment?.error" test-id="purchase-message">
-      <app-purchase-status-message [status]="purchase.status"></app-purchase-status-message>
+      <app-purchase-status-message [purchase]="purchase"></app-purchase-status-message>
     </div>
     <div *ngIf="purchase.payment?.error" class="main-message">
       <p>
