@@ -8,6 +8,7 @@ import { PurchaseStockOptionModule } from 'src/app/components/purchase-stock-opt
 import { PaymentTypePipeModule } from 'src/app/pipes/payment-type/payment-type.pipe.module';
 import { PurchaseStatusMessageModule } from 'src/app/components/purchase-status-message/purchase-status-message.module';
 import { PurchaseStatusesModule } from 'src/app/components/purchase-statuses/purchase-statuses.module';
+import { PurchaseDetailLoaderComponent } from './purchase-detail-loader/purchase-detail-loader.component';
 
 @NgModule({
   imports: [
@@ -20,6 +21,9 @@ import { PurchaseStatusesModule } from 'src/app/components/purchase-statuses/pur
     PurchaseStatusMessageModule,
     PurchaseStatusesModule
   ],
-  declarations: [PurchaseDetailPage]
+  declarations: [
+    PurchaseDetailPage,
+    PurchaseDetailLoaderComponent
+  ]
 })
 export class PurchaseDetailPageModule {}

@@ -9,7 +9,7 @@
 
 <ion-content>
   <section *ngIf="isLoading$ | async" test-id="purchase-detail-loader">
-    loading...
+    <app-purchase-detail-loader></app-purchase-detail-loader>
   </section>
   <section *ngIf="(isLoading$ | async) === false" test-id="purchase-detail">
     <div *ngIf="purchase$ | async; let purchase">

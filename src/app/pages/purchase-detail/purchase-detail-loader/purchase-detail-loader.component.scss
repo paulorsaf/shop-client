@@ -1,0 +1,21 @@
+.loader {
+    ion-card-content {
+        padding: 0;
+    }
+    ion-skeleton-text {
+        margin: 0;
+        height: 20rem;
+    }
+    &.status ion-skeleton-text {
+        height: 15rem;
+    }
+    &.products ion-skeleton-text {
+        height: 40rem;
+    }
+    &.payment ion-skeleton-text {
+        height: 10rem;
+    }
+    &.address ion-skeleton-text {
+        height: 20rem;
+    }
+}
