@@ -87,17 +87,17 @@
           <ion-card-subtitle>{{purchase.payment.type | paymentType}}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          <ion-text *ngIf="purchase.payment.type === 'MONEY'">
+          <ion-text *ngIf="purchase.payment.type === 'MONEY'" test-id="payment-by-money">
             Pagamento na entrega do produto.
           </ion-text>
-          <ion-text *ngIf="purchase.payment.type === 'PIX'">
+          <ion-text *ngIf="purchase.payment.type === 'PIX'" test-id="payment-by-pix">
             <ion-button *ngIf="purchase?.payment?.receiptUrl" fill="clear" size="full"
-              (click)="showReceipt()">
+              (click)="showReceipt()" test-id="pix-receipt">
               Ver recibo
             </ion-button>
           </ion-text>
 
-          <ion-text *ngIf="purchase.payment.error" color="danger">
+          <ion-text *ngIf="purchase.payment.error" color="danger" test-id="payment-error">
             Erro ao realizar pagamento: {{purchase.payment.error}}
 
             <ion-button color="danger" size="full" (click)="retryPayment()">

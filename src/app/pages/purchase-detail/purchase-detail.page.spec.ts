@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { loadPurchaseDetailFail, loadPurchaseDetailSuccess } from 'src/app/store/purchase-detail/purchase-detail.action';
 import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
+import { PaymentTypePipeModule } from 'src/app/pipes/payment-type/payment-type.pipe.module';
 
 describe('PurchaseDetailPage', () => {
   let component: PurchaseDetailPage;
@@ -29,6 +30,7 @@ describe('PurchaseDetailPage', () => {
       ],
       imports: [
         RouterTestingModule.withRoutes([]),
+        PaymentTypePipeModule,
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
         StoreModule.forFeature('purchaseDetail', purchaseDetailReducer)
@@ -82,6 +84,18 @@ describe('PurchaseDetailPage', () => {
       expect(page.querySelector('[test-id="purchase-detail"]')).not.toBeNull();
     })
 
+    it('when payment doesnt have error, then hide payment error', () => {
+      expect(page.querySelector('[test-id="payment-error"]')).toBeNull();
+    })
+
+    it('when payment has error, then show payment error', () => {
+      const purchase = {id: '1', payment: {error: 'any error'}} as any;
+      store.dispatch(loadPurchaseDetailSuccess({purchase}));
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="payment-error"]')).not.toBeNull();
+    })
+
   })
 
   describe('given purchase loaded with error', () => {
@@ -101,6 +115,55 @@ describe('PurchaseDetailPage', () => {
         expect(toastController.isPresented).toBeTruthy();
         done();
       }, 100)
+    })
+
+  })
+
+  describe('given payment by pix', () => {
+
+    beforeEach(() => {
+      const purchase = {id: '1', payment: {type: 'PIX', receiptUrl: "receiptUrl"}} as any;
+      store.dispatch(loadPurchaseDetailSuccess({purchase}));
+      fixture.detectChanges();
+    })
+
+    it('then hide payment by money details', () => {
+      expect(page.querySelector('[test-id="payment-by-money"]')).toBeNull();
+    })
+
+    it('then show payment by pix details', () => {
+      expect(page.querySelector('[test-id="payment-by-pix"]')).not.toBeNull();
+    })
+
+    it('then show pix receipt', () => {
+      expect(page.querySelector('[test-id="pix-receipt"]')).not.toBeNull();
+    })
+
+    it('when user clicks on receipt, then show receipt', () => {
+      spyOn(window, 'open');
+
+      page.querySelector('[test-id="pix-receipt"]').click();
+      fixture.detectChanges();
+
+      expect(window.open).toHaveBeenCalled();
+    })
+
+  })
+
+  describe('given payment by money', () => {
+
+    beforeEach(() => {
+      const purchase = {id: '1', payment: {type: 'MONEY'}} as any;
+      store.dispatch(loadPurchaseDetailSuccess({purchase}));
+      fixture.detectChanges();
+    })
+
+    it('then show payment by money details', () => {
+      expect(page.querySelector('[test-id="payment-by-money"]')).not.toBeNull();
+    })
+
+    it('then hide payment by pix details', () => {
+      expect(page.querySelector('[test-id="payment-by-pix"]')).toBeNull();
     })
 
   })
