@@ -72,7 +72,11 @@
           </div>
           <ion-item>
             <ion-label position="floating">Estado*</ion-label>
-            <ion-input formControlName="state"></ion-input>
+            <ion-select formControlName="state">
+              <ion-select-option *ngFor="let state of states" [value]="state.code">
+                {{state.name}}
+              </ion-select-option>
+            </ion-select>
           </ion-item>
           <div class="form-error" *ngIf="form.get('state').touched && form.get('state').errors?.required">
             Estado é obrigatório

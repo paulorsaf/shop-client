@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { states } from 'src/app/model/address/states-list';
 import { AppState } from 'src/app/store/app-state';
 import { setDeliveryAddress } from 'src/app/store/shopping-cart/shopping-cart.actions';
 
@@ -13,6 +14,7 @@ import { setDeliveryAddress } from 'src/app/store/shopping-cart/shopping-cart.ac
 export class DeliveryAddressPage implements OnInit {
 
   form: FormGroup;
+  states: {name: string, code: string}[] = states;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,6 +28,7 @@ export class DeliveryAddressPage implements OnInit {
 
   goToPayment() {
     if (this.form.value.deliveryType === "DELIVERY") {
+      this.form.markAllAsTouched();
       if (this.form.valid) {
         const address = {...this.form.value};
         delete address.deliveryType;
