@@ -1,6 +1,12 @@
 import { AppState } from './app-state';
 
 export const appInitialState: AppState = {
+    address: {
+        address: undefined,
+        error: undefined,
+        isLoaded: false,
+        isLoading: false
+    },
     banner: {
         banners: [],
         error: undefined,

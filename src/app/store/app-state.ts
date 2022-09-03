@@ -1,3 +1,4 @@
+import { AddressState } from './address/address.state';
 import { BannerState } from './banner/banner.state';
 import { CategoryState } from './category/category-state';
 import { CompanyState } from './company/company.state';
@@ -12,6 +13,7 @@ import { TrendingState } from './trending/trending-state';
 import { UserState } from './user/user.state';
 
 export type AppState = {
+    address: AddressState;
     banner: BannerState;
     category: CategoryState;
     company: CompanyState;

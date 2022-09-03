@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { Address } from 'src/app/model/address/address';
 import { states } from 'src/app/model/address/states-list';
+import { searchByZipCode } from 'src/app/store/address/address.actions';
+import { AddressState } from 'src/app/store/address/address.state';
 import { AppState } from 'src/app/store/app-state';
 import { setDeliveryAddress } from 'src/app/store/shopping-cart/shopping-cart.actions';
 
@@ -13,16 +18,24 @@ import { setDeliveryAddress } from 'src/app/store/shopping-cart/shopping-cart.ac
 })
 export class DeliveryAddressPage implements OnInit {
 
+  addressSubscription: Subscription;
+
   form: FormGroup;
   states: {name: string, code: string}[] = states;
 
+  address$: Observable<Address>;
+
   constructor(
     private formBuilder: FormBuilder,
+    private loadingController: LoadingController,
     private router: Router,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private toastController: ToastController
   ) { }
 
   ngOnInit() {
+    this.address$ = this.store.select(state => state.address.address);
+
     this.createForm();
   }
 
@@ -39,6 +52,61 @@ export class DeliveryAddressPage implements OnInit {
       this.store.dispatch(setDeliveryAddress({address: null}))
       this.router.navigate(['/payment']);
     }
+  }
+
+  onChangeZipCode() {
+    this.store.dispatch(searchByZipCode({zipCode: this.form.value.zipCode}));
+
+    this.addressSubscription = this.store.select('address')
+      .subscribe(state => {
+        this.toggleLoading(state.isLoading);
+        this.onZipCodeLoaded(state);
+        this.onZipCodeFail(state.error)
+      });
+  }
+
+  private onZipCodeFail(error: any) {
+    if (error) {
+      this.showErrorMessage(error);
+    }
+  }
+
+  private async showErrorMessage(error: any){
+    const toast = await this.toastController.create({
+      color: "danger",
+      header: "Erro ao buscar CEP",
+      message: error?.error?.message,
+      position: "bottom",
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  private onZipCodeLoaded(state: AddressState) {
+    if (state.isLoaded) {
+      this.form.get('city').setValue(state.address.city);
+      this.form.get('complement').setValue(state.address.complement);
+      this.form.get('latitude').setValue(state.address.latitude);
+      this.form.get('longitude').setValue(state.address.longitude);
+      this.form.get('neighborhood').setValue(state.address.neighborhood);
+      this.form.get('number').setValue(state.address.number);
+      this.form.get('state').setValue(state.address.state);
+      this.form.get('street').setValue(state.address.street);
+    }
+  }
+
+  private toggleLoading(isLoading: boolean) {
+    if (isLoading) {
+      this.showLoading();
+    } else {
+      this.addressSubscription.unsubscribe();
+      this.loadingController.dismiss();
+    }
+  }
+
+  private async showLoading() {
+    const loading = await this.loadingController.create();
+    loading.present();
   }
 
   private createForm() {

@@ -31,13 +31,13 @@ describe('Product effects', () => {
     effects = TestBed.get(ProductEffects);
   });
 
-  describe('given load banners', () => {
+  describe('given load product', () => {
 
     beforeEach(() => {
       actions$ = of(loadProduct({id: '1'}));
     });
 
-    it('should loadPkce return retrieveAuthCode', (done) => {
+    it('when success, then return load product success', (done) => {
       const product = {id: 1} as any;
       productService.response = of(product);
 
@@ -47,7 +47,7 @@ describe('Product effects', () => {
       });
     });
 
-    it('should retrieve auth code with success', (done) => {
+    it('when fail, then return load product fail', (done) => {
       productService.response = throwError(error);
 
       effects.loadProductEffect$.subscribe((newAction) => {

@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AddressEffects } from './address/address.effects';
+import { addressReducer } from './address/address.reducers';
 import { BannerEffects } from './banner/banner.effects';
 import { bannerReducer } from './banner/banner.reducers';
 import { CategoryEffects } from './category/category.effects';
@@ -30,6 +32,7 @@ import { userReducer } from './user/user.reducers';
 @NgModule({
   imports: [
     StoreModule.forRoot([]),
+    StoreModule.forFeature('address', addressReducer),
     StoreModule.forFeature('banner', bannerReducer),
     StoreModule.forFeature('category', categoryReducer),
     StoreModule.forFeature('company', companyReducer),
@@ -43,6 +46,7 @@ import { userReducer } from './user/user.reducers';
     StoreModule.forFeature('trending', trendingReducer),
     StoreModule.forFeature('user', userReducer),
     EffectsModule.forRoot([
+      AddressEffects,
       BannerEffects,
       CategoryEffects,
       CompanyEffects,
