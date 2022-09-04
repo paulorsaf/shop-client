@@ -7,6 +7,7 @@ export type Purchase = {
     
     address: Address;
     createdAt: string;
+    deliveryPrice: number;
     payment: Payment;
     products: PurchaseProduct[];
     status: string;
