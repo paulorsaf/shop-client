@@ -7,7 +7,7 @@ import { AddressEffects } from './address.effects';
 import { clearZipCodeSearch, getDeliveryPrice, getDeliveryPriceFail, getDeliveryPriceSuccess, searchByZipCode, searchByZipCodeFail, searchByZipCodeSuccess } from './address.actions';
 import { AddressService } from 'src/app/services/address/address.service';
 
-fdescribe('Address effects', () => {
+describe('Address effects', () => {
   let effects: AddressEffects;
   let actions$: Observable<Action>;
   let addressService: AddressServiceMock;

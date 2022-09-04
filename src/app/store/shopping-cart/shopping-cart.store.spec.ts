@@ -5,7 +5,7 @@ import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, ma
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { selectTotalPrice, selectTotalQuantity, selectTotalQuantityForProductStock, ShoppingCartState } from './shopping-cart.state';
 
-fdescribe('Shopping cart store', () => {
+describe('Shopping cart store', () => {
 
     const product: ShoppingCartProduct = {
         amount: 1,

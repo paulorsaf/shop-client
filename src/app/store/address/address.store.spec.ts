@@ -3,7 +3,7 @@ import { clearZipCodeSearch, getDeliveryPrice, getDeliveryPriceFail, getDelivery
 import { addressReducer } from "./address.reducers";
 import { AddressState } from "./address.state";
 
-fdescribe('Address store', () => {
+describe('Address store', () => {
 
     it('searchByZipCode', () => {
         const initialState: AddressState = {

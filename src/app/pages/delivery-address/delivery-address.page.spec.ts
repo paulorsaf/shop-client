@@ -15,7 +15,7 @@ import { AppState } from 'src/app/store/app-state';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { DeliveryAddressPage } from './delivery-address.page';
 
-fdescribe('DeliveryAddressPage', () => {
+describe('DeliveryAddressPage', () => {
   let component: DeliveryAddressPage;
   let fixture: ComponentFixture<DeliveryAddressPage>;
   let page: PageMock;

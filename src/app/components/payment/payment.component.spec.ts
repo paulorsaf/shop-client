@@ -15,7 +15,7 @@ import { makePurchase, makePurchaseFail, makePurchaseSuccess } from 'src/app/sto
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { PaymentComponent } from './payment.component';
 
-fdescribe('PaymentComponent', () => {
+describe('PaymentComponent', () => {
   let component: PaymentComponent;
   let fixture: ComponentFixture<PaymentComponent>;
   let page: PageMock;
