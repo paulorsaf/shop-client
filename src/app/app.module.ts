@@ -1,6 +1,6 @@
-import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
+import { APP_INITIALIZER, DEFAULT_CURRENCY_CODE, ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
+import { Router, RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrMaskDirective, BrMaskerModule } from 'br-mask';
 import { RegisterComponent } from './components/register/register.component';
 import { PurchaseStockOptionModule } from './components/purchase-stock-option/purchase-stock-option.module';
+import * as Sentry from "@sentry/angular";
 
 registerLocaleData(localePt);
 
@@ -74,7 +75,23 @@ registerLocaleData(localePt);
       provide: HTTP_INTERCEPTORS,
       useClass: AddCompanyHeaderHttpRequestInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: true,
+      }),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
   ],
   exports: [
     LoginComponent,
