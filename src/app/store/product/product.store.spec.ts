@@ -1,6 +1,6 @@
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
-import { loadProduct, loadProductFail, loadProductSuccess, setSelectedColor, setSelectedSize } from './product.actions';
+import { clearProduct, loadProduct, loadProductFail, loadProductSuccess, setSelectedColor, setSelectedSize } from './product.actions';
 import { productReducer } from './product.reducers';
 import { ProductState, selectColors, selectStockOptionSelected } from './product.state';
 
@@ -206,6 +206,24 @@ describe('Product store', () => {
         expect(newState).toEqual({
             ...appInitialState.product,
             selectedColor: "anyColor"
+        });
+    });
+
+    it('clearProduct', () => {
+        const initialState: ProductState = {
+            ...appInitialState.product,
+            error: {},
+            isLoaded: true,
+            isLoading: true,
+            product: {} as any,
+            selectedColor: "any",
+            selectedSize: "any"
+        };
+
+        const newState = productReducer(initialState, clearProduct());
+
+        expect(newState).toEqual({
+            ...appInitialState.product
         });
     });
 

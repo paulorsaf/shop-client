@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { appInitialState } from '../app-initial-state';
 import { ProductState } from './product.state';
-import { loadProduct, loadProductFail, loadProductSuccess, setSelectedColor, setSelectedSize } from './product.actions';
+import { clearProduct, loadProduct, loadProductFail, loadProductSuccess, setSelectedColor, setSelectedSize } from './product.actions';
 
 const initialState: ProductState = appInitialState.product;
 
@@ -34,6 +34,9 @@ const productReduce = createReducer(
     ...state,
     selectedColor: undefined,
     selectedSize: action.size
+  })),
+  on(clearProduct, () => ({
+    ...initialState
   }))
 );
 

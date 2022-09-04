@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { appInitialState } from '../app-initial-state';
-import { clearZipCodeSearch, getDeliveryPrice, getDeliveryPriceFail, getDeliveryPriceSuccess, searchByZipCode, searchByZipCodeFail, searchByZipCodeSuccess } from './address.actions';
+import { clearAddress, clearZipCodeSearch, getDeliveryPrice, getDeliveryPriceFail, getDeliveryPriceSuccess, searchByZipCode, searchByZipCodeFail, searchByZipCodeSuccess } from './address.actions';
 import { AddressState } from './address.state';
 
 const initialState: AddressState = appInitialState.address;
@@ -49,6 +49,9 @@ const _addressReducer = createReducer(
     error: action.error,
     isGettingDeliveryPrice: false,
     isGotDeliveryPrice: false
+  })),
+  on(clearAddress, () => ({
+    ...initialState
   }))
 );
 

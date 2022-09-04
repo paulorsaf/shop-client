@@ -1,5 +1,5 @@
 import { appInitialState } from "../app-initial-state";
-import { clearZipCodeSearch, getDeliveryPrice, getDeliveryPriceFail, getDeliveryPriceSuccess, searchByZipCode, searchByZipCodeFail, searchByZipCodeSuccess } from "./address.actions";
+import { clearAddress, clearZipCodeSearch, getDeliveryPrice, getDeliveryPriceFail, getDeliveryPriceSuccess, searchByZipCode, searchByZipCodeFail, searchByZipCodeSuccess } from "./address.actions";
 import { addressReducer } from "./address.reducers";
 import { AddressState } from "./address.state";
 
@@ -127,6 +127,25 @@ describe('Address store', () => {
             error,
             isGettingDeliveryPrice: false,
             isGotDeliveryPrice: false
+        })
+    })
+
+    it('getDeliveryPriceFail', () => {
+        const initialState: AddressState = {
+            ...appInitialState.address,
+            address: {} as any,
+            deliveryPrice: 0,
+            error: {},
+            isGettingDeliveryPrice: true,
+            isGotDeliveryPrice: true,
+            isLoaded: true,
+            isLoading: true
+        }
+
+        const newState = addressReducer(initialState, clearAddress());
+
+        expect(newState).toEqual({
+            ...appInitialState.address
         })
     })
 

@@ -7,6 +7,8 @@ export const searchByZipCodeFail = createAction('[Address] search by zip code fa
 
 export const clearZipCodeSearch = createAction('[Address] clear zip code search');
 
+export const clearAddress = createAction('[Address] clear');
+
 export const getDeliveryPrice = createAction('[Address] get delivery price', props<{zipCode: string}>());
 export const getDeliveryPriceSuccess = createAction('[Address] get delivery price success', props<{deliveryPrice: number}>());
 export const getDeliveryPriceFail = createAction('[Address] get delivery price fail', props<{error: any}>());

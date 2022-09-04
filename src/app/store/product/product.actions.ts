@@ -6,3 +6,5 @@ export const loadProductFail = createAction('[Product] load fail', props<{error:
 
 export const setSelectedColor = createAction('[Product] select color', props<{color: string}>());
 export const setSelectedSize = createAction('[Product] select size', props<{size: string}>());
+
+export const clearProduct = createAction('[Product] clear');

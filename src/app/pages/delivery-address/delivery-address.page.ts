@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Address } from 'src/app/model/address/address';
 import { states } from 'src/app/model/address/states-list';
-import { searchByZipCode } from 'src/app/store/address/address.actions';
+import { clearAddress, searchByZipCode } from 'src/app/store/address/address.actions';
 import { AddressState } from 'src/app/store/address/address.state';
 import { AppState } from 'src/app/store/app-state';
 import { setDeliveryAddress, setDeliveryPrice } from 'src/app/store/shopping-cart/shopping-cart.actions';
@@ -38,6 +38,8 @@ export class DeliveryAddressPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.store.dispatch(clearAddress());
+
     this.address$ = this.store.select(state => state.address.address);
     this.deliveryPrice$ = this.store.select(state => state.address.deliveryPrice);
     this.isLoadingDeliveryPrice$ = this.store.select(

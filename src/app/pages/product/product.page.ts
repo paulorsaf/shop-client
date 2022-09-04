@@ -1,13 +1,13 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Product, Stock } from 'src/app/model/product/product';
 import { AppState } from 'src/app/store/app-state';
-import { loadProduct } from 'src/app/store/product/product.actions';
+import { clearProduct, loadProduct } from 'src/app/store/product/product.actions';
 import { selectHasStockOptions, selectProduct, selectStockOptionSelected } from 'src/app/store/product/product.state';
 import { addProduct, decreaseProduct, removeProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { selectTotalPrice, selectTotalQuantityForProductStock } from 'src/app/store/shopping-cart/shopping-cart.state';
@@ -32,13 +32,14 @@ export class ProductPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private navController: NavController,
-    private store: Store<AppState>,
-    private toastController: ToastController
+    private store: Store<AppState>
   ) {
     this.hasBackButton = (this.location.getState() as any)?.navigationId !== 1;
   }
 
   ngOnInit() {
+    this.store.dispatch(clearProduct());
+
     this.isLoading$ = this.store.select(state => state.product.isLoading);
     this.product$ = this.store.select(state => state.product.product);
     this.selectedAmount$ = this.store.select(selectTotalQuantityForProductStock)
