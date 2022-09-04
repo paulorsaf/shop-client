@@ -16,6 +16,7 @@ import { AddTokenHeaderHttpRequestInterceptor } from './interceptors/add-token-h
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
 import { AddCompanyHeaderHttpRequestInterceptor } from './interceptors/add-company-header-http-request.interceptor';
 import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -45,6 +46,7 @@ registerLocaleData(localePt);
 
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
+    AngularFireAnalyticsModule,
 
     BrMaskerModule
   ],
