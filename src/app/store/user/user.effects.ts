@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { loginUserByToken, loginUserByTokenFail, loginUserByTokenSuccess, logout, logoutFail, logoutSuccess, setUser } from './user.actions';
+import amplitude from 'amplitude-js';
 
 @Injectable()
 export class UserEffects {
@@ -13,7 +14,10 @@ export class UserEffects {
       ofType(logout),
       switchMap(() =>
         this.authService.logout().pipe(
-          map(() => logoutSuccess()),
+          map(() => {
+            amplitude.getInstance().setUserId(null);
+            return logoutSuccess();
+          }),
           catchError(error => of(logoutFail({error})))
         )
       )
@@ -32,7 +36,10 @@ export class UserEffects {
       ofType(loginUserByToken),
       switchMap(() =>
         this.authService.loginByToken().pipe(
-          map(user => loginUserByTokenSuccess({user})),
+          map(user => {
+            amplitude.getInstance().setUserId(user.id);
+            return loginUserByTokenSuccess({user});
+          }),
           catchError(error => of(loginUserByTokenFail()))
         )
       )

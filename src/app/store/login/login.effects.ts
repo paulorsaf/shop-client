@@ -6,6 +6,7 @@ import { User } from 'src/app/model/user/user';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { setUser } from '../user/user.actions';
 import { login, loginFail, loginSuccess, recoverPassword, recoverPasswordFail, recoverPasswordSuccess } from './login.actions';
+import amplitude from 'amplitude-js';
 
 @Injectable()
 export class LoginEffects {
@@ -15,7 +16,10 @@ export class LoginEffects {
       ofType(login),
       switchMap((params: {email: string, password: string}) =>
         this.authService.login(params.email, params.password).pipe(
-          map(user => loginSuccess({user})),
+          map(user => {
+            amplitude.getInstance().setUserId(user.id);
+            return loginSuccess({user})
+          }),
           catchError(error => of(loginFail({error})))
         )
       )

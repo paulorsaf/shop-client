@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+import { amplitudeMetaReducer } from '../amplitude/amplitude';
 import { AddressEffects } from './address/address.effects';
 import { addressReducer } from './address/address.reducers';
 import { BannerEffects } from './banner/banner.effects';
@@ -31,7 +33,11 @@ import { userReducer } from './user/user.reducers';
 
 @NgModule({
   imports: [
-    StoreModule.forRoot([]),
+    StoreModule.forRoot({}, {
+      metaReducers: environment.production ? [
+          amplitudeMetaReducer
+      ] : []
+  }),
     StoreModule.forFeature('address', addressReducer),
     StoreModule.forFeature('banner', bannerReducer),
     StoreModule.forFeature('category', categoryReducer),
