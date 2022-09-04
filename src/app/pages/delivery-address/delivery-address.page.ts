@@ -129,7 +129,13 @@ export class DeliveryAddressPage implements OnInit {
       this.showLoading();
     } else {
       this.addressSubscription.unsubscribe();
-      this.loadingController.dismiss();
+      try {
+        this.loadingController.getTop().then(loading => {
+          if (loading){
+            loading.dismiss();
+          }
+        });
+      } catch (error){}
     }
   }
 

@@ -71,7 +71,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       .select(state => state.register.isRegistered)
       .pipe(filter(isRegistered => isRegistered))
       .subscribe(() => {
-        this.loadingController.dismiss();
+        this.dismissLoadingController();
         this.modalController.dismiss();
       });
   }
@@ -81,9 +81,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
       .select(state => state.register.error)
       .pipe(filter(error => !!error))
       .subscribe(error => {
-        this.loadingController.dismiss();
+        this.dismissLoadingController();
         this.showErrorMessage(error);
       });
+  }
+
+  private dismissLoadingController() {
+    try {
+      this.loadingController.getTop().then(loading => {
+        if (loading){
+          loading.dismiss();
+        }
+      });
+    } catch (error){}
   }
 
   private async showErrorMessage(error: any){

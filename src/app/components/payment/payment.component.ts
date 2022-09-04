@@ -119,7 +119,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
       this.loadingController.create()
         .then(loading => loading.present())
     } else if (this.wasPaying) {
-      this.loadingController.dismiss();
+      try {
+        this.loadingController.getTop().then(loading => {
+          if (loading){
+            loading.dismiss();
+          }
+        });
+      } catch (error){}
     }
   }
 

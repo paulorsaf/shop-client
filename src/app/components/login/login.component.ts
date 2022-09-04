@@ -89,7 +89,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.loadingController.create()
           .then(loading => loading.present())
       } else if (state.error || state.isRecoveredPassword || state.isLoggedIn) {
-        this.loadingController.dismiss();
+        try {
+          this.loadingController.getTop().then(loading => {
+            if (loading){
+              loading.dismiss();
+            }
+          });
+        } catch (error){}
       }
     })
   }
