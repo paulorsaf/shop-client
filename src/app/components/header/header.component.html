@@ -1,6 +1,6 @@
-<ion-button fill="clear" color="light" *ngIf="hasSearchButton" test-id="search-button">
+<!-- <ion-button fill="clear" color="light" *ngIf="hasSearchButton" test-id="search-button">
   <ion-icon name="search-outline"></ion-icon>
-</ion-button>
+</ion-button> -->
 <ion-button fill="clear" color="light" (click)="showShoppingCart()"
   test-id="shopping-cart-button">
   <ion-icon name="cart-outline"></ion-icon> &nbsp;{{totalQuantity$ | async}}
