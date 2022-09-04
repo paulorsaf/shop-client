@@ -20,7 +20,8 @@ export class PurchaseCardComponent implements OnInit {
 
   ngOnInit() {}
 
-  retryPayment(purchase: Purchase) {
+  retryPayment($event, purchase: Purchase) {
+    $event.stopPropagation();
     this.modalController.create({
       component: RetryPaymentPage,
       componentProps: {

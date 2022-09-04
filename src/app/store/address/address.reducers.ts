@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { appInitialState } from '../app-initial-state';
-import { searchByZipCode, searchByZipCodeFail, searchByZipCodeSuccess } from './address.actions';
+import { clearZipCodeSearch, getDeliveryPrice, getDeliveryPriceFail, getDeliveryPriceSuccess, searchByZipCode, searchByZipCodeFail, searchByZipCodeSuccess } from './address.actions';
 import { AddressState } from './address.state';
 
 const initialState: AddressState = appInitialState.address;
@@ -25,6 +25,30 @@ const _addressReducer = createReducer(
     error: action.error,
     isLoaded: false,
     isLoading: false
+  })),
+  on(clearZipCodeSearch, (state) => ({
+    ...state,
+    isLoaded: false,
+    isLoading: false
+  })),
+  on(getDeliveryPrice, (state) => ({
+    ...state,
+    deliveryPrice: undefined,
+    error: undefined,
+    isGettingDeliveryPrice: true,
+    isGotDeliveryPrice: false
+  })),
+  on(getDeliveryPriceSuccess, (state, action) => ({
+    ...state,
+    deliveryPrice: action.deliveryPrice,
+    isGettingDeliveryPrice: false,
+    isGotDeliveryPrice: true
+  })),
+  on(getDeliveryPriceFail, (state, action) => ({
+    ...state,
+    error: action.error,
+    isGettingDeliveryPrice: false,
+    isGotDeliveryPrice: false
   }))
 );
 

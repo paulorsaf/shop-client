@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { appInitialState } from '../app-initial-state';
-import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress } from './shopping-cart.actions';
+import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
 import { ShoppingCartState } from './shopping-cart.state';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 
@@ -94,6 +94,12 @@ const shoppingCartReduce = createReducer(
   on(clear, () => {
     return {
       ...initialState
+    }
+  }),
+  on(setDeliveryPrice, (state, action) => {
+    return {
+      ...state,
+      deliveryPrice: action.deliveryPrice
     }
   })
 );

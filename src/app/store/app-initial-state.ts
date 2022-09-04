@@ -3,7 +3,10 @@ import { AppState } from './app-state';
 export const appInitialState: AppState = {
     address: {
         address: undefined,
+        deliveryPrice: undefined,
         error: undefined,
+        isGettingDeliveryPrice: false,
+        isGotDeliveryPrice: false,
         isLoaded: false,
         isLoading: false
     },
@@ -68,6 +71,7 @@ export const appInitialState: AppState = {
     },
     shoppingCart: {
         deliveryAddress: undefined,
+        deliveryPrice: undefined,
         error: undefined,
         isOpen: false,
         isPaid: false,

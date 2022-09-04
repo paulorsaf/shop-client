@@ -19,6 +19,7 @@ import { ShoppingCartState } from 'src/app/store/shopping-cart/shopping-cart.sta
 export class PaymentComponent implements OnInit, OnDestroy {
 
   @Input() company: Company;
+  @Input() deliveryPrice: number;
   @Input() purchase: Purchase;
   @Input() totalPrice: number;
 

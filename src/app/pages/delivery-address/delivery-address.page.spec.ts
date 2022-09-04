@@ -9,13 +9,13 @@ import { BlankMockComponent } from 'src/app/model/mocks/blank-mock/blank-mock.co
 import { LoadingControllerMock } from 'src/app/model/mocks/loading-controller.mock';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
-import { searchByZipCodeFail, searchByZipCodeSuccess } from 'src/app/store/address/address.actions';
+import { getDeliveryPrice, getDeliveryPriceSuccess, searchByZipCodeFail, searchByZipCodeSuccess } from 'src/app/store/address/address.actions';
 import { addressReducer } from 'src/app/store/address/address.reducers';
 import { AppState } from 'src/app/store/app-state';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { DeliveryAddressPage } from './delivery-address.page';
 
-describe('DeliveryAddressPage', () => {
+fdescribe('DeliveryAddressPage', () => {
   let component: DeliveryAddressPage;
   let fixture: ComponentFixture<DeliveryAddressPage>;
   let page: PageMock;
@@ -163,7 +163,6 @@ describe('DeliveryAddressPage', () => {
     describe('when zip code loaded', () => {
 
       beforeEach(() => {
-        
         store.dispatch(searchByZipCodeSuccess({address}));
         fixture.detectChanges();
       })
@@ -215,6 +214,41 @@ describe('DeliveryAddressPage', () => {
 
   })
 
+  describe('given getting delivery price', () => {
+
+    beforeEach(() => {
+      store.dispatch(searchByZipCodeSuccess({address}));
+      store.dispatch(getDeliveryPrice({zipCode: "anyZipCode"}));
+      fixture.detectChanges();
+    });
+
+    it('then show delivery price loader', () => {
+      expect(page.querySelector('[test-id="delivery-price-value-loader"]')).not.toBeNull();
+    })
+
+    it('then hide delivery price', () => {
+      expect(page.querySelector('[test-id="delivery-price-value"]')).toBeNull();
+    })
+
+    describe('when delivery price loaded', () => {
+
+      beforeEach(() => {
+        store.dispatch(getDeliveryPriceSuccess({deliveryPrice: 10}));
+        fixture.detectChanges();
+      });
+  
+      it('then hide delivery price loader', () => {
+        expect(page.querySelector('[test-id="delivery-price-value-loader"]')).toBeNull();
+      })
+  
+      it('then show delivery price', () => {
+        expect(page.querySelector('[test-id="delivery-price-value"]')).not.toBeNull();
+      })
+
+    })
+
+  })
+
   describe('given delivery type is delivery', () => {
 
     it('when form is invalid and user clicks on next button, then do not go to payment page', done => {
@@ -232,6 +266,7 @@ describe('DeliveryAddressPage', () => {
       beforeEach(() => {
         fillForm();
   
+        store.dispatch(getDeliveryPriceSuccess({deliveryPrice: 10}));
         page.querySelector('[test-id="next-button"]').click();
         fixture.detectChanges();
       })
@@ -249,6 +284,13 @@ describe('DeliveryAddressPage', () => {
             latitude: 1,
             longitude: 2
           } as Address)
+          done();
+        })
+      })
+
+      it('then set delivery price', done => {
+        store.select('shoppingCart').subscribe(state => {
+          expect(state.deliveryPrice).toEqual(10);
           done();
         })
       })
@@ -271,14 +313,38 @@ describe('DeliveryAddressPage', () => {
       fixture.detectChanges();
     })
 
-    it('when user clicks on next button, then go to payment page', done => {
-      page.querySelector('[test-id="next-button"]').click();
+    it('then hide delivery price', () => {
+      store.dispatch(searchByZipCodeSuccess({address: {} as any}));
+      store.dispatch(getDeliveryPriceSuccess({deliveryPrice: 10}));
       fixture.detectChanges();
 
-      setTimeout(() => {
-        expect(location.path()).toEqual('/payment');
-        done();
-      }, 100);
+      expect(page.querySelector('[test-id="delivery-price"]')).toBeNull();
+    })
+
+    describe('when user clicks on next button', () => {
+
+      it('then set delivery price', done => {
+        store.dispatch(getDeliveryPriceSuccess({deliveryPrice: 10}));
+        
+        page.querySelector('[test-id="next-button"]').click();
+        fixture.detectChanges();
+
+        store.select('shoppingCart').subscribe(state => {
+          expect(state.deliveryPrice).toBeUndefined();
+          done();
+        })
+      })
+
+      it('then go to payment page', done => {
+        page.querySelector('[test-id="next-button"]').click();
+        fixture.detectChanges();
+
+        setTimeout(() => {
+          expect(location.path()).toEqual('/payment');
+          done();
+        }, 100);
+      })
+
     })
 
   })

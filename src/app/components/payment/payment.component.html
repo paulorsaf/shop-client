@@ -1,9 +1,21 @@
 <form [formGroup]="form" *ngIf="form">
   <ion-list class="payment-method">
-    <ion-item lines="none" class="total-price">
-      <ion-label>Valor total</ion-label>
+    <ion-item lines="none">
+      <ion-label>Valor da compra</ion-label>
       <ion-button fill="clear" color="success" slot="end">
         {{totalPrice | currency: "R$ "}}
+      </ion-button>
+    </ion-item>
+    <ion-item lines="none" *ngIf="deliveryPrice" test-id="delivery-price">
+      <ion-label>Entrega</ion-label>
+      <ion-button fill="clear" color="success" slot="end">
+        {{deliveryPrice | currency: "R$ "}}
+      </ion-button>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>Valor total</ion-label>
+      <ion-button fill="clear" color="success" slot="end">
+        {{totalPrice + (deliveryPrice || 0) | currency: "R$ "}}
       </ion-button>
     </ion-item>
   </ion-list>

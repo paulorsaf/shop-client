@@ -87,6 +87,28 @@
         </ion-list>
       </ion-card-content>
     </ion-card>
+
+    <span *ngIf="form.value.deliveryType === 'DELIVERY'">
+      <span *ngIf="address$ | async">
+        <ion-card *ngIf="(isLoadingDeliveryPrice$ | async) || (isLoadedDeliveryPrice$ | async)"
+          class="delivery-price" test-id="delivery-price">
+          <ion-card-content>
+            <ion-item lines="none">
+              <ion-label>Valor da entrega</ion-label>
+              <ion-note *ngIf="(isLoadingDeliveryPrice$ | async)" slot="end"
+                test-id="delivery-price-value-loader">
+                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+              </ion-note>
+              <ion-badge slot="end" *ngIf="isLoadedDeliveryPrice$ | async" color="primary"
+                test-id="delivery-price-value">
+                {{(deliveryPrice$ | async) | currency: "R$ "}}
+              </ion-badge>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </span>
+    </span>
+
     <div class="ion-padding">
       <ion-button size="full" (click)="goToPayment()" test-id="next-button">Próximo</ion-button>
     </div>

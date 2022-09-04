@@ -39,6 +39,7 @@ export class ShoppingCartEffects {
       switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
         this.paymentService.payByPix({
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
+          deliveryPrice: storeState.shoppingCart.deliveryPrice,
           purchaseId: action.purchaseId,
           receipt: action.receipt,
           shoppingCart: storeState.shoppingCart.products
@@ -57,6 +58,7 @@ export class ShoppingCartEffects {
       switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
         this.paymentService.payByMoney({
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
+          deliveryPrice: storeState.shoppingCart.deliveryPrice,
           purchaseId: action.purchaseId,
           shoppingCart: storeState.shoppingCart.products
         }).pipe(

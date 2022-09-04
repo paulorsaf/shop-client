@@ -15,7 +15,7 @@ import { makePurchase, makePurchaseFail, makePurchaseSuccess } from 'src/app/sto
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { PaymentComponent } from './payment.component';
 
-describe('PaymentComponent', () => {
+fdescribe('PaymentComponent', () => {
   let component: PaymentComponent;
   let fixture: ComponentFixture<PaymentComponent>;
   let page: PageMock;
@@ -51,6 +51,8 @@ describe('PaymentComponent', () => {
 
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
+
+    component.purchase = {} as any;
 
     fixture.detectChanges();
   }));
@@ -109,6 +111,24 @@ describe('PaymentComponent', () => {
         expect(page.querySelector('[test-id="receipt-button"]')).toBeNull();
       })
 
+    })
+
+  })
+
+  describe('given delivery type', () => {
+
+    it('when delivery, then show delivery price', () => {
+      component.deliveryPrice = 10;
+      fixture.detectChanges();
+  
+      expect(page.querySelector('[test-id="delivery-price"]')).not.toBeNull();
+    })
+  
+    it('when pick up, then hide delivery price', () => {
+      component.deliveryPrice = 0;
+      fixture.detectChanges();
+  
+      expect(page.querySelector('[test-id="delivery-price"]')).toBeNull();
     })
 
   })

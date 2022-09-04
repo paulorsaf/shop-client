@@ -11,8 +11,13 @@ ion-content {
     }
 }
 
-ion-card.product-list {
-    ion-card-content {
+ion-card {
+    &.product-list {
+        ion-card-content {
+            padding: 0;
+        }
+    }
+    ion-list {
         padding: 0;
     }
 }

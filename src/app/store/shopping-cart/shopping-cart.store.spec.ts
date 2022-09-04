@@ -1,11 +1,11 @@
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
-import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress } from './shopping-cart.actions';
+import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { selectTotalPrice, selectTotalQuantity, selectTotalQuantityForProductStock, ShoppingCartState } from './shopping-cart.state';
 
-describe('Products store', () => {
+fdescribe('Shopping cart store', () => {
 
     const product: ShoppingCartProduct = {
         amount: 1,
@@ -312,6 +312,19 @@ describe('Products store', () => {
 
         expect(newState).toEqual({
             ...appInitialState.shoppingCart
+        });
+    })
+
+    it('setDeliveryPrice', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+        };
+
+        const newState = shoppingCartReducer(initialState, setDeliveryPrice({deliveryPrice: 10}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            deliveryPrice: 10
         });
     })
 

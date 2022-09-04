@@ -18,4 +18,9 @@ export class AddressService {
     return this.http.get<Address>(url);
   }
 
+  findDeliveryPrice(zipCode: string): Observable<number> {
+    const url = `${environment.api}/deliveries/${zipCode.replace(/[^\d]/g, '')}`;
+    return this.http.get<number>(url);
+  }
+
 };

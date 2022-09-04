@@ -11,6 +11,7 @@ export const openShoppingCart = createAction('[Shopping cart] open');
 export const closeShoppingCart = createAction('[Shopping cart] close');
 
 export const setDeliveryAddress = createAction('[Shopping cart] set delivery address', props<{address: Address}>());
+export const setDeliveryPrice = createAction('[Shopping cart] set delivery price', props<{deliveryPrice: number}>());
 
 export const makePurchase =
     createAction('[Shopping cart] pucharse', props<{payment: Payment, purchaseId?: string}>());

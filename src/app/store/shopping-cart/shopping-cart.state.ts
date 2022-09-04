@@ -8,6 +8,7 @@ import { selectStockOptionSelected } from '../product/product.state';
 
 export type ShoppingCartState = {
     deliveryAddress: Address;
+    deliveryPrice: number;
     error: any;
     isOpen: boolean;
     isPaid: boolean;

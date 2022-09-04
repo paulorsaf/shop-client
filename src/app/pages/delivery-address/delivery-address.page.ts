@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Address } from 'src/app/model/address/address';
 import { states } from 'src/app/model/address/states-list';
 import { searchByZipCode } from 'src/app/store/address/address.actions';
 import { AddressState } from 'src/app/store/address/address.state';
 import { AppState } from 'src/app/store/app-state';
-import { setDeliveryAddress } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { setDeliveryAddress, setDeliveryPrice } from 'src/app/store/shopping-cart/shopping-cart.actions';
 
 @Component({
   selector: 'app-delivery-address',
@@ -24,6 +25,9 @@ export class DeliveryAddressPage implements OnInit {
   states: {name: string, code: string}[] = states;
 
   address$: Observable<Address>;
+  deliveryPrice$: Observable<number>;
+  isLoadedDeliveryPrice$: Observable<boolean>;
+  isLoadingDeliveryPrice$: Observable<boolean>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,6 +39,13 @@ export class DeliveryAddressPage implements OnInit {
 
   ngOnInit() {
     this.address$ = this.store.select(state => state.address.address);
+    this.deliveryPrice$ = this.store.select(state => state.address.deliveryPrice);
+    this.isLoadingDeliveryPrice$ = this.store.select(
+      state => state.address.isGettingDeliveryPrice
+    );
+    this.isLoadedDeliveryPrice$ = this.store.select(
+      state => state.address.isGotDeliveryPrice
+    );
 
     this.createForm();
   }
@@ -45,12 +56,10 @@ export class DeliveryAddressPage implements OnInit {
       if (this.form.valid) {
         const address = {...this.form.value};
         delete address.deliveryType;
-        this.store.dispatch(setDeliveryAddress({address}));
-        this.router.navigate(['/payment']);
+        this.updateShoppingCartStateAndGoToPayment(address);
       }
     } else {
-      this.store.dispatch(setDeliveryAddress({address: null}))
-      this.router.navigate(['/payment']);
+      this.updateShoppingCartStateAndGoToPayment(null);
     }
   }
 
@@ -63,6 +72,24 @@ export class DeliveryAddressPage implements OnInit {
         this.onZipCodeLoaded(state);
         this.onZipCodeFail(state.error)
       });
+  }
+
+  private updateShoppingCartStateAndGoToPayment(address: Address) {
+    this.setDeliveryPrice();
+    this.store.dispatch(setDeliveryAddress({address}));
+    this.router.navigate(['/payment']);
+  }
+
+  private setDeliveryPrice() {
+    if (this.form.value.deliveryType === "DELIVERY") {
+      this.store.select('address')
+        .pipe(take(1))
+        .subscribe(state => {
+          this.store.dispatch(setDeliveryPrice({deliveryPrice: state.deliveryPrice}));
+        })
+    } else {
+      this.store.dispatch(setDeliveryPrice({deliveryPrice: undefined}));
+    }
   }
 
   private onZipCodeFail(error: any) {

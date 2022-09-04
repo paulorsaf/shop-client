@@ -33,6 +33,7 @@ export class PaymentService {
     const url = `${environment.api}/purchases`;
     return this.http.post<void>(url, {
       deliveryAddress: paymentDetails.deliveryAddress,
+      deliveryPrice: paymentDetails.deliveryPrice,
       payment: {
         type: PaymentType.MONEY
       },
@@ -50,6 +51,7 @@ export class PaymentService {
         const url = `${environment.api}/purchases`;
         this.http.post<void>(url, {
           deliveryAddress: paymentDetails.deliveryAddress,
+          deliveryPrice: paymentDetails.deliveryPrice,
           payment: {
             type: PaymentType.PIX
           },
@@ -120,6 +122,7 @@ export class PaymentService {
 
 type PaymentByMoney = {
   deliveryAddress: Address;
+  deliveryPrice: number;
   purchaseId?: string;
   shoppingCart: ShoppingCartProduct[];
 }
