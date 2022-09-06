@@ -26,7 +26,7 @@
         <ion-label>PIX</ion-label>
         <ion-radio slot="start" [value]="PaymentType.PIX"></ion-radio>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="!address || address.city === company?.address.city" test-id="money">
         <ion-label>Dinheiro (ao receber produto)</ion-label>
         <ion-radio slot="start" [value]="PaymentType.MONEY"></ion-radio>
       </ion-item>

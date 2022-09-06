@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { Company } from 'src/app/model/company/company';
 import { Purchase } from 'src/app/model/purchase/purchase';
 import { AppState } from 'src/app/store/app-state';
@@ -29,7 +29,8 @@ export class RetryPaymentPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.company$ = this.store.select(state => state.company.selectedCompany);
+    this.company$ = this.store.select(state => state.company.selectedCompany)
+    .pipe(tap(console.log));
     this.totalPrice = this.getTotalPrice();
 
     this.isPaidSubscription = this.store

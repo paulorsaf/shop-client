@@ -11,6 +11,7 @@
 
 <ion-content>
   <app-payment-form
+    [address]="purchase.address"
     [company]="company$ | async"
     [deliveryPrice]="purchase.deliveryPrice"
     [totalPrice]="totalPrice"

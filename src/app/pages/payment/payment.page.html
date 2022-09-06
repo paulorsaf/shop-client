@@ -9,6 +9,7 @@
 
 <ion-content>
   <app-payment-form
+    [address]="address$ | async"
     [company]="company$ | async"
     [deliveryPrice]="deliveryPrice$ | async"
     [totalPrice]="totalPrice$ | async">

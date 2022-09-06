@@ -12,13 +12,15 @@ const _companyReducer = createReducer(
     company: undefined,
     error: undefined,
     isLoaded: false,
-    isLoading: true
+    isLoading: true,
+    selectedCompany: undefined
   })),
   on(loadCompanySuccess, (state, action) => ({
     ...state,
     company: action.company,
     isLoaded: true,
-    isLoading: false
+    isLoading: false,
+    selectedCompany: action.company
   })),
   on(loadCompanyFail, (state, action) => ({
     ...state,

@@ -52,6 +52,8 @@ describe('PaymentComponent', () => {
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
 
+    component.address = {city: "anyCity"} as any;
+    component.company = {address: {city: "anyCity"}} as any;
     component.purchase = {} as any;
 
     fixture.detectChanges();
@@ -70,6 +72,30 @@ describe('PaymentComponent', () => {
   })
 
   describe('given payment type', () => {
+
+    it('when delivery is pick up, show hide money option', () => {
+      component.address = undefined;
+      component.company = {address: {city: "anyCity"}} as any;
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="money"]')).not.toBeNull();
+    })
+
+    it('when delivery address is different from company address, then hide money option', () => {
+      component.address = {city: "anyOtherCity"} as any;
+      component.company = {address: {city: "anyCity"}} as any;
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="money"]')).toBeNull();
+    })
+
+    it('when delivery address is equal to company address, then show money option', () => {
+      component.address = {city: "anyCity"} as any;
+      component.company = {address: {city: "anyCity"}} as any;
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="money"]')).not.toBeNull();
+    })
 
     describe('when pix', () => {
 

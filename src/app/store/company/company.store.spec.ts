@@ -11,7 +11,8 @@ describe('Company store', () => {
             error: {},
             isLoaded: true,
             isLoading: true,
-            company: {} as any
+            company: {} as any,
+            selectedCompany: {} as any
         }
 
         const newState = companyReducer(initialState, loadCompany());
@@ -21,7 +22,8 @@ describe('Company store', () => {
             error: undefined,
             isLoaded: false,
             isLoading: true,
-            company: undefined
+            company: undefined,
+            selectedCompany: undefined
         })
     })
 
@@ -38,7 +40,8 @@ describe('Company store', () => {
             ...appInitialState.company,
             company,
             isLoaded: true,
-            isLoading: false
+            isLoading: false,
+            selectedCompany: company
         })
     })
 
