@@ -33,7 +33,7 @@ describe('HeaderComponent', () => {
     page = fixture.debugElement.nativeElement;
   }));
 
-  it('given has search button, then show search button', () => {
+  xit('given has search button, then show search button', () => {
     component.hasSearchButton = true;
     fixture.detectChanges();
 

@@ -124,17 +124,14 @@ export class DeliveryAddressPage implements OnInit {
     }
   }
 
-  private toggleLoading(isLoading: boolean) {
+  private async toggleLoading(isLoading: boolean) {
     if (isLoading) {
       this.showLoading();
     } else {
       this.addressSubscription.unsubscribe();
       try {
-        this.loadingController.getTop().then(loading => {
-          if (loading){
-            loading.dismiss();
-          }
-        });
+        const loading = await this.loadingController.getTop();
+        loading?.dismiss();
       } catch (error){}
     }
   }

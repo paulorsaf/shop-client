@@ -15,4 +15,7 @@ export class LoadingControllerMock {
     dismiss() {
         this.isDismissed = true;
     }
+    getTop() {
+        return this;
+    }
 };

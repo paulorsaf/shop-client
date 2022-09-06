@@ -4,6 +4,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
+import { Address } from 'src/app/model/address/address';
 import { Purchase } from 'src/app/model/purchase/purchase';
 import { AppState } from 'src/app/store/app-state';
 import { loadPurchaseDetail } from 'src/app/store/purchase-detail/purchase-detail.action';
@@ -16,6 +17,7 @@ import { RetryPaymentPage } from '../purchases/retry-payment/retry-payment.page'
 })
 export class PurchaseDetailPage implements OnInit, OnDestroy {
 
+  address$: Observable<Address>;
   isLoading$: Observable<boolean>;
   purchase$: Observable<Purchase>;
   
@@ -29,6 +31,9 @@ export class PurchaseDetailPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.address$ = this.store.select(state =>
+      state.purchaseDetail.purchase.address || state.company.company.address
+    );
     this.isLoading$ = this.store.select(state => state.purchaseDetail.isLoading);
     this.purchase$ = this.store.select(state => state.purchaseDetail.purchase);
 

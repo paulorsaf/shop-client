@@ -113,18 +113,15 @@ export class PaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  private toggleLoading(state: ShoppingCartState) {
+  private async toggleLoading(state: ShoppingCartState) {
     if (state.isPaying) {
       this.wasPaying = true;
       this.loadingController.create()
         .then(loading => loading.present())
     } else if (this.wasPaying) {
       try {
-        this.loadingController.getTop().then(loading => {
-          if (loading){
-            loading.dismiss();
-          }
-        });
+        const loading = await this.loadingController.getTop();
+        loading?.dismiss();
       } catch (error){}
     }
   }

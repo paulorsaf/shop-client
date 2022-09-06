@@ -86,13 +86,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
       });
   }
 
-  private dismissLoadingController() {
+  private async dismissLoadingController() {
     try {
-      this.loadingController.getTop().then(loading => {
-        if (loading){
-          loading.dismiss();
-        }
-      });
+      const loading = await this.loadingController.getTop();
+      loading?.dismiss();
     } catch (error){}
   }
 

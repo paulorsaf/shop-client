@@ -83,21 +83,22 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
   }
 
-  private toggleLoading() {
+  private async toggleLoading() {
     this.loadingSubscription = this.store.select('login').subscribe(state => {
       if (state.isRecoveringPassword || state.isLoggingIn) {
         this.loadingController.create()
           .then(loading => loading.present())
       } else if (state.error || state.isRecoveredPassword || state.isLoggedIn) {
-        try {
-          this.loadingController.getTop().then(loading => {
-            if (loading){
-              loading.dismiss();
-            }
-          });
-        } catch (error){}
+        this.dismissLoading();
       }
     })
+  }
+
+  private async dismissLoading() {
+    try {
+      const loading = await this.loadingController.getTop();
+      loading?.dismiss();
+    } catch (error){}
   }
 
   private onError() {
