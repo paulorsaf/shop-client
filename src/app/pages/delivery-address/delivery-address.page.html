@@ -22,12 +22,12 @@
       </ion-radio-group>
     </ion-list>
 
-    <ion-card *ngIf="form.value.deliveryType === 'DELIVERY'" test-id="address-form">
+    <ion-card>
       <ion-card-header>
         <ion-card-title>Endereço</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-list>
+        <ion-list *ngIf="form.value.deliveryType === 'DELIVERY'" test-id="address-form">
           <ion-item>
             <ion-label position="floating">CEP*</ion-label>
             <ion-input formControlName="zipCode" [brmasker]="{mask:'00.000-000', len:10}"
@@ -85,6 +85,15 @@
             </div>
           </span>
         </ion-list>
+        <div *ngIf="form.value.deliveryType === 'PICK_UP'" test-id="company-address">
+          <p>Rua: {{(company$ | async)?.address.street}}</p>
+          <p>Número: {{(company$ | async)?.address.number}}</p>
+          <p>Bairro: {{(company$ | async)?.address.neighborhood}}</p>
+          <p>CEP: {{(company$ | async)?.address.zipCode}}</p>
+          <p>Complemento: {{(company$ | async)?.address.complement}}</p>
+          <p>Cidade: {{(company$ | async)?.address.city}}</p>
+          <p>Estado: {{(company$ | async)?.address.state}}</p>
+        </div>
       </ion-card-content>
     </ion-card>
 

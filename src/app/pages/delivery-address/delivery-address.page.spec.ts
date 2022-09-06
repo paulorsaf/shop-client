@@ -12,6 +12,7 @@ import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
 import { getDeliveryPrice, getDeliveryPriceSuccess, searchByZipCodeFail, searchByZipCodeSuccess } from 'src/app/store/address/address.actions';
 import { addressReducer } from 'src/app/store/address/address.reducers';
 import { AppState } from 'src/app/store/app-state';
+import { companyReducer } from 'src/app/store/company/company.reducers';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { DeliveryAddressPage } from './delivery-address.page';
 
@@ -49,6 +50,7 @@ describe('DeliveryAddressPage', () => {
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
         StoreModule.forFeature('address', addressReducer),
+        StoreModule.forFeature('company', companyReducer),
         StoreModule.forFeature('shoppingCart', shoppingCartReducer)
       ]
     })
@@ -84,15 +86,33 @@ describe('DeliveryAddressPage', () => {
 
   describe('given delivery type', () => {
 
-    it('when delivery, then show address form', () => {
-      expect(page.querySelector('[test-id="address-form"]')).not.toBeNull();
+    describe('when delivery', () => {
+
+      it('then show address form', () => {
+        expect(page.querySelector('[test-id="address-form"]')).not.toBeNull();
+      })
+
+      it('then hide company address', () => {
+        expect(page.querySelector('[test-id="company-address"]')).toBeNull();
+      })
+
     })
 
-    it('when pick up, then hide address form', () => {
-      component.form.get('deliveryType')!.setValue('PICK_UP');
-      fixture.detectChanges();
+    describe('when pick up', () => {
 
-      expect(page.querySelector('[test-id="address-form"]')).toBeNull();
+      beforeEach(() => {
+        component.form.get('deliveryType')!.setValue('PICK_UP');
+        fixture.detectChanges();
+      })
+
+      it('then hide address form', () => {
+        expect(page.querySelector('[test-id="address-form"]')).toBeNull();
+      })
+
+      it('then show company address', () => {
+        expect(page.querySelector('[test-id="company-address"]')).not.toBeNull();
+      })
+
     })
 
   })
