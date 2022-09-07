@@ -5,19 +5,22 @@
         <ion-img *ngIf="(company$ | async)?.logo?.imageUrl; let imageUrl" [src]="imageUrl"
           test-id="company-logo">
         </ion-img>
-        <ion-list *ngIf="user$ | async">
-          <ion-note>Logado como<br/>{{(user$ | async).email}}</ion-note>
-          <ion-item lines="none" test-id="purchases-menu" (click)="goToPage('purchases')">
+        <ion-list>
+          <ion-note *ngIf="user$ | async">Logado como<br/>{{(user$ | async).email}}</ion-note>
+          <ion-item lines="none" test-id="purchases-menu" (click)="goToPage('purchases')"
+            *ngIf="user$ | async">
             <ion-icon name="bag-check" color="primary" slot="start"></ion-icon>
             <ion-label color="primary">Minhas compras</ion-label>
           </ion-item>
-          <ion-item lines="none" test-id="logout-menu" (click)="logout()">
+          <ion-item lines="none" test-id="about-us-menu" (click)="goToPage('about-us')">
+            <ion-icon color="primary" name="home" slot="start"></ion-icon>
+            <ion-label color="primary">Sobre nós</ion-label>
+          </ion-item>
+          <ion-item lines="none" test-id="logout-menu" (click)="logout()" *ngIf="user$ | async">
             <ion-icon name="log-out" slot="start"></ion-icon>
             <ion-label>Sair</ion-label>
           </ion-item>
-        </ion-list>
-        <ion-list *ngIf="!(user$ | async)">
-          <ion-item lines="none" test-id="login-menu" (click)="openLogin()">
+          <ion-item lines="none" test-id="login-menu" (click)="openLogin()" *ngIf="!(user$ | async)">
             <ion-icon name="person" slot="start"></ion-icon>
             <ion-label>Entrar</ion-label>
           </ion-item>

@@ -45,7 +45,7 @@ export class AddressEffects {
       this.getStore(),
       switchMap(([action, storeState]: [action: any, storeState: AppState]) => 
         this.addressService.findDeliveryPrice(
-          action.zipCode, storeState.shoppingCart.products.map(p => ({
+          action.zipCode, storeState.shoppingCart?.products?.map(p => ({
             amount: p.amount || 1, weight: p.product.weight
           }))
         ).pipe(

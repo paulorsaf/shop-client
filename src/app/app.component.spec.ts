@@ -31,6 +31,7 @@ describe('AppComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         RouterTestingModule.withRoutes([
+          { path: "about-us", component: BlankMockComponent },
           { path: "purchases", component: BlankMockComponent }
         ]),
         StoreModule.forRoot([]),
@@ -136,6 +137,10 @@ describe('AppComponent', () => {
 
   })
 
+  it('given app starts, show about us button', () => {
+    expect(page.querySelector('[test-id="about-us-menu"]')).not.toBeNull();
+  })
+
   describe('given user is not logged', () => {
 
     beforeEach(() => {
@@ -193,6 +198,16 @@ describe('AppComponent', () => {
 
       setTimeout(() => {
         expect(location.path()).toEqual('/purchases');
+        done();
+      }, 100)
+    })
+
+    it('when user clicks on about us button, then go to my about us page', done => {
+      page.querySelector('[test-id="about-us-menu"]').click();
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        expect(location.path()).toEqual('/about-us');
         done();
       }, 100)
     })
