@@ -2,8 +2,11 @@
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
+        <ion-img *ngIf="(company$ | async)?.logo?.imageUrl; let imageUrl" [src]="imageUrl"
+          test-id="company-logo">
+        </ion-img>
         <ion-list *ngIf="user$ | async">
-          <ion-note>{{(user$ | async).email}}</ion-note>
+          <ion-note>Logado como<br/>{{(user$ | async).email}}</ion-note>
           <ion-item lines="none" test-id="purchases-menu" (click)="goToPage('purchases')">
             <ion-icon name="bag-check" color="primary" slot="start"></ion-icon>
             <ion-label color="primary">Minhas compras</ion-label>

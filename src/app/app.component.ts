@@ -4,6 +4,7 @@ import { MenuController, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LoginComponent } from './components/login/login.component';
+import { Company } from './model/company/company';
 import { User } from './model/user/user';
 import { AppState } from './store/app-state';
 import { loadCompany } from './store/company/company.action';
@@ -15,6 +16,7 @@ import { loginUserByToken, logout } from './store/user/user.actions';
 })
 export class AppComponent implements OnInit {
 
+  company$: Observable<Company>;
   isLoggingUserByToken$!: Observable<boolean>;
   user$: Observable<User>;
 
@@ -26,6 +28,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.company$ = this.store.select(state => state.company.company);
     this.isLoggingUserByToken$ = this.store.select(state => state.user.isLoggingInByToken);
     this.user$ = this.store.select(state => state.user.user);
 

@@ -9,6 +9,7 @@ import { BlankMockComponent } from './model/mocks/blank-mock/blank-mock.componen
 import { ModalControllerMock } from './model/mocks/modal-controller.mock';
 import { PageMock } from './model/mocks/page.mock';
 import { AppState } from './store/app-state';
+import { loadCompanySuccess } from './store/company/company.action';
 import { companyReducer } from './store/company/company.reducers';
 import { loginUserByTokenFail, loginUserByTokenSuccess, setUser } from './store/user/user.actions';
 import { userReducer } from './store/user/user.reducers';
@@ -113,6 +114,26 @@ describe('AppComponent', () => {
       })
     })
     
+  })
+
+  describe('given company loaded', () => {
+
+    it('when company has logo, then show logo', () => {
+      const company = {logo: {imageUrl: "anyImageUrl"}} as any;
+      store.dispatch(loadCompanySuccess({company}));
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="company-logo"]')).not.toBeNull();
+    })
+
+    it('when company doesnt have logo, then hide logo', () => {
+      const company = {logo: {}} as any;
+      store.dispatch(loadCompanySuccess({company}));
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="company-logo"]')).toBeNull();
+    })
+
   })
 
   describe('given user is not logged', () => {
