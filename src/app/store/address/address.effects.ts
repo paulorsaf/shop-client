@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Address } from 'src/app/model/address/address';
 import { AddressService } from 'src/app/services/address/address.service';
+import { AppState } from '../app-state';
 import { clearZipCodeSearch, getDeliveryPrice, getDeliveryPriceFail, getDeliveryPriceSuccess, searchByZipCode, searchByZipCodeFail, searchByZipCodeSuccess } from './address.actions';
 
 @Injectable()
@@ -40,8 +42,13 @@ export class AddressEffects {
   getDeliveryPriceEffect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getDeliveryPrice),
-      switchMap((params: {zipCode: string}) =>
-        this.addressService.findDeliveryPrice(params.zipCode).pipe(
+      this.getStore(),
+      switchMap(([action, storeState]: [action: any, storeState: AppState]) => 
+        this.addressService.findDeliveryPrice(
+          action.zipCode, storeState.shoppingCart.products.map(p => ({
+            amount: p.amount || 1, weight: p.product.weight
+          }))
+        ).pipe(
           map(deliveryPrice => getDeliveryPriceSuccess({deliveryPrice})),
           catchError(error => of(getDeliveryPriceFail({error})))
         )
@@ -49,9 +56,14 @@ export class AddressEffects {
     )
   );
 
+  getStore(){
+    return withLatestFrom(this.store);
+  }
+
   constructor(
     private actions$: Actions,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private store: Store<AppState>
   ) {}
 
 }
