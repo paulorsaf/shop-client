@@ -94,16 +94,22 @@
           <ion-text *ngIf="purchase.payment.type === 'MONEY'" test-id="payment-by-money">
             Pagamento na entrega do produto.
           </ion-text>
-          <ion-text *ngIf="purchase.payment.type === 'PIX'" test-id="payment-by-pix">
-            <ion-button *ngIf="purchase?.payment?.receiptUrl" fill="clear" size="full"
-              (click)="showReceipt()" test-id="pix-receipt">
-              Ver recibo
-            </ion-button>
+          <ion-text *ngIf="purchase.payment.type === 'CREDIT_CARD'" test-id="payment-by-credit-card">
+            <span *ngIf="purchase.payment.card">
+              <p>Bandeira: {{purchase.payment.card.brand}}</p>
+              <p>Número: **** **** **** {{purchase.payment.card.last4}}</p>
+              <p>Expiração: {{purchase.payment.card.exp_month}}/{{purchase.payment.card.exp_year}}</p>
+            </span>
           </ion-text>
+          <ion-button *ngIf="purchase?.payment?.receiptUrl" fill="clear" size="full"
+            (click)="showReceipt()" test-id="receipt">
+            Ver recibo
+          </ion-button>
 
           <ion-text *ngIf="purchase.payment.error" color="danger" test-id="payment-error">
-            Erro ao realizar pagamento: {{purchase.payment.error}}
-
+            Erro ao realizar pagamento: <br/>
+            {{purchase.payment.error?.message || (purchase.payment.error | json)}}
+            <br/><br/>
             <ion-button color="danger" size="full" (click)="retryPayment()">
               Tentar novamente
             </ion-button>

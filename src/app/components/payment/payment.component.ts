@@ -5,6 +5,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Address } from 'src/app/model/address/address';
+import { states } from 'src/app/model/address/states-list';
 import { Company } from 'src/app/model/company/company';
 import { PaymentType } from 'src/app/model/payment/payment';
 import { Purchase } from 'src/app/model/purchase/purchase';
@@ -29,6 +30,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   paymentSubscription: Subscription;
+  states: {name: string, code: string}[] = states;
 
   constructor(
     private formBuilder: FormBuilder,

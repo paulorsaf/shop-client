@@ -13,7 +13,7 @@ import { PaymentType } from 'src/app/model/payment/payment';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { PaymentServiceMock } from 'src/app/model/mocks/payment-service.mock';
 
-fdescribe('Products effects', () => {
+describe('Products effects', () => {
   let effects: ShoppingCartEffects;
   let actions$: Observable<Action>;
   let modalController: ModalControllerMock;

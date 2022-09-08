@@ -17,7 +17,7 @@
       </ion-text>
     </span>
 
-    <span *ngIf="(payment$ | async)?.type === 'PIX'" test-id="payment-confirmation">
+    <span *ngIf="(payment$ | async)?.type !== 'MONEY'" test-id="payment-confirmation">
       <ion-text color="primary">
         <h1>Pedido feito com sucesso!</h1>
       </ion-text>

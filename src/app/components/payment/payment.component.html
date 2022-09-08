@@ -114,7 +114,7 @@
           </ion-item>
           <ion-item>
             <ion-label position="floating">CEP</ion-label>
-            <ion-input type="tel" formControlName="zipCode">
+            <ion-input type="tel" formControlName="zipCode" [brmasker]="{mask:'00.000-000', len:10}">
             </ion-input>
           </ion-item>
           <ion-item>
@@ -123,9 +123,12 @@
             </ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="floating">Estado</ion-label>
-            <ion-input type="tel" formControlName="state">
-            </ion-input>
+            <ion-label position="floating">Estado*</ion-label>
+            <ion-select formControlName="state">
+              <ion-select-option *ngFor="let state of states" [value]="state.code">
+                {{state.name}}
+              </ion-select-option>
+            </ion-select>
           </ion-item>
         </ion-list>
       </ion-card-content>

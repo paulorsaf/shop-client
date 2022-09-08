@@ -16,9 +16,17 @@ export type Purchase = {
 }
 
 export type Payment = {
+    card?: PayByCreditCardResponse;
     error: any;
     receiptUrl: string;
     type: string;
+}
+
+export type PayByCreditCardResponse = {
+    brand: string;
+    exp_month: number;
+    exp_year: number;
+    last4: string;
 }
 
 export type PurchaseProduct = {

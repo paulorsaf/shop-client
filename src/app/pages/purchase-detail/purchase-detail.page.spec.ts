@@ -131,18 +131,18 @@ describe('PurchaseDetailPage', () => {
       expect(page.querySelector('[test-id="payment-by-money"]')).toBeNull();
     })
 
-    it('then show payment by pix details', () => {
-      expect(page.querySelector('[test-id="payment-by-pix"]')).not.toBeNull();
+    it('then hide payment by credit card details', () => {
+      expect(page.querySelector('[test-id="payment-by-credit-card"]')).toBeNull();
     })
 
-    it('then show pix receipt', () => {
-      expect(page.querySelector('[test-id="pix-receipt"]')).not.toBeNull();
+    it('then show receipt', () => {
+      expect(page.querySelector('[test-id="receipt"]')).not.toBeNull();
     })
 
     it('when user clicks on receipt, then show receipt', () => {
       spyOn(window, 'open');
 
-      page.querySelector('[test-id="pix-receipt"]').click();
+      page.querySelector('[test-id="receipt"]').click();
       fixture.detectChanges();
 
       expect(window.open).toHaveBeenCalled();
@@ -162,8 +162,26 @@ describe('PurchaseDetailPage', () => {
       expect(page.querySelector('[test-id="payment-by-money"]')).not.toBeNull();
     })
 
-    it('then hide payment by pix details', () => {
-      expect(page.querySelector('[test-id="payment-by-pix"]')).toBeNull();
+    it('then hide payment by credit card details', () => {
+      expect(page.querySelector('[test-id="payment-by-credit-card"]')).toBeNull();
+    })
+
+  })
+
+  describe('given payment by credit card', () => {
+
+    beforeEach(() => {
+      const purchase = {id: '1', payment: {type: 'CREDIT_CARD'}} as any;
+      store.dispatch(loadPurchaseDetailSuccess({purchase}));
+      fixture.detectChanges();
+    })
+
+    it('then hide payment by money details', () => {
+      expect(page.querySelector('[test-id="payment-by-money"]')).toBeNull();
+    })
+
+    it('then show payment by credit card details', () => {
+      expect(page.querySelector('[test-id="payment-by-credit-card"]')).not.toBeNull();
     })
 
   })

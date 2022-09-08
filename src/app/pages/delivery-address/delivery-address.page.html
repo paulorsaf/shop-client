@@ -30,7 +30,7 @@
         <ion-list *ngIf="form.value.deliveryType === 'DELIVERY'" test-id="address-form">
           <ion-item>
             <ion-label position="floating">CEP*</ion-label>
-            <ion-input formControlName="zipCode" [brmasker]="{mask:'00.000-000', len:10}"
+            <ion-input type="tel" formControlName="zipCode" [brmasker]="{mask:'00.000-000', len:10}"
               (change)="onChangeZipCode()" #zipCode test-id="zip-code"></ion-input>
           </ion-item>
           <div class="form-error" *ngIf="form.get('zipCode').touched && form.get('zipCode').errors?.required">

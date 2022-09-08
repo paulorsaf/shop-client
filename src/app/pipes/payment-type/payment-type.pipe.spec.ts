@@ -12,6 +12,10 @@ describe("PaymentType pipe", () => {
         expect(pipe.transform("MONEY")).toEqual("Dinheiro");
     })
 
+    it('given payment is CREDIT_CARD, then return Cartão de Crédito', () => {
+        expect(pipe.transform("CREDIT_CARD")).toEqual("Cartão de Crédito");
+    })
+
     it('given payment is any other, then return any other', () => {
         expect(pipe.transform("ANY_OTHER")).toEqual("ANY_OTHER");
     })

@@ -113,7 +113,7 @@ describe('PurchaseSuccessPage', () => {
     })
   })
 
-  describe('given payment by pix', () => {
+  describe('given payment not by money', () => {
 
     beforeEach(() => {
       store.dispatch(makePurchase({
