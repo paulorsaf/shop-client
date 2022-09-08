@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
@@ -42,6 +42,14 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.createForm();
 
     this.onPaying();
+
+    this.form.controls.paymentType.valueChanges.subscribe(paymentType => {
+      if (paymentType === PaymentType.CREDIT_CARD) {
+        this.addCreditCardValidators();
+      } else {
+        this.removeCreditCardValidators();
+      }
+    })
   }
 
   ngOnDestroy(): void {
@@ -49,9 +57,35 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   finishPurchase() {
+    this.form.markAllAsTouched();
+
+    if (this.form.valid) {
+      const paymentType = this.form.controls.paymentType.value;
+      if (paymentType === PaymentType.MONEY) {
+        this.makePurchaseByMoney();
+      } else if (paymentType === PaymentType.CREDIT_CARD) {
+        this.makePurchaseByCreditCard();
+      }
+    }
+  }
+
+  private makePurchaseByMoney() {
     this.store.dispatch(
       makePurchase({
         payment: {
+          type: this.form.value.paymentType
+        },
+        purchaseId: this.purchase?.id
+      })
+    )
+  }
+
+  private makePurchaseByCreditCard() {
+    this.store.dispatch(
+      makePurchase({
+        payment: {
+          billingAddress: this.form.value.billingAddress,
+          creditCard: this.form.value.creditCard,
           type: this.form.value.paymentType
         },
         purchaseId: this.purchase?.id
@@ -75,7 +109,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   copyPix() {
-    this.copyText(this.company.pixKey);
+    this.copyText(this.company.payment.pixKey);
   }
 
   private copyText(text: string) {
@@ -142,8 +176,64 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   private createForm() {
     this.form = this.formBuilder.group({
-      paymentType: [PaymentType.PIX]
+      paymentType: [PaymentType.PIX],
+      billingAddress: this.formBuilder.group({
+        street: [''],
+        number: [''],
+        neighborhood: [''],
+        zipCode: [''],
+        city: [''],
+        state: [''],
+      }),
+      creditCard: this.formBuilder.group({
+        cardFlag: [''],
+        cardNumber: [''],
+        cardHolder: [''],
+        cardMonth: [''],
+        cardYear: [''],
+        cardCvc: ['']
+      })
     });
+  }
+
+  private addCreditCardValidators(){
+    this.setCreditCardControlValidator('creditCard', 'cardFlag', Validators.required);
+    this.setCreditCardControlValidator('creditCard', 'cardNumber', Validators.required);
+    this.setCreditCardControlValidator('creditCard', 'cardHolder', Validators.required);
+    this.setCreditCardControlValidator('creditCard', 'cardMonth', Validators.required);
+    this.setCreditCardControlValidator('creditCard', 'cardYear', Validators.required);
+    this.setCreditCardControlValidator('creditCard', 'cardCvc', Validators.required);
+    this.setCreditCardControlValidator('billingAddress', 'street', Validators.required);
+    this.setCreditCardControlValidator('billingAddress', 'number', Validators.required);
+    this.setCreditCardControlValidator('billingAddress', 'neighborhood', Validators.required);
+    this.setCreditCardControlValidator('billingAddress', 'zipCode', Validators.required);
+    this.setCreditCardControlValidator('billingAddress', 'city', Validators.required);
+    this.setCreditCardControlValidator('billingAddress', 'state', Validators.required);
+  }
+
+  private removeCreditCardValidators(){
+    this.setCreditCardControlValidator('creditCard', 'cardFlag');
+    this.setCreditCardControlValidator('creditCard', 'cardNumber');
+    this.setCreditCardControlValidator('creditCard', 'cardHolder');
+    this.setCreditCardControlValidator('creditCard', 'cardMonth');
+    this.setCreditCardControlValidator('creditCard', 'cardYear');
+    this.setCreditCardControlValidator('creditCard', 'cardCvc');
+    this.setCreditCardControlValidator('billingAddress', 'street');
+    this.setCreditCardControlValidator('billingAddress', 'number');
+    this.setCreditCardControlValidator('billingAddress', 'neighborhood');
+    this.setCreditCardControlValidator('billingAddress', 'zipCode');
+    this.setCreditCardControlValidator('billingAddress', 'city');
+    this.setCreditCardControlValidator('billingAddress', 'state');
+  }
+
+  private setCreditCardControlValidator(control: string, subControl: string, validator?: ValidatorFn) {
+    if (validator) {
+      this.form.controls[control].get(subControl).addValidators(Validators.required);
+    } else {
+      this.form.controls[control].get(subControl).removeValidators(Validators.required);
+      this.form.controls[control].reset();
+    }
+    this.form.controls[control].get(subControl).updateValueAndValidity();
   }
 
   get PaymentType() {return PaymentType};

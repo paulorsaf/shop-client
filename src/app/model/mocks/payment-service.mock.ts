@@ -9,4 +9,7 @@ export class PaymentServiceMock {
     payByPix() {
         return this.response || of();
     }
+    payByCreditCard() {
+        return this.response || of();
+    }
 };

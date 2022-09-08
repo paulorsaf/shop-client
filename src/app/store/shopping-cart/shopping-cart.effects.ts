@@ -8,7 +8,7 @@ import { ShoppingCartComponent } from 'src/app/components/shopping-cart/shopping
 import { Payment, PaymentType } from 'src/app/model/payment/payment';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { AppState } from '../app-state';
-import { closeShoppingCart, makePurchase, makePurchaseByMoney, makePurchaseByPix, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
+import { closeShoppingCart, makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
 
 @Injectable()
 export class ShoppingCartEffects {
@@ -25,6 +25,13 @@ export class ShoppingCartEffects {
         }
         if (params.payment.type === PaymentType.MONEY) {
           return of(makePurchaseByMoney({
+            purchaseId: params.purchaseId
+          }));
+        }
+        if (params.payment.type === PaymentType.CREDIT_CARD) {
+          return of(makePurchaseByCreditCard({
+            billingAddress: params.payment.billingAddress,
+            creditCard: params.payment.creditCard,
             purchaseId: params.purchaseId
           }));
         }
@@ -57,6 +64,26 @@ export class ShoppingCartEffects {
       this.getStore(),
       switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
         this.paymentService.payByMoney({
+          deliveryAddress: storeState.shoppingCart.deliveryAddress,
+          deliveryPrice: storeState.shoppingCart.deliveryPrice,
+          purchaseId: action.purchaseId,
+          shoppingCart: storeState.shoppingCart.products
+        }).pipe(
+          map(() => makePurchaseSuccess()),
+          catchError(error => of(makePurchaseFail({error})))
+        )
+      )
+    )
+  );
+
+  makePurchaseByCreditCardEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(makePurchaseByCreditCard),
+      this.getStore(),
+      switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
+        this.paymentService.payByCreditCard({
+          billingAddress: action.billingAddress,
+          creditCard: action.creditCard,
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,
           purchaseId: action.purchaseId,

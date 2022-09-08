@@ -1,7 +1,10 @@
-ion-list.payment-method {
-    padding-top: 70px;
-    ion-button {
-        font-size: 18px;
+ion-list {
+    padding: 0;
+    &.payment-method {
+        padding-top: 70px;
+        ion-button {
+            font-size: 18px;
+        }
     }
 }
 
@@ -16,4 +19,15 @@ input[type="file"] {
 
 ion-skeleton-text {
     height: 15px;
+}
+
+.card-numbers {
+    display: flex;
+    ion-item {
+        padding-right: 8px;
+
+        &:last-child {
+            padding-right: 0;
+        }
+    }
 }

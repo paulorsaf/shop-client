@@ -4,7 +4,7 @@ import { Action, Store, StoreModule } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { ShoppingCartEffects } from './shopping-cart.effects';
-import { makePurchase, makePurchaseByMoney, makePurchaseByPix, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
+import { makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
 import { ModalControllerMock } from 'src/app/model/mocks/modal-controller.mock';
 import { ModalController } from '@ionic/angular';
 import { AppState } from '../app-state';
@@ -13,7 +13,7 @@ import { PaymentType } from 'src/app/model/payment/payment';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { PaymentServiceMock } from 'src/app/model/mocks/payment-service.mock';
 
-describe('Products effects', () => {
+fdescribe('Products effects', () => {
   let effects: ShoppingCartEffects;
   let actions$: Observable<Action>;
   let modalController: ModalControllerMock;
@@ -83,6 +83,22 @@ describe('Products effects', () => {
       });
     });
 
+    it('when credit card, then return make purchase with credit card', (done) => {
+      const billingAddress = {id: "anyAddress"} as any;
+      const creditCard = {id: "anyCard"} as any;
+      const payment = {billingAddress, creditCard, type:  PaymentType.CREDIT_CARD}
+      actions$ = of(makePurchase({payment}));
+
+      effects.makePurchaseEffect$.subscribe(action => {
+        expect(action).toEqual(makePurchaseByCreditCard({
+          billingAddress,
+          creditCard,
+          purchaseId: undefined
+        }));
+        done();
+      });
+    });
+
   });
 
   describe('given make purchase by pix', () => {
@@ -132,6 +148,35 @@ describe('Products effects', () => {
       actions$ = of(makePurchaseByMoney({}));
 
       effects.makePurchaseByMoneyEffect$.subscribe(action => {
+        expect(action).toEqual(makePurchaseFail({error}));
+        done();
+      });
+    });
+
+  });
+
+  describe('given make purchase by credit card', () => {
+
+    beforeEach(() => {
+      const billingAddress = {id: "anyBillingAddress"} as any;
+      const creditCard = {id: "anyCreditCard"} as any;
+
+      actions$ = of(makePurchaseByCreditCard({billingAddress, creditCard}));
+    })
+
+    it('when success, then return make purchase success', (done) => {
+      paymentService.response = of({});
+
+      effects.makePurchaseByCreditCardEffect$.subscribe(action => {
+        expect(action).toEqual(makePurchaseSuccess());
+        done();
+      });
+    });
+
+    it('when fail, then return make purchase fail', (done) => {
+      paymentService.response = throwError(error);
+
+      effects.makePurchaseByCreditCardEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseFail({error}));
         done();
       });

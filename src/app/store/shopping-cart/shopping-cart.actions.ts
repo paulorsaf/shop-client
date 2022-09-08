@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { Address } from "src/app/model/address/address";
-import { Payment } from "src/app/model/payment/payment";
+import { CreditCardPayment, Payment } from "src/app/model/payment/payment";
 import { ShoppingCartProduct } from "src/app/model/shopping-cart-product/shopping-cart-product";
 
 export const addProduct = createAction('[Shopping cart] add', props<{product: ShoppingCartProduct}>());
@@ -22,5 +22,11 @@ export const makePurchaseByPix =
     createAction('[Shopping cart] pucharse by pix', props<{purchaseId?: string, receipt: File}>());
 export const makePurchaseByMoney =
     createAction('[Shopping cart] pucharse by money', props<{purchaseId?: string}>());
+export const makePurchaseByCreditCard =
+    createAction('[Shopping cart] pucharse by credit card', props<{
+        billingAddress: Address,
+        creditCard: CreditCardPayment,
+        purchaseId?: string
+    }>());
 
 export const clear = createAction('[Shopping cart] clear');

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Address } from 'src/app/model/address/address';
-import { PaymentType } from 'src/app/model/payment/payment';
+import { CreditCardPayment, PaymentType } from 'src/app/model/payment/payment';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { environment } from 'src/environments/environment';
 
@@ -15,7 +15,7 @@ export class PaymentService {
     private http: HttpClient
   ) { }
 
-  payByMoney(paymentDetails: PaymentByMoney): Observable<void> {
+  payByMoney(paymentDetails: Payment): Observable<void> {
     if (paymentDetails.purchaseId) {
       return this.retryPaymentByMoney(paymentDetails);
     }
@@ -29,7 +29,14 @@ export class PaymentService {
     return this.makePaymentByPix(paymentDetails);
   }
 
-  private makePaymentByMoney(paymentDetails: PaymentByMoney) {
+  payByCreditCard(paymentDetails: PaymentByCreditCard): Observable<void> {
+    if (paymentDetails.purchaseId) {
+      return this.retryPaymentByCreditCard(paymentDetails);
+    }
+    return this.makePaymentCreditCard(paymentDetails);
+  }
+
+  private makePaymentByMoney(paymentDetails: Payment) {
     const url = `${environment.api}/purchases`;
     return this.http.post<void>(url, {
       deliveryAddress: paymentDetails.deliveryAddress,
@@ -76,7 +83,25 @@ export class PaymentService {
     });
   }
 
-  private retryPaymentByMoney(paymentDetails: PaymentByMoney) {
+  private makePaymentCreditCard(paymentDetails: PaymentByCreditCard) {
+    const url = `${environment.api}/purchases`;
+    return this.http.post<void>(url, {
+      deliveryAddress: paymentDetails.deliveryAddress,
+      deliveryPrice: paymentDetails.deliveryPrice,
+      payment: {
+        billingAddress: paymentDetails.billingAddress,
+        creditCard: paymentDetails.creditCard,
+        type: PaymentType.CREDIT_CARD
+      },
+      products: paymentDetails.shoppingCart.map(s => ({
+        amount: s.amount,
+        productId: s.product.id,
+        stockOptionId: s.stockOption?.id
+      }))
+    });
+  }
+
+  private retryPaymentByMoney(paymentDetails: Payment) {
     const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
     return this.http.patch<void>(url, {
       payment: {
@@ -109,6 +134,17 @@ export class PaymentService {
     });
   }
 
+  private retryPaymentByCreditCard(paymentDetails: PaymentByCreditCard) {
+    const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
+    return this.http.patch<void>(url, {
+      payment: {
+        billingAddress: paymentDetails.billingAddress,
+        creditCard: paymentDetails.creditCard,
+        type: PaymentType.CREDIT_CARD
+      }
+    });
+  }
+
   private toBase64(image: File) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -120,7 +156,7 @@ export class PaymentService {
 
 }
 
-type PaymentByMoney = {
+type Payment = {
   deliveryAddress: Address;
   deliveryPrice: number;
   purchaseId?: string;
@@ -129,4 +165,9 @@ type PaymentByMoney = {
 
 type PaymentByPix = {
   receipt: File;
-} & PaymentByMoney;
+} & Payment;
+
+type PaymentByCreditCard = {
+  billingAddress: Address;
+  creditCard: CreditCardPayment;
+} & Payment;

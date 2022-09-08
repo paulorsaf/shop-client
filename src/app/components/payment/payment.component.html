@@ -26,9 +26,13 @@
         <ion-label>PIX</ion-label>
         <ion-radio slot="start" [value]="PaymentType.PIX"></ion-radio>
       </ion-item>
-      <ion-item *ngIf="!address || address.city === company?.address.city" test-id="money">
+      <ion-item *ngIf="!address || address?.city === company?.address?.city" test-id="money">
         <ion-label>Dinheiro (ao receber produto)</ion-label>
         <ion-radio slot="start" [value]="PaymentType.MONEY"></ion-radio>
+      </ion-item>
+      <ion-item *ngIf="company?.payment?.creditCard" test-id="credit-card">
+        <ion-label>Cartão de crédito</ion-label>
+        <ion-radio slot="start" [value]="PaymentType.CREDIT_CARD"></ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>
@@ -37,12 +41,96 @@
     <ion-card-header>
       <ion-card-title>Chave PIX</ion-card-title>
       <ion-card-subtitle>
-        <ion-skeleton-text *ngIf="!company?.pixKey" [animated]="true"></ion-skeleton-text>
-        <span *ngIf="company?.pixKey">{{company.pixKey}}</span>
+        <ion-skeleton-text *ngIf="!company?.payment?.pixKey" [animated]="true"></ion-skeleton-text>
+        <span *ngIf="company?.payment?.pixKey">{{company.payment.pixKey}}</span>
       </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content align="right">* Clique para copiar</ion-card-content>
   </ion-card>
+
+  <span *ngIf="form.value.paymentType === 'CREDIT_CARD'">
+    <ion-card test-id="credit-card-form">
+      <ion-card-header>
+        <ion-card-title>Dados do Cartão</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list formGroupName="creditCard">
+          <ion-item>
+            <ion-label position="floating">Tipo</ion-label>
+            <ion-select formControlName="cardFlag">
+              <ion-select-option *ngFor="let flag of company.payment.creditCard.flags" [value]="flag">
+                {{flag}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Número do cartão</ion-label>
+            <ion-input type="tel" formControlName="cardNumber"
+              [brmasker]="{mask:'0000   0000   0000   0000', len:25}">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Nome do titular</ion-label>
+            <ion-input formControlName="cardHolder"></ion-input>
+          </ion-item>
+          <div class="card-numbers">
+            <ion-item>
+              <ion-label position="floating">Mês</ion-label>
+              <ion-input type="tel" formControlName="cardMonth" [brmasker]="{mask:'00', len:2}"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Ano</ion-label>
+              <ion-input type="tel" formControlName="cardYear" [brmasker]="{mask:'0000', len:4}"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">CVV</ion-label>
+              <ion-input type="tel" formControlName="cardCvc" [brmasker]="{mask:'000', len:3}"></ion-input>
+            </ion-item>
+          </div>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card test-id="billing-address">
+      <ion-card-header>
+        <ion-card-title>Endereço de cobrança</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list formGroupName="billingAddress">
+          <ion-item>
+            <ion-label position="floating">Logradouro</ion-label>
+            <ion-input type="tel" formControlName="street">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Número</ion-label>
+            <ion-input type="tel" formControlName="number">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Bairro</ion-label>
+            <ion-input type="tel" formControlName="neighborhood">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">CEP</ion-label>
+            <ion-input type="tel" formControlName="zipCode">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Cidade</ion-label>
+            <ion-input type="tel" formControlName="city">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Estado</ion-label>
+            <ion-input type="tel" formControlName="state">
+            </ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </span>
 
   <div class="ion-padding">
     <ion-button size="full" (click)="finishPurchase()" *ngIf="form.value.paymentType !== 'PIX'"
