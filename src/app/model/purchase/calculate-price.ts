@@ -21,4 +21,5 @@ export type CalculatePriceResponse = {
     readonly deliveryPrice: number;
     readonly paymentFee: number;
     readonly totalPrice: number;
+    readonly totalPriceWithPaymentFee: number;
 }

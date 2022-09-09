@@ -25,7 +25,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
   @Input() company: Company;
   @Input() products: {amount: number, price: number, priceWithDiscount: number, weight: number}[];
   @Input() purchaseId: string;
-
   
   form: FormGroup;
   paymentSubscription: Subscription;
