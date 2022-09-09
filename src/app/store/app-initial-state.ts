@@ -73,10 +73,13 @@ export const appInitialState: AppState = {
         deliveryAddress: undefined,
         deliveryPrice: undefined,
         error: undefined,
+        isCalculatedPrice: false,
+        isCalculatingPrice: false,
         isOpen: false,
         isPaid: false,
         isPaying: false,
         payment: undefined,
+        price: undefined,
         products: []
     },
     trending: {

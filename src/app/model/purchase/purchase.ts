@@ -9,6 +9,7 @@ export type Purchase = {
     createdAt: string;
     deliveryPrice: number;
     payment: Payment;
+    price: Price;
     products: PurchaseProduct[];
     status: string;
     totalAmount: number;
@@ -38,4 +39,13 @@ export type PurchaseProduct = {
     stock: Stock;
     totalAmount: number;
     totalPrice: number;
+    weight: number;
 };
+
+type Price = {
+    products: number;
+    delivery: number;
+    paymentFee: number;
+    total: number;
+    totalWithPaymentFee: number;
+}

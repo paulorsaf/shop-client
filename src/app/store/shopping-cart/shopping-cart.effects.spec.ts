@@ -12,6 +12,7 @@ import { shoppingCartReducer } from './shopping-cart.reducers';
 import { PaymentType } from 'src/app/model/payment/payment';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { PaymentServiceMock } from 'src/app/model/mocks/payment-service.mock';
+import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
 
 describe('Products effects', () => {
   let effects: ShoppingCartEffects;
@@ -178,6 +179,34 @@ describe('Products effects', () => {
 
       effects.makePurchaseByCreditCardEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseFail({error}));
+        done();
+      });
+    });
+
+  });
+
+  describe('given calculate purchase price', () => {
+
+    beforeEach(() => {
+      const calculate = {id: "anyCalculate"} as any;
+      actions$ = of(calculatePurchasePrice({calculate}));
+    })
+
+    it('when success, then return calculate purchase price success', (done) => {
+      const price = {id: "anyPrice"} as any;
+      paymentService.response = of(price);
+
+      effects.calculatePurchasePriceEffect$.subscribe(action => {
+        expect(action).toEqual(calculatePurchasePriceSuccess({price}));
+        done();
+      });
+    });
+
+    it('when fail, then return calculate purchase price fail', (done) => {
+      paymentService.response = throwError(error);
+
+      effects.calculatePurchasePriceEffect$.subscribe(action => {
+        expect(action).toEqual(calculatePurchasePriceFail({error}));
         done();
       });
     });

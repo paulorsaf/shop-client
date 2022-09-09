@@ -7,7 +7,6 @@ import { Company } from 'src/app/model/company/company';
 import { Purchase } from 'src/app/model/purchase/purchase';
 import { AppState } from 'src/app/store/app-state';
 import { loadCompanyById } from 'src/app/store/company/company.action';
-import { selectTotalPrice } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
   selector: 'app-retry-payment',
@@ -19,7 +18,7 @@ export class RetryPaymentPage implements OnInit, OnDestroy {
   company$: Observable<Company>;
 
   purchase: Purchase;
-  totalPrice: number;
+  products$: Observable<{amount: number; price: number, weight: number, priceWithDiscount: number}[]>;
 
   isPaidSubscription: Subscription;
 
@@ -29,9 +28,13 @@ export class RetryPaymentPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.company$ = this.store.select(state => state.company.selectedCompany)
-    .pipe(tap(console.log));
-    this.totalPrice = this.getTotalPrice();
+    this.company$ = this.store.select(state => state.company.selectedCompany);
+    this.products$ = this.store.select(state => state.purchaseDetail.purchase.products.map(p => ({
+      amount: p.amount,
+      price: p.price,
+      priceWithDiscount: p.priceWithDiscount,
+      weight: p.weight
+    })));
 
     this.isPaidSubscription = this.store
       .select(state => state.shoppingCart.isPaid)
@@ -49,20 +52,6 @@ export class RetryPaymentPage implements OnInit, OnDestroy {
 
   close() {
     this.modalController.dismiss();
-  }
-
-  private getTotalPrice() {
-    return selectTotalPrice({
-      shoppingCart: {
-        products: this.purchase.products.map(p => ({
-          amount: p.amount,
-          product: {
-            price: p.price,
-            priceWithDiscount: p.priceWithDiscount
-          }
-        })) || []
-      }
-    } as any);
   }
 
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Address } from 'src/app/model/address/address';
 import { CreditCardPayment, PaymentType } from 'src/app/model/payment/payment';
+import { CalculatePrice, CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { environment } from 'src/environments/environment';
 
@@ -14,6 +15,11 @@ export class PaymentService {
   constructor(
     private http: HttpClient
   ) { }
+
+  calculatePrice(calculate: CalculatePrice): Observable<CalculatePriceResponse> {
+    const url = `${environment.api}/purchases/prices`;
+    return this.http.patch<CalculatePriceResponse>(url, calculate);
+  }
 
   payByMoney(paymentDetails: Payment): Observable<void> {
     if (paymentDetails.purchaseId) {

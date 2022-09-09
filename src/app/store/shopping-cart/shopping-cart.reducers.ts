@@ -3,6 +3,7 @@ import { appInitialState } from '../app-initial-state';
 import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
 import { ShoppingCartState } from './shopping-cart.state';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
+import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
 
 const initialState: ShoppingCartState = appInitialState.shoppingCart;
 
@@ -101,7 +102,26 @@ const shoppingCartReduce = createReducer(
       ...state,
       deliveryPrice: action.deliveryPrice
     }
-  })
+  }),
+  on(calculatePurchasePrice, (state) => ({
+    ...state,
+    error: undefined,
+    isCalculatedPrice: false,
+    isCalculatingPrice: true,
+    price: undefined
+  })),
+  on(calculatePurchasePriceSuccess, (state, action) => ({
+    ...state,
+    isCalculatedPrice: true,
+    isCalculatingPrice: false,
+    price: action.price
+  })),
+  on(calculatePurchasePriceFail, (state, action) => ({
+    ...state,
+    error: action.error,
+    isCalculatedPrice: false,
+    isCalculatingPrice: false,
+  }))
 );
 
 

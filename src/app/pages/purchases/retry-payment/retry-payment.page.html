@@ -11,10 +11,10 @@
 
 <ion-content>
   <app-payment-form
+    *ngIf="company$ | async"
     [address]="purchase.address"
     [company]="company$ | async"
-    [deliveryPrice]="purchase.deliveryPrice"
-    [totalPrice]="totalPrice"
-    [purchase]="purchase"
+    [purchaseId]="purchase.id"
+    [products]="products$ | async"
   ></app-payment-form>
 </ion-content>

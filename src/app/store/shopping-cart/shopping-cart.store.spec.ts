@@ -1,6 +1,7 @@
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
+import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
 import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { selectTotalPrice, selectTotalQuantity, selectTotalQuantityForProductStock, ShoppingCartState } from './shopping-cart.state';
@@ -327,5 +328,60 @@ describe('Shopping cart store', () => {
             deliveryPrice: 10
         });
     })
+
+    it('calculatePurchasePrice', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            error: {},
+            isCalculatedPrice: true,
+            isCalculatingPrice: false,
+            price: {} as any
+        };
+
+        const calculate = {id: "anyCalculate"} as any;
+        const newState = shoppingCartReducer(initialState, calculatePurchasePrice({calculate}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            error: undefined,
+            isCalculatedPrice: false,
+            isCalculatingPrice: true,
+            price: undefined
+        });
+    });
+
+    it('calculatePurchasePriceSuccess', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isCalculatingPrice: true
+        };
+
+        const price = {id: "anyPrice"} as any;
+        const newState = shoppingCartReducer(initialState, calculatePurchasePriceSuccess({price}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            isCalculatedPrice: true,
+            isCalculatingPrice: false,
+            price
+        });
+    });
+
+    it('calculatePurchasePriceSuccess', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isCalculatingPrice: true
+        };
+
+        const error = {error: "error"} as any;
+        const newState = shoppingCartReducer(initialState, calculatePurchasePriceFail({error}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            error,
+            isCalculatedPrice: false,
+            isCalculatingPrice: false
+        });
+    });
 
 });

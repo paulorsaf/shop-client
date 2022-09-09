@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Address } from 'src/app/model/address/address';
 import { states } from 'src/app/model/address/states-list';
 import { Company } from 'src/app/model/company/company';
 import { PaymentType } from 'src/app/model/payment/payment';
-import { Purchase } from 'src/app/model/purchase/purchase';
+import { CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
 import { AppState } from 'src/app/store/app-state';
+import { calculatePurchasePrice } from 'src/app/store/purchases/purchases.actions';
 import { makePurchase } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { ShoppingCartState } from 'src/app/store/shopping-cart/shopping-cart.state';
 
@@ -22,15 +23,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   @Input() address: Address;
   @Input() company: Company;
-  @Input() deliveryPrice: number;
-  @Input() purchase: Purchase;
-  @Input() totalPrice: number;
+  @Input() products: {amount: number, price: number, priceWithDiscount: number, weight: number}[];
+  @Input() purchaseId: string;
 
-  wasPaying = false;
-
+  
   form: FormGroup;
   paymentSubscription: Subscription;
   states: {name: string, code: string}[] = states;
+  wasPaying = false;
+
+  isLoadingPrice$: Observable<boolean>;
+  price$: Observable<CalculatePriceResponse>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,9 +44,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.isLoadingPrice$ = this.store.select(state => state.shoppingCart.isCalculatingPrice);
+    this.price$ = this.store.select(state => state.shoppingCart.price);
+
     this.createForm();
 
     this.onPaying();
+    this.calculatePrice();
 
     this.form.controls.paymentType.valueChanges.subscribe(paymentType => {
       if (paymentType === PaymentType.CREDIT_CARD) {
@@ -51,7 +58,22 @@ export class PaymentComponent implements OnInit, OnDestroy {
       } else {
         this.removeCreditCardValidators();
       }
-    })
+    });
+  }
+
+  private calculatePrice() {
+    let address = null;
+    if (this.address?.zipCode) {
+      address = {
+        destinationZipCode: this.address.zipCode
+      };
+    }
+
+    this.store.dispatch(calculatePurchasePrice({calculate: {
+      address,
+      paymentType: this.form.controls.paymentType.value,
+      products: this.products
+    }}));
   }
 
   ngOnDestroy(): void {
@@ -77,7 +99,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         payment: {
           type: this.form.value.paymentType
         },
-        purchaseId: this.purchase?.id
+        purchaseId: this.purchaseId
       })
     )
   }
@@ -90,7 +112,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
           creditCard: this.form.value.creditCard,
           type: this.form.value.paymentType
         },
-        purchaseId: this.purchase?.id
+        purchaseId: this.purchaseId
       })
     )
   }
@@ -103,7 +125,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
           type: this.form.value.paymentType,
           receiptUrl
         },
-        purchaseId: this.purchase?.id
+        purchaseId: this.purchaseId
       })
     );
 

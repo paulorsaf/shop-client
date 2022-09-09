@@ -17,7 +17,8 @@ export class PaymentPage implements OnInit {
   address$: Observable<Address>;
   company$: Observable<Company>;
   deliveryPrice$: Observable<number>;
-  totalPrice$: Observable<number>;
+
+  products$: Observable<{amount: number; price: number, priceWithDiscount: number, weight: number}[]>;
 
   constructor(
     private store: Store<AppState>
@@ -27,7 +28,13 @@ export class PaymentPage implements OnInit {
     this.address$ = this.store.select(state => state.shoppingCart.deliveryAddress);
     this.company$ = this.store.select(state => state.company.company);
     this.deliveryPrice$ = this.store.select(state => state.shoppingCart.deliveryPrice);
-    this.totalPrice$ = this.store.select(selectTotalPrice);
+
+    this.products$ = this.store.select(state => state.shoppingCart.products.map(p => ({
+      amount: p.amount,
+      price: p.product.price,
+      priceWithDiscount: p.product.priceWithDiscount,
+      weight: p.product.weight
+    })));
   }
 
 }

@@ -48,17 +48,6 @@
                 </app-purchase-stock-option>
               </ion-label>
             </ion-item>
-            <ion-item lines="none">
-              <ion-label>
-                <h2>Total</h2>
-                <div class="prices">
-                  <p class="price">
-                    {{purchase.totalAmount}} {{purchase.totalAmount == 1 ? 'produto' : 'produtos'}}
-                  </p>
-                  <p>{{purchase.totalPrice | currency: "R$ "}}</p>
-                </div>
-              </ion-label>
-            </ion-item>
           </ion-list>
         </ion-card-content>
       </ion-card>
@@ -67,10 +56,7 @@
         <ion-card-header>
           <ion-card-title>Dados da entrega</ion-card-title>
           <ion-card-subtitle>
-            <span *ngIf="purchase.address">
-              Entrega à domicílio<br/>
-              Valor: {{purchase.deliveryPrice | currency: "R$ "}}
-            </span>
+            <span *ngIf="purchase.address">Entrega à domicílio</span>
             <span *ngIf="!purchase.address">Buscar na loja</span>
           </ion-card-subtitle>
         </ion-card-header>
@@ -85,12 +71,39 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card *ngIf="purchase.payment">
+      <ion-card class="payment-details" *ngIf="purchase.payment">
         <ion-card-header>
           <ion-card-title>Dados do pagamento</ion-card-title>
           <ion-card-subtitle>{{purchase.payment.type | paymentType}}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
+          <div class="payment-list">
+            <div class="payment-line">
+              <ion-label>
+                <h2>Produtos</h2>
+              </ion-label>
+              <p slot="end">{{purchase.price?.products | currency: "R$ "}}</p>
+            </div>
+            <div class="payment-line" *ngIf="purchase.address">
+              <ion-label>
+                <h2>Taxa de entrega</h2>
+              </ion-label>
+              <p slot="end">{{purchase.price?.delivery | currency: "R$ "}}</p>
+            </div>
+            <div class="payment-line" *ngIf="purchase.payment.type === 'CREDIT_CARD'">
+              <ion-label>
+                <h2>Taxa do cartão de crédito</h2>
+              </ion-label>
+              <p slot="end">{{purchase.price?.paymentFee | currency: "R$ "}}</p>
+            </div>
+            <div class="payment-line">
+              <ion-label>
+                <h2>Total</h2>
+              </ion-label>
+              <p slot="end">{{purchase.price?.totalWithPaymentFee | currency: "R$ "}}</p>
+            </div>
+          </div>
+
           <ion-text *ngIf="purchase.payment.type === 'MONEY'" test-id="payment-by-money">
             Pagamento na entrega do produto.
           </ion-text>
@@ -101,6 +114,7 @@
               <p>Expiração: {{purchase.payment.card.exp_month}}/{{purchase.payment.card.exp_year}}</p>
             </span>
           </ion-text>
+
           <ion-button *ngIf="purchase?.payment?.receiptUrl" fill="clear" size="full"
             (click)="showReceipt()" test-id="receipt">
             Ver recibo

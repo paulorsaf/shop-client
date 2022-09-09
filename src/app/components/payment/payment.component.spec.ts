@@ -11,6 +11,7 @@ import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
 import { PaymentType } from 'src/app/model/payment/payment';
 import { AppState } from 'src/app/store/app-state';
 import { companyReducer } from 'src/app/store/company/company.reducers';
+import { calculatePurchasePriceSuccess } from 'src/app/store/purchases/purchases.actions';
 import { makePurchase, makePurchaseFail, makePurchaseSuccess } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { PaymentComponent } from './payment.component';
@@ -54,7 +55,6 @@ describe('PaymentComponent', () => {
 
     component.address = {city: "anyCity"} as any;
     component.company = {address: {city: "anyCity"}} as any;
-    component.purchase = {} as any;
 
     fixture.detectChanges();
   }));
@@ -69,11 +69,54 @@ describe('PaymentComponent', () => {
       expect(component.form.value.paymentType).toEqual(PaymentType.PIX);
     })
 
+    it('then calculate purchase price', done => {
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.isCalculatingPrice).toBeTruthy();
+        done();
+      })
+    })
+
+  })
+
+  describe('given calculating price', () => {
+
+    it('then show price loader', () => {
+      expect(page.querySelector('[test-id="price-loader"]')).not.toBeNull();
+    })
+
+    it('then hide price', () => {
+      expect(page.querySelector('[test-id="price"]')).toBeNull();
+    })
+
+    describe('when price calculated', () => {
+
+      beforeEach(() => {
+        const price = {id: "anyPrice"} as any;
+        store.dispatch(calculatePurchasePriceSuccess({price}));
+        fixture.detectChanges();
+      })
+  
+      it('then hide price loader', () => {
+        expect(page.querySelector('[test-id="price-loader"]')).toBeNull();
+      })
+  
+      it('then show price', () => {
+        expect(page.querySelector('[test-id="price"]')).not.toBeNull();
+      })
+  
+    })
+
   })
 
   describe('given payment type', () => {
 
-    it('when delivery is pick up, show hide money option', () => {
+    beforeEach(() => {
+      const price = {id: "anyPrice", deliveryPrice: 10} as any;
+      store.dispatch(calculatePurchasePriceSuccess({price}));
+      fixture.detectChanges();
+    })
+
+    it('when delivery is pick up, show money option', () => {
       component.address = undefined;
       component.company = {address: {city: "anyCity"}} as any;
       fixture.detectChanges();
@@ -81,20 +124,20 @@ describe('PaymentComponent', () => {
       expect(page.querySelector('[test-id="money"]')).not.toBeNull();
     })
 
-    it('when delivery address is different from company address, then hide money option', () => {
-      component.address = {city: "anyOtherCity"} as any;
-      component.company = {address: {city: "anyCity"}} as any;
-      fixture.detectChanges();
-
-      expect(page.querySelector('[test-id="money"]')).toBeNull();
-    })
-
-    it('when delivery address is equal to company address, then show money option', () => {
+    it('when delivery city is equal to company city, then show money option', () => {
       component.address = {city: "anyCity"} as any;
       component.company = {address: {city: "anyCity"}} as any;
       fixture.detectChanges();
 
       expect(page.querySelector('[test-id="money"]')).not.toBeNull();
+    })
+
+    it('when delivery city is different from company city, then hide money option', () => {
+      component.address = {city: "anyOtherCity"} as any;
+      component.company = {address: {city: "anyCity"}} as any;
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="money"]')).toBeNull();
     })
 
     it('when company has credit card configured, then show credit card option', () => {
@@ -111,12 +154,12 @@ describe('PaymentComponent', () => {
       expect(page.querySelector('[test-id="credit-card"]')).toBeNull();
     })
 
-    describe('when pix', () => {
+    describe('when pix selected', () => {
 
       beforeEach(() => {
         component.form.controls.paymentType.setValue('PIX');
         fixture.detectChanges();
-      })
+      });
 
       it('then show pix key', () => {
         expect(page.querySelector('[test-id="pix-key"]')).not.toBeNull();
@@ -138,13 +181,17 @@ describe('PaymentComponent', () => {
         expect(page.querySelector('[test-id="credit-card-form"]')).toBeNull();
       })
 
+      it('then hide credit card fee', () => {
+        expect(page.querySelector('[test-id="credit-card-fee"]')).toBeNull();
+      })
+
       it('then form is valid', () => {
         expect(component.form.valid).toBeTruthy();
       })
 
     })
 
-    describe('when money', () => {
+    describe('when money selected', () => {
 
       beforeEach(() => {
         component.form.controls.paymentType.setValue('MONEY');
@@ -171,19 +218,27 @@ describe('PaymentComponent', () => {
         expect(page.querySelector('[test-id="billing-address"]')).toBeNull();
       })
 
+      it('then hide credit card fee', () => {
+        expect(page.querySelector('[test-id="credit-card-fee"]')).toBeNull();
+      })
+
       it('then form is valid', () => {
         expect(component.form.valid).toBeTruthy();
       })
 
     })
 
-    describe('when credit card', () => {
+    describe('when credit card selected', () => {
 
       beforeEach(() => {
         component.company = {payment: {creditCard: {}}} as any;
         fixture.detectChanges();
 
         component.form.controls.paymentType.setValue('CREDIT_CARD');
+        fixture.detectChanges();
+
+        const price = {id: "anyPrice", deliveryPrice: 10} as any;
+        store.dispatch(calculatePurchasePriceSuccess({price}));
         fixture.detectChanges();
       })
 
@@ -207,10 +262,27 @@ describe('PaymentComponent', () => {
         expect(page.querySelector('[test-id="billing-address"]')).not.toBeNull();
       })
 
+      it('then show credit card fee', () => {
+        expect(page.querySelector('[test-id="credit-card-fee"]')).not.toBeNull();
+      })
+
       it('then form is invalid', () => {
         expect(component.form.valid).toBeFalsy();
       })
 
+    })
+
+  })
+
+  describe('given user changes payment type', () => {
+
+    beforeEach(() => {
+      const price = {id: "anyPrice"} as any;
+      store.dispatch(calculatePurchasePriceSuccess({price}));
+      fixture.detectChanges();
+
+      component.form.controls.paymentType.setValue('CREDIT_CARD');
+      fixture.detectChanges();
     })
 
   })
@@ -360,14 +432,16 @@ describe('PaymentComponent', () => {
   describe('given delivery type', () => {
 
     it('when delivery, then show delivery price', () => {
-      component.deliveryPrice = 10;
+      const price = {id: "anyPrice", deliveryPrice: 10} as any;
+      store.dispatch(calculatePurchasePriceSuccess({price}));
       fixture.detectChanges();
   
       expect(page.querySelector('[test-id="delivery-price"]')).not.toBeNull();
     })
   
     it('when pick up, then hide delivery price', () => {
-      component.deliveryPrice = 0;
+      const price = {id: "anyPrice", deliveryPrice: 0} as any;
+      store.dispatch(calculatePurchasePriceSuccess({price}));
       fixture.detectChanges();
   
       expect(page.querySelector('[test-id="delivery-price"]')).toBeNull();
@@ -412,7 +486,7 @@ describe('PaymentComponent', () => {
     })
 
     it('when payment for an existing purchase, then send purchase id', () => {
-      component.purchase = {id: "anyPurchaseId"} as any;
+      component.purchaseId = "anyPurchaseId";
 
       spyOn(store, 'dispatch');
 
@@ -469,7 +543,7 @@ describe('PaymentComponent', () => {
       })
   
       it('and payment for an existing purchase, then send purchase id', () => {
-        component.purchase = {id: "anyPurchaseId"} as any;
+        component.purchaseId = "anyPurchaseId";
         spyOn(store, 'dispatch');
   
         page.querySelector('[test-id="finish-purchase-button"]').click();
@@ -539,7 +613,7 @@ describe('PaymentComponent', () => {
       })
   
       it('and payment for an existing purchase, then send purchase id', () => {
-        component.purchase = {id: "anyPurchaseId"} as any;
+        component.purchaseId = "anyPurchaseId";
         spyOn(store, 'dispatch');
   
         fillCreditCardForm();

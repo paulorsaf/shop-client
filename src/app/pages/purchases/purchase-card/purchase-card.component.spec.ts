@@ -68,22 +68,6 @@ describe('PurchaseCardComponent', () => {
       expect(page.querySelector('[test-id="payment-error"]')).not.toBeNull();
     })
 
-    describe('when user clicks on retry payment button', () => {
-
-      beforeEach(() => {
-        page.querySelector('[test-id="retry-payment-button"]').click();
-        fixture.detectChanges();
-      })
-
-      it('then open retry payment page', done => {
-        setTimeout(() => {
-          expect(modalController.isPresented).toBeTruthy();
-          done();
-        }, 100)
-      })
-
-    })
-
   });
 
   describe('given there is no error on payment', () => {

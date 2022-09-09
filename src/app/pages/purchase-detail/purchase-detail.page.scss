@@ -21,3 +21,14 @@ ion-card {
         padding: 0;
     }
 }
+
+.payment-list {
+    margin-bottom: 15px;
+    .payment-line {
+        display: flex;
+        justify-content: space-between;
+        [slot="end"] {
+            text-align: end;
+        }
+    }
+}

@@ -19,5 +19,9 @@ export type Payment = {
 }
 
 export type CreditCardPayment = {
-    flags: ['MASTERCARD', 'VISA']
+    flags: string[]
+    fee?: {
+        percentage: number;
+        value: number;
+    }
 }

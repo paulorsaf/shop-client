@@ -1,24 +1,44 @@
 <form [formGroup]="form" *ngIf="form">
-  <ion-list class="payment-method">
-    <ion-item lines="none">
-      <ion-label>Valor da compra</ion-label>
-      <ion-button fill="clear" color="success" slot="end">
-        {{totalPrice | currency: "R$ "}}
-      </ion-button>
-    </ion-item>
-    <ion-item lines="none" *ngIf="deliveryPrice" test-id="delivery-price">
-      <ion-label>Entrega</ion-label>
-      <ion-button fill="clear" color="success" slot="end">
-        {{deliveryPrice | currency: "R$ "}}
-      </ion-button>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-label>Valor total</ion-label>
-      <ion-button fill="clear" color="success" slot="end">
-        {{totalPrice + (deliveryPrice || 0) | currency: "R$ "}}
-      </ion-button>
+  <ion-list *ngIf="isLoadingPrice$ | async" class="payment-method" test-id="price-loader">
+    <ion-item lines="none" *ngFor="let a of [1,2,3,4]">
+      <ion-label>
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-label>
     </ion-item>
   </ion-list>
+  <span *ngIf="!(isLoadingPrice$ | async)">
+    <ion-list *ngIf="price$ | async; let price" class="payment-method" test-id="price">
+      <ion-item lines="none">
+        <ion-label>Valor da compra</ion-label>
+        <ion-button fill="clear" color="success" slot="end">
+          {{price.productsPrice | currency: "R$ "}}
+        </ion-button>
+      </ion-item>
+      <ion-item lines="none" *ngIf="price.deliveryPrice" test-id="delivery-price">
+        <ion-label>Entrega</ion-label>
+        <ion-button fill="clear" color="success" slot="end">
+          {{price.deliveryPrice | currency: "R$ "}}
+        </ion-button>
+      </ion-item>
+      <ion-item lines="none" *ngIf="form.value.paymentType === 'CREDIT_CARD'" test-id="credit-card-fee">
+        <ion-label>Taxa do cartão</ion-label>
+        <ion-button fill="clear" color="success" slot="end">
+          {{price.paymentFee | currency: "R$ "}}
+        </ion-button>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>Valor total</ion-label>
+        <ion-button fill="clear" color="success" slot="end">
+          <span *ngIf="form.value.paymentType !== 'CREDIT_CARD'">
+            {{price.totalPrice | currency: "R$ "}}
+          </span>
+          <span *ngIf="form.value.paymentType === 'CREDIT_CARD'">
+            {{price.totalPriceWithPaymentFee | currency: "R$ "}}
+          </span>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </span>
 
   <ion-list>
     <ion-radio-group formControlName="paymentType">
@@ -58,7 +78,7 @@
           <ion-item>
             <ion-label position="floating">Tipo</ion-label>
             <ion-select formControlName="cardFlag">
-              <ion-select-option *ngFor="let flag of company.payment.creditCard.flags" [value]="flag">
+              <ion-select-option *ngFor="let flag of company.payment?.creditCard.flags" [value]="flag">
                 {{flag}}
               </ion-select-option>
             </ion-select>

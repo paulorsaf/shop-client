@@ -6,8 +6,10 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { ShoppingCartComponent } from 'src/app/components/shopping-cart/shopping-cart.component';
 import { Payment, PaymentType } from 'src/app/model/payment/payment';
+import { CalculatePrice } from 'src/app/model/purchase/calculate-price';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { AppState } from '../app-state';
+import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
 import { closeShoppingCart, makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
 
 @Injectable()
@@ -114,6 +116,18 @@ export class ShoppingCartEffects {
     ), {
       dispatch: false
     }
+  );
+
+  calculatePurchasePriceEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(calculatePurchasePrice),
+      switchMap((params: {calculate: CalculatePrice}) =>
+        this.paymentService.calculatePrice(params.calculate).pipe(
+          map(price => calculatePurchasePriceSuccess({price})),
+          catchError(error => of(calculatePurchasePriceFail({error})))
+        )
+      )
+    )
   );
 
   private getStore(){
