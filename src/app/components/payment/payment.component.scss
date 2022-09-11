@@ -31,3 +31,18 @@ ion-skeleton-text {
         }
     }
 }
+
+ion-card {
+    &.credit-cards-loader ion-card-content {
+        padding: 0;
+        ion-skeleton-text {
+            height: 7.4rem;
+            margin: 0;
+        }
+    }
+
+    h2 {
+        text-transform: uppercase !important;
+        font-weight: bold !important;
+    }
+}

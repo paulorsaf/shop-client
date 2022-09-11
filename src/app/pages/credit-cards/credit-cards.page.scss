@@ -17,7 +17,7 @@ h2 {
 ion-skeleton-text {
     margin: 0;
     margin-bottom: 1px;
-    height: 10rem;
+    height: 9.1rem;
 }
 
 .empty-results {
@@ -26,4 +26,8 @@ ion-skeleton-text {
     align-items: center;
     font-size: 1.8rem;
     height: calc(100vh - 7rem);
+}
+
+ion-list {
+    padding: 0;
 }

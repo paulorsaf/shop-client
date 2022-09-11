@@ -28,5 +28,10 @@ export const makePurchaseByCreditCard =
         creditCard: CreditCardPayment,
         purchaseId?: string
     }>());
+export const makePurchaseBySavedCreditCard =
+    createAction('[Shopping cart] pucharse by saved credit card', props<{
+        creditCardId: string,
+        purchaseId?: string
+    }>());
 
 export const clear = createAction('[Shopping cart] clear');

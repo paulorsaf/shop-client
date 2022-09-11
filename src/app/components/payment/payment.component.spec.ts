@@ -2,8 +2,9 @@ import { Location } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
+import { AlertController, IonicModule, LoadingController, ToastController } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
+import { AlertControllerMock } from 'src/app/model/mocks/alert-controller.mock';
 import { BlankMockComponent } from 'src/app/model/mocks/blank-mock/blank-mock.component';
 import { LoadingControllerMock } from 'src/app/model/mocks/loading-controller.mock';
 import { PageMock } from 'src/app/model/mocks/page.mock';
@@ -11,6 +12,8 @@ import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
 import { PaymentType } from 'src/app/model/payment/payment';
 import { AppState } from 'src/app/store/app-state';
 import { companyReducer } from 'src/app/store/company/company.reducers';
+import { loadCreditCardsSuccess } from 'src/app/store/credit-cards/credit-cards.actions';
+import { creditCardsReducer } from 'src/app/store/credit-cards/credit-cards.reducers';
 import { calculatePurchasePriceSuccess } from 'src/app/store/purchases/purchases.actions';
 import { makePurchase, makePurchaseFail, makePurchaseSuccess } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
@@ -24,8 +27,10 @@ describe('PaymentComponent', () => {
   let store: Store<AppState>;
   let loadingController: LoadingControllerMock;
   let toastController: ToastControllerMock;
+  let alertController: AlertControllerMock;
 
   beforeEach(waitForAsync(() => {
+    alertController = new AlertControllerMock();
     loadingController = new LoadingControllerMock();
     toastController = new ToastControllerMock();
 
@@ -39,9 +44,11 @@ describe('PaymentComponent', () => {
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
         StoreModule.forFeature('company', companyReducer),
+        StoreModule.forFeature('creditCards', creditCardsReducer),
         StoreModule.forFeature('shoppingCart', shoppingCartReducer)
       ]
     })
+    .overrideProvider(AlertController, {useValue: alertController})
     .overrideProvider(LoadingController, {useValue: loadingController})
     .overrideProvider(ToastController, {useValue: toastController})
     .compileComponents();
@@ -268,6 +275,117 @@ describe('PaymentComponent', () => {
 
       it('then form is invalid', () => {
         expect(component.form.valid).toBeFalsy();
+      })
+
+      it('then load saved credit cards', done => {
+        store.select('creditCards').subscribe(state => {
+          expect(state.isLoading).toBeTruthy();
+          done();
+        })
+      })
+
+    })
+
+  })
+
+  describe('given loading saved credit cards', () => {
+
+    beforeEach(() => {
+      component.company = {payment: {creditCard: {}}} as any;
+      fixture.detectChanges();
+
+      component.form.controls.paymentType.setValue('CREDIT_CARD');
+      fixture.detectChanges();
+    })
+
+    it('then show credit cards loader', () => {
+      expect(page.querySelector('[test-id="credit-cards-loader"]')).not.toBeNull();
+    })
+
+    it('then hide credit cards', () => {
+      expect(page.querySelector('[test-id="credit-cards"]')).toBeNull();
+    })
+
+    describe('when credit cards loaded', () => {
+
+      beforeEach(() => {
+        const creditCards = [{id: 1}] as any;
+        store.dispatch(loadCreditCardsSuccess({creditCards}));
+        fixture.detectChanges();
+      })
+
+      it('then hide credit cards loader', () => {
+        expect(page.querySelector('[test-id="credit-cards-loader"]')).toBeNull();
+      })
+  
+      it('then show credit cards', () => {
+        expect(page.querySelector('[test-id="credit-cards"]')).not.toBeNull();
+      })
+  
+      it('and no credit cards found, then hide credit cards', () => {
+        const creditCards = [] as any;
+        store.dispatch(loadCreditCardsSuccess({creditCards}));
+        fixture.detectChanges();
+
+        expect(page.querySelector('[test-id="credit-cards"] ion-card')).toBeNull();
+      })
+
+    })
+
+  })
+
+  describe('given user clicks on saved credit card', () => {
+
+    beforeEach(() => {
+      component.company = {payment: {creditCard: {}}} as any;
+      fixture.detectChanges();
+
+      component.form.controls.paymentType.setValue('CREDIT_CARD');
+      fixture.detectChanges();
+
+      const creditCards = [{id: 1}] as any;
+      store.dispatch(loadCreditCardsSuccess({creditCards}));
+      fixture.detectChanges();
+
+      page.querySelector('[test-id="saved-credit-card"]').click();
+      fixture.detectChanges();
+    })
+
+    it('then ask user confirmation', done => {
+      setTimeout(() => {
+        expect(alertController.isPresented).toBeTruthy();
+        done();
+      }, 100)
+    })
+
+    describe('when user cancels', () => {
+
+      beforeEach(() => {
+        alertController.buttons[0].handler();
+        fixture.detectChanges();
+      })
+
+      it('then dont make payment', done => {
+        store.select('shoppingCart').subscribe(state => {
+          expect(state.isPaying).toBeFalsy();
+          done();
+        })
+      })
+
+    })
+
+    describe('when user confirms', () => {
+
+      beforeEach(() => {
+        alertController.buttons[1].handler();
+        fixture.detectChanges();
+      })
+
+      it('then make payment', done => {
+        store.select('shoppingCart').subscribe(state => {
+          expect(state.isPaying).toBeTruthy();
+          done();
+        })
       })
 
     })

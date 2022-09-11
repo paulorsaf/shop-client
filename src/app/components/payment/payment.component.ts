@@ -1,17 +1,19 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Address } from 'src/app/model/address/address';
 import { states } from 'src/app/model/address/states-list';
 import { Company } from 'src/app/model/company/company';
+import { CreditCard } from 'src/app/model/payment/credit-card';
 import { PaymentType } from 'src/app/model/payment/payment';
 import { CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
 import { AppState } from 'src/app/store/app-state';
+import { loadCreditCards } from 'src/app/store/credit-cards/credit-cards.actions';
 import { calculatePurchasePrice } from 'src/app/store/purchases/purchases.actions';
-import { makePurchase } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { makePurchase, makePurchaseBySavedCreditCard } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { ShoppingCartState } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
@@ -31,10 +33,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
   states: {name: string, code: string}[] = states;
   wasPaying = false;
 
+  creditCards$: Observable<CreditCard[]>;
+  isLoadingCreditCards$: Observable<boolean>;
   isLoadingPrice$: Observable<boolean>;
   price$: Observable<CalculatePriceResponse>;
 
   constructor(
+    private alertController: AlertController,
     private formBuilder: FormBuilder,
     private loadingController: LoadingController,
     private router: Router,
@@ -43,6 +48,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.creditCards$ = this.store.select(state => state.creditCards.creditCards);
+    this.isLoadingCreditCards$ = this.store.select(state => state.creditCards.isLoading);
     this.isLoadingPrice$ = this.store.select(state => state.shoppingCart.isCalculatingPrice);
     this.price$ = this.store.select(state => state.shoppingCart.price);
 
@@ -54,25 +61,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.form.controls.paymentType.valueChanges.subscribe(paymentType => {
       if (paymentType === PaymentType.CREDIT_CARD) {
         this.addCreditCardValidators();
+        this.store.dispatch(loadCreditCards());
       } else {
         this.removeCreditCardValidators();
       }
     });
-  }
-
-  private calculatePrice() {
-    let address = null;
-    if (this.address?.zipCode) {
-      address = {
-        destinationZipCode: this.address.zipCode
-      };
-    }
-
-    this.store.dispatch(calculatePurchasePrice({calculate: {
-      address,
-      paymentType: this.form.controls.paymentType.value,
-      products: this.products
-    }}));
   }
 
   ngOnDestroy(): void {
@@ -90,6 +83,42 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.makePurchaseByCreditCard();
       }
     }
+  }
+
+  askCreditCardPayment(card: CreditCard) {
+    this.alertController.create({
+      header: 'Pagar com cartão salvo',
+      message: `Deseja finalizar o pedido com o cartão terminado em ${card.last4}?`,
+      buttons: [{
+        text: 'Não',
+        handler: () => {}
+      }, {
+        text: 'Sim',
+        id: 'remove-item',
+        handler: () => this.store.dispatch(makePurchase({
+          payment: {
+            creditCardId: card.id,
+            type: this.form.value.paymentType
+          },
+          purchaseId: this.purchaseId
+        }))
+      }]
+    }).then(alert => alert.present());
+  }
+
+  private calculatePrice() {
+    let address = null;
+    if (this.address?.zipCode) {
+      address = {
+        destinationZipCode: this.address.zipCode
+      };
+    }
+
+    this.store.dispatch(calculatePurchasePrice({calculate: {
+      address,
+      paymentType: this.form.controls.paymentType.value,
+      products: this.products
+    }}));
   }
 
   private makePurchaseByMoney() {

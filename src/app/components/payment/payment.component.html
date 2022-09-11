@@ -6,6 +6,7 @@
       </ion-label>
     </ion-item>
   </ion-list>
+
   <span *ngIf="!(isLoadingPrice$ | async)">
     <ion-list *ngIf="price$ | async; let price" class="payment-method" test-id="price">
       <ion-item lines="none">
@@ -69,6 +70,30 @@
   </ion-card>
 
   <span *ngIf="form.value.paymentType === 'CREDIT_CARD'">
+    <section *ngIf="isLoadingCreditCards$ | async" test-id="credit-cards-loader">
+      <ion-card class="credit-cards-loader">
+        <ion-card-content>
+          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+    </section>
+    <section *ngIf="!(isLoadingCreditCards$ | async)" test-id="credit-cards">
+      <ion-card *ngFor="let creditCard of creditCards$ | async"
+        (click)="askCreditCardPayment(creditCard)" test-id="saved-credit-card">
+        <ion-card-content>
+          <ion-item lines="none">
+            <ion-label>
+              <h2>{{creditCard.brand}}</h2>
+            </ion-label>
+            <div slot="end">
+              <p>**** **** **** {{creditCard.last4}}</p>
+              <p align="right">{{creditCard.exp_month}}/{{creditCard.exp_year}}</p>
+            </div>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </section>
+    
     <ion-card test-id="credit-card-form">
       <ion-card-header>
         <ion-card-title>Dados do Cartão</ion-card-title>

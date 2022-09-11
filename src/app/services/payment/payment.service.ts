@@ -42,6 +42,13 @@ export class PaymentService {
     return this.makePaymentCreditCard(paymentDetails);
   }
 
+  payBySavedCreditCard(paymentDetails: PaymentBySavedCreditCard): Observable<void> {
+    if (paymentDetails.purchaseId) {
+      return this.retryPaymentBySavedCreditCard(paymentDetails);
+    }
+    return this.makePaymentBySavedCreditCard(paymentDetails);
+  }
+
   private makePaymentByMoney(paymentDetails: Payment) {
     const url = `${environment.api}/purchases`;
     return this.http.post<void>(url, {
@@ -107,6 +114,23 @@ export class PaymentService {
     });
   }
 
+  private makePaymentBySavedCreditCard(paymentDetails: PaymentBySavedCreditCard) {
+    const url = `${environment.api}/purchases`;
+    return this.http.post<void>(url, {
+      deliveryAddress: paymentDetails.deliveryAddress,
+      deliveryPrice: paymentDetails.deliveryPrice,
+      payment: {
+        creditCardId: paymentDetails.creditCardId,
+        type: PaymentType.CREDIT_CARD
+      },
+      products: paymentDetails.shoppingCart.map(s => ({
+        amount: s.amount,
+        productId: s.product.id,
+        stockOptionId: s.stockOption?.id
+      }))
+    });
+  }
+
   private retryPaymentByMoney(paymentDetails: Payment) {
     const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
     return this.http.patch<void>(url, {
@@ -151,6 +175,16 @@ export class PaymentService {
     });
   }
 
+  private retryPaymentBySavedCreditCard(paymentDetails: PaymentBySavedCreditCard) {
+    const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
+    return this.http.patch<void>(url, {
+      payment: {
+        creditCardId: paymentDetails.creditCardId,
+        type: PaymentType.CREDIT_CARD
+      }
+    });
+  }
+
   private toBase64(image: File) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -176,4 +210,8 @@ type PaymentByPix = {
 type PaymentByCreditCard = {
   billingAddress: Address;
   creditCard: CreditCardPayment;
+} & Payment;
+
+type PaymentBySavedCreditCard = {
+  creditCardId: string;
 } & Payment;

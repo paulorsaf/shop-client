@@ -3,6 +3,7 @@ import { Address } from "../address/address";
 export type Payment = {
     billingAddress?: Address;
     creditCard?: CreditCardPayment;
+    creditCardId?: string;
     type: string;
     error?: any;
     receiptUrl?: File;

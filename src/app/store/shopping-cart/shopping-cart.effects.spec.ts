@@ -4,7 +4,7 @@ import { Action, Store, StoreModule } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { ShoppingCartEffects } from './shopping-cart.effects';
-import { makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
+import { makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseBySavedCreditCard, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
 import { ModalControllerMock } from 'src/app/model/mocks/modal-controller.mock';
 import { ModalController } from '@ionic/angular';
 import { AppState } from '../app-state';
@@ -84,21 +84,43 @@ describe('Products effects', () => {
       });
     });
 
-    it('when credit card, then return make purchase with credit card', (done) => {
+    describe('when credit card', () => {
+
       const billingAddress = {id: "anyAddress"} as any;
       const creditCard = {id: "anyCard"} as any;
-      const payment = {billingAddress, creditCard, type:  PaymentType.CREDIT_CARD}
-      actions$ = of(makePurchase({payment}));
+      let payment: any;
 
-      effects.makePurchaseEffect$.subscribe(action => {
-        expect(action).toEqual(makePurchaseByCreditCard({
-          billingAddress,
-          creditCard,
-          purchaseId: undefined
-        }));
-        done();
+      beforeEach(() => {
+        payment = {billingAddress, creditCard, type:  PaymentType.CREDIT_CARD}
+      })
+
+      it('and new credit card, then return make purchase with credit card', (done) => {
+        actions$ = of(makePurchase({payment}));
+  
+        effects.makePurchaseEffect$.subscribe(action => {
+          expect(action).toEqual(makePurchaseByCreditCard({
+            billingAddress,
+            creditCard,
+            purchaseId: undefined
+          }));
+          done();
+        });
       });
-    });
+
+      it('and saved credit card, then return make purchase with saved credit card', (done) => {
+        payment.creditCardId = "anyCreditCardId";
+        actions$ = of(makePurchase({payment}));
+  
+        effects.makePurchaseEffect$.subscribe(action => {
+          expect(action).toEqual(makePurchaseBySavedCreditCard({
+            creditCardId: "anyCreditCardId",
+            purchaseId: undefined
+          }));
+          done();
+        });
+      });
+
+    })
 
   });
 
@@ -178,6 +200,32 @@ describe('Products effects', () => {
       paymentService.response = throwError(error);
 
       effects.makePurchaseByCreditCardEffect$.subscribe(action => {
+        expect(action).toEqual(makePurchaseFail({error}));
+        done();
+      });
+    });
+
+  });
+
+  describe('given make purchase by saved credit card', () => {
+
+    beforeEach(() => {
+      actions$ = of(makePurchaseBySavedCreditCard({creditCardId: "anyCreditCardId"}));
+    })
+
+    it('when success, then return make purchase success', (done) => {
+      paymentService.response = of({});
+
+      effects.makePurchaseBySavedCreditCardEffect$.subscribe(action => {
+        expect(action).toEqual(makePurchaseSuccess());
+        done();
+      });
+    });
+
+    it('when fail, then return make purchase fail', (done) => {
+      paymentService.response = throwError(error);
+
+      effects.makePurchaseBySavedCreditCardEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseFail({error}));
         done();
       });

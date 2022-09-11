@@ -15,4 +15,7 @@ export class PaymentServiceMock {
     payByCreditCard() {
         return this.response || of();
     }
+    payBySavedCreditCard() {
+        return this.response || of();
+    }
 };
