@@ -32,6 +32,7 @@ describe('AppComponent', () => {
       imports: [
         RouterTestingModule.withRoutes([
           { path: "about-us", component: BlankMockComponent },
+          { path: "credit-cards", component: BlankMockComponent },
           { path: "purchases", component: BlankMockComponent }
         ]),
         StoreModule.forRoot([]),
@@ -59,6 +60,10 @@ describe('AppComponent', () => {
         expect(state.isLoggingInByToken).toBeTruthy();
         done();
       })
+    })
+
+    it('then show about us button', () => {
+      expect(page.querySelector('[test-id="about-us-menu"]')).not.toBeNull();
     })
 
     describe('when logging in user by token', () => {
@@ -137,10 +142,6 @@ describe('AppComponent', () => {
 
   })
 
-  it('given app starts, show about us button', () => {
-    expect(page.querySelector('[test-id="about-us-menu"]')).not.toBeNull();
-  })
-
   describe('given user is not logged', () => {
 
     beforeEach(() => {
@@ -158,6 +159,10 @@ describe('AppComponent', () => {
 
     it('then hide purchases button', () => {
       expect(page.querySelector('[test-id="purchases-menu"]')).toBeNull();
+    })
+
+    it('then hide credit cards button', () => {
+      expect(page.querySelector('[test-id="credit-cards-menu"]')).toBeNull();
     })
 
     it('when user clicks on login button, then show login', done => {
@@ -190,6 +195,10 @@ describe('AppComponent', () => {
 
     it('then show purchases button', () => {
       expect(page.querySelector('[test-id="purchases-menu"]')).not.toBeNull();
+    })
+
+    it('then show credit cards button', () => {
+      expect(page.querySelector('[test-id="credit-cards-menu"]')).not.toBeNull();
     })
 
     it('when user clicks on purchase button, then go to my purchases page', done => {
@@ -226,6 +235,16 @@ describe('AppComponent', () => {
         })
       })
 
+    })
+
+    it('when user clicks on credit cards button, then go to my credit cards page', done => {
+      page.querySelector('[test-id="credit-cards-menu"]').click();
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        expect(location.path()).toEqual('/credit-cards');
+        done();
+      }, 100)
     })
 
   })

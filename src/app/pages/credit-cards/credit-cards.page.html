@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="hasBackButton">
+      <ion-back-button fill="clear" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="!hasBackButton">
+      <ion-button (click)="goHome()">
+        <ion-icon name="home" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="light">Cartões de Crédito</ion-title>
+    <ion-buttons slot="end">
+      <app-header></app-header>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <section *ngIf="isLoading$ | async" test-id="credit-cards-loader">
+    <ion-skeleton-text  *ngFor="let i of [1, 2, 3, 4, 5, 6]" [animated]="true"></ion-skeleton-text>
+  </section>
+  <section *ngIf="!(isLoading$ | async)" test-id="credit-cards">
+    <ion-list *ngIf="(creditCards$ | async)?.length">
+      <ion-item-sliding *ngFor="let creditCard of creditCards$ | async">
+        <ion-item>
+          <ion-label>
+            <h2>{{creditCard.brand}}</h2>
+          </ion-label>
+          <div slot="end">
+            <p>**** **** **** {{creditCard.last4}}</p>
+            <p align="right">{{creditCard.exp_month}}/{{creditCard.exp_year}}</p>
+          </div>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="delete(creditCard)" test-id="delete-button">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+
+    <div *ngIf="!(creditCards$ | async)?.length" class="empty-results" test-id="empty-results">
+      Nenhum cartão de crédito encontrado.
+    </div>
+
+    <!-- <ion-fab *ngIf="!(isLoading$ | async)" vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button test-id="add-card-button">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab> -->
+  </section>
+</ion-content>

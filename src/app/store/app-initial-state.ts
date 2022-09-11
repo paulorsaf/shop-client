@@ -31,6 +31,14 @@ export const appInitialState: AppState = {
         isLoadingById: false,
         selectedCompany: undefined
     },
+    creditCards: {
+        creditCards: [],
+        error: undefined,
+        isDeleted: false,
+        isDeleting: false,
+        isLoaded: false,
+        isLoading: false
+    },
     login: {
         error: undefined,
         isLoggedIn: false,

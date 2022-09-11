@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'about-us',
     loadChildren: () => import('./pages/about-us/about-us.module').then( m => m.AboutUsPageModule)
+  },
+  {
+    path: 'credit-cards',
+    loadChildren: () => import('./pages/credit-cards/credit-cards.module').then( m => m.CreditCardsPageModule)
   }
 ];
 

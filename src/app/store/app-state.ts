@@ -2,6 +2,7 @@ import { AddressState } from './address/address.state';
 import { BannerState } from './banner/banner.state';
 import { CategoryState } from './category/category-state';
 import { CompanyState } from './company/company.state';
+import { CreditCardsState } from './credit-cards/credit-cards.state';
 import { LoginState } from './login/login.state';
 import { ProductState } from './product/product.state';
 import { ProductsState } from './products/products.state';
@@ -17,6 +18,7 @@ export type AppState = {
     banner: BannerState;
     category: CategoryState;
     company: CompanyState;
+    creditCards: CreditCardsState;
     login: LoginState;
     product: ProductState;
     products: ProductsState;

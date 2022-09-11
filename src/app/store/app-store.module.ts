@@ -12,6 +12,8 @@ import { CategoryEffects } from './category/category.effects';
 import { categoryReducer } from './category/category.reducers';
 import { CompanyEffects } from './company/company.effects';
 import { companyReducer } from './company/company.reducers';
+import { CreditCardsEffects } from './credit-cards/credit-cards.effects';
+import { creditCardsReducer } from './credit-cards/credit-cards.reducers';
 import { LoginEffects } from './login/login.effects';
 import { loginReducer } from './login/login.reducers';
 import { ProductEffects } from './product/product.effects';
@@ -42,6 +44,7 @@ import { userReducer } from './user/user.reducers';
     StoreModule.forFeature('banner', bannerReducer),
     StoreModule.forFeature('category', categoryReducer),
     StoreModule.forFeature('company', companyReducer),
+    StoreModule.forFeature('creditCards', creditCardsReducer),
     StoreModule.forFeature('login', loginReducer),
     StoreModule.forFeature('product', productReducer),
     StoreModule.forFeature('products', productsReducer),
@@ -56,6 +59,7 @@ import { userReducer } from './user/user.reducers';
       BannerEffects,
       CategoryEffects,
       CompanyEffects,
+      CreditCardsEffects,
       LoginEffects,
       ProductEffects,
       ProductsEffects,
