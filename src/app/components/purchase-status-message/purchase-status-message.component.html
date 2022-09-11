@@ -1,4 +1,4 @@
-<p class="main-message" *ngIf="purchase.status !== 'FINISHED'">
+<p class="main-message" *ngIf="purchase.status !== 'CANCELLED'">
   <ion-text color="primary" *ngIf="purchase.status === 'CREATED'" test-id="created-payment-message">
     Por favor, aguarde enquanto atendemos o seu pedido.
   </ion-text>
@@ -22,3 +22,8 @@
     Sua compra está a caminho e em breve chegará até a sua casa.
   </ion-text>
 </p>
+
+<ion-text color="danger" *ngIf="purchase.status === 'CANCELLED' && purchase.reason"
+  test-id="cancelled-message">
+  Motivo: {{purchase.reason}}
+</ion-text>

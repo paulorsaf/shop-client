@@ -11,6 +11,7 @@ export type Purchase = {
     payment: Payment;
     price: Price;
     products: PurchaseProduct[];
+    reason: string;
     status: string;
     totalAmount: number;
     totalPrice: number;

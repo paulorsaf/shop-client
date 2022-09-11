@@ -20,39 +20,6 @@ describe('PurchaseStatusMessageComponent', () => {
     page = fixture.debugElement.nativeElement;
   }));
 
-  describe('given purchase status is finished', () => {
-
-    beforeEach(() => {
-      component.purchase = {status: "FINISHED"} as any;
-      fixture.detectChanges();
-    })
-
-    it('then hide created payment message', () => {
-      expect(page.querySelector('[test-id="created-payment-message"]')).toBeNull();
-    })
-
-    it('then hide verifying payment message', () => {
-      expect(page.querySelector('[test-id="verifying-payment-message"]')).toBeNull();
-    })
-  
-    it('then hide paid message', () => {
-      expect(page.querySelector('[test-id="paid-message"]')).toBeNull();
-    })
-  
-    it('then hide sorting out message', () => {
-      expect(page.querySelector('[test-id="sorting-out-message"]')).toBeNull();
-    })
-  
-    it('then hide ready message', () => {
-      expect(page.querySelector('[test-id="ready-message"]')).toBeNull();
-    })
-  
-    it('then hide deliverying message', () => {
-      expect(page.querySelector('[test-id="deliverying-message"]')).toBeNull();
-    })
-
-  })
-
   it('given purchase status is created, then show created payment message', () => {
     component.purchase = {status: "CREATED"} as any;
     fixture.detectChanges();

@@ -70,4 +70,42 @@ describe('PurchaseStatusesComponent', () => {
 
   })
 
+  describe('given purchase status', () => {
+
+    describe('when finished', () => {
+
+      beforeEach(() => {
+        component.purchase = {status: "FINISHED"} as any;
+        fixture.detectChanges();
+      })
+
+      it('then hide cancelled status', () => {
+        expect(page.querySelector('[test-id="cancelled"]')).toBeNull();
+      })
+
+      it('then show finished status', () => {
+        expect(page.querySelector('[test-id="finished"]')).not.toBeNull();
+      })
+
+    })
+
+    describe('when cancelled', () => {
+
+      beforeEach(() => {
+        component.purchase = {status: "CANCELLED"} as any;
+        fixture.detectChanges();
+      })
+
+      it('then show cancelled status', () => {
+        expect(page.querySelector('[test-id="cancelled"]')).not.toBeNull();
+      })
+
+      it('then hide finished status', () => {
+        expect(page.querySelector('[test-id="finished"]')).toBeNull();
+      })
+
+    })
+
+  })
+
 });

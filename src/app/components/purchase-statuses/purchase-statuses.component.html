@@ -24,8 +24,14 @@
     <ion-icon name="car-outline"></ion-icon>
     <div>Enviando</div>
   </div>
-  <div class="status-item" [ngClass]="purchase.status === 'FINISHED' ? 'selected' : ''">
+  <div class="status-item" [ngClass]="purchase.status === 'FINISHED' ? 'selected' : ''"
+    test-id="finished" *ngIf="purchase.status !== 'CANCELLED'">
     <ion-icon name="bag-check"></ion-icon>
     <div>Finalizado</div>
+  </div>
+  <div class="status-item cancelled" [ngClass]="purchase.status === 'CANCELLED' ? 'selected' : ''"
+    test-id="cancelled" *ngIf="purchase.status === 'CANCELLED'">
+    <ion-icon name="bag-check"></ion-icon>
+    <div>Cancelado</div>
   </div>
 </div>

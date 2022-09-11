@@ -5,8 +5,10 @@
     <app-purchase-statuses [purchase]="purchase"></app-purchase-statuses>
   </ion-card-content>
   <ion-card-content>
-    <div *ngIf="!purchase.payment?.error" test-id="purchase-message">
-      <app-purchase-status-message [purchase]="purchase"></app-purchase-status-message>
+    <div *ngIf="purchase.status !== 'FINISHED'">
+      <div *ngIf="!purchase.payment?.error" test-id="purchase-message">
+        <app-purchase-status-message [purchase]="purchase"></app-purchase-status-message>
+      </div>
     </div>
     <div *ngIf="purchase.payment?.error" class="main-message">
       <p>
@@ -18,11 +20,11 @@
         Tentar novamente
       </ion-button>
     </div>
+    <p>{{purchase.price?.totalWithPaymentFee | currency: "R$ "}}</p>
     <p *ngIf="purchase.address">Entrega à domicílio</p>
     <p *ngIf="!purchase.address">Busca na loja</p>
     <p>
-      Pagamento com
-      <b><ion-text color="primary">{{purchase.payment?.type | paymentType}}</ion-text></b>.
+      Pagamento com {{purchase.payment?.type | paymentType}}.
     </p>
     <p>Pedido criado em {{purchase.createdAt | date: "dd/MM/yyyy HH:mm"}}</p>
   </ion-card-content>

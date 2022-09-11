@@ -14,5 +14,8 @@
             color: var(--ion-color-primary);
             font-weight: 600;
         }
+        &.cancelled {
+            color: var(--ion-color-danger);
+        }
     }
 }
