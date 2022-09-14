@@ -13,7 +13,7 @@ import { CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
 import { AppState } from 'src/app/store/app-state';
 import { loadCreditCards } from 'src/app/store/credit-cards/credit-cards.actions';
 import { calculatePurchasePrice } from 'src/app/store/purchases/purchases.actions';
-import { makePurchase, makePurchaseBySavedCreditCard } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { makePurchase } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { ShoppingCartState } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({

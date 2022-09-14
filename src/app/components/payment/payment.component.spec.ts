@@ -61,7 +61,14 @@ describe('PaymentComponent', () => {
     page = fixture.debugElement.nativeElement;
 
     component.address = {city: "anyCity"} as any;
-    component.company = {address: {city: "anyCity"}} as any;
+    component.company = {
+      address: {city: "anyCity"},
+      payment: {
+        creditCard: {},
+        money: true,
+        pixKey: "anyPixKey"
+      }
+    } as any;
 
     fixture.detectChanges();
   }));
@@ -125,7 +132,6 @@ describe('PaymentComponent', () => {
 
     it('when delivery is pick up, show money option', () => {
       component.address = undefined;
-      component.company = {address: {city: "anyCity"}} as any;
       fixture.detectChanges();
 
       expect(page.querySelector('[test-id="money"]')).not.toBeNull();
@@ -133,7 +139,6 @@ describe('PaymentComponent', () => {
 
     it('when delivery city is equal to company city, then show money option', () => {
       component.address = {city: "anyCity"} as any;
-      component.company = {address: {city: "anyCity"}} as any;
       fixture.detectChanges();
 
       expect(page.querySelector('[test-id="money"]')).not.toBeNull();
@@ -141,21 +146,39 @@ describe('PaymentComponent', () => {
 
     it('when delivery city is different from company city, then hide money option', () => {
       component.address = {city: "anyOtherCity"} as any;
-      component.company = {address: {city: "anyCity"}} as any;
       fixture.detectChanges();
 
       expect(page.querySelector('[test-id="money"]')).toBeNull();
     })
 
-    it('when company has credit card configured, then show credit card option', () => {
-      component.company = {payment: {creditCard: {}}} as any;
+    it('when company has payment by money configured, then show money option', () => {
+      expect(page.querySelector('[test-id="money"]')).not.toBeNull();
+    })
+
+    it('when company doesnt have payment by money configured, then hide money option', () => {
+      component.company.payment.money = false;
       fixture.detectChanges();
 
+      expect(page.querySelector('[test-id="money"]')).toBeNull();
+    })
+
+    it('when company has payment by pix configured, then show pix option', () => {
+      expect(page.querySelector('[test-id="pix"]')).not.toBeNull();
+    })
+
+    it('when company doesnt have payment by pix configured, then hide pix option', () => {
+      component.company.payment.pixKey = "";
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="pix"]')).toBeNull();
+    })
+
+    it('when company has credit card configured, then show credit card option', () => {
       expect(page.querySelector('[test-id="credit-card"]')).not.toBeNull();
     })
 
     it('when company doesnt have credit card configured, then hide credit card option', () => {
-      component.company = {} as any;
+      component.company.payment.creditCard = null;
       fixture.detectChanges();
 
       expect(page.querySelector('[test-id="credit-card"]')).toBeNull();

@@ -43,14 +43,18 @@
 
   <ion-list>
     <ion-radio-group formControlName="paymentType">
-      <ion-item>
-        <ion-label>PIX</ion-label>
-        <ion-radio slot="start" [value]="PaymentType.PIX"></ion-radio>
-      </ion-item>
-      <ion-item *ngIf="!address || address?.city === company?.address?.city" test-id="money">
-        <ion-label>Dinheiro (ao receber produto)</ion-label>
-        <ion-radio slot="start" [value]="PaymentType.MONEY"></ion-radio>
-      </ion-item>
+      <span *ngIf="company?.payment?.pixKey">
+        <ion-item test-id="pix">
+          <ion-label>PIX</ion-label>
+          <ion-radio slot="start" [value]="PaymentType.PIX"></ion-radio>
+        </ion-item>
+      </span>
+      <span *ngIf="company?.payment?.money">
+        <ion-item *ngIf="!address || address?.city === company?.address?.city" test-id="money">
+          <ion-label>Dinheiro (ao receber produto)</ion-label>
+          <ion-radio slot="start" [value]="PaymentType.MONEY"></ion-radio>
+        </ion-item>
+      </span>
       <ion-item *ngIf="company?.payment?.creditCard" test-id="credit-card">
         <ion-label>Cartão de crédito</ion-label>
         <ion-radio slot="start" [value]="PaymentType.CREDIT_CARD"></ion-radio>

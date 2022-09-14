@@ -15,6 +15,7 @@ export type Image = {
 
 export type Payment = {
     creditCard: CreditCardPayment;
+    money: boolean;
     pixKey: string;
 }
 
