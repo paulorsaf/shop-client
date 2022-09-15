@@ -6,8 +6,13 @@ import { Store, StoreModule } from '@ngrx/store';
 import { BlankMockComponent } from 'src/app/model/mocks/blank-mock/blank-mock.component';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { AppState } from 'src/app/store/app-state';
+import { loadPurchaseDetailSuccess } from 'src/app/store/purchase-detail/purchase-detail.action';
+import { purchaseDetailReducer } from 'src/app/store/purchase-detail/purchase-detail.reducers';
+import { loadLastPurchase, loadLastPurchaseSuccess, loadPaymentPurchaseById } from 'src/app/store/purchases/purchases.actions';
+import { purchasesReducer } from 'src/app/store/purchases/purchases.reducers';
 import { addProduct, makePurchase } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
+import { environment } from 'src/environments/environment';
 import { PurchaseSuccessPage } from './purchase-success.page';
 
 describe('PurchaseSuccessPage', () => {
@@ -29,6 +34,8 @@ describe('PurchaseSuccessPage', () => {
         ]),
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
+        StoreModule.forFeature('purchaseDetail', purchaseDetailReducer),
+        StoreModule.forFeature('purchases', purchasesReducer),
         StoreModule.forFeature('shoppingCart', shoppingCartReducer)
       ]
     }).compileComponents();
@@ -45,6 +52,141 @@ describe('PurchaseSuccessPage', () => {
       amount: 1
     }}));
   }));
+
+  describe('given page starts', () => {
+
+    describe('when purchase detail is loaded', () => {
+
+      beforeEach(() => {
+        const purchase = {id: "anyId"} as any;
+        store.dispatch(loadPurchaseDetailSuccess({purchase}));
+        store.dispatch(makePurchase({payment: {type: "MONEY"}}));
+      })
+
+      it('then load last purchase', done => {
+        fixture.detectChanges();
+
+        store.select('purchases').subscribe(state => {
+          expect(state.isLoadingPaymentPurchase).toBeTruthy();
+          done();
+        })
+      })
+
+      it('then load payment purchase by id', () => {
+        spyOn(store, 'dispatch');
+        fixture.detectChanges();
+
+        expect(store.dispatch).toHaveBeenCalledWith(loadPaymentPurchaseById());
+      })
+
+    })
+
+    describe('when purchase detail is not loaded', () => {
+
+      describe('and payment not by money', () => {
+
+        beforeEach(() => {
+          store.dispatch(makePurchase({payment: {type: "CREDIT_CARD"}}));
+        })
+
+        it('then load last purchase', done => {
+          fixture.detectChanges();
+
+          store.select('purchases').subscribe(state => {
+            expect(state.isLoadingPaymentPurchase).toBeTruthy();
+            done();
+          })
+        })
+
+        it('then load last payment purchase', () => {
+          spyOn(store, 'dispatch');
+          fixture.detectChanges();
+  
+          expect(store.dispatch).toHaveBeenCalledWith(loadLastPurchase());
+        })
+
+      })
+  
+      it('and payment by money, then do not load last purchase', done => {
+        store.dispatch(makePurchase({payment: {type: "MONEY"}}));
+        fixture.detectChanges();
+
+        store.select('purchases').subscribe(state => {
+          expect(state.isLoadingPaymentPurchase).toBeFalsy();
+          done();
+        })
+      })
+
+    })
+
+  })
+
+  describe('given loading last purchase', () => {
+
+    beforeEach(() => {
+      store.dispatch(makePurchase({payment: {type: "CREDIT_CARD"}}));
+      fixture.detectChanges();
+    })
+
+    it('then show last purchase loader', () => {
+      expect(page.querySelector('[test-id="last-purchase-loader"]')).not.toBeNull();
+    })
+
+    it('then hide last purchase', () => {
+      expect(page.querySelector('[test-id="last-purchase"]')).toBeNull();
+    })
+
+    describe('when loaded', () => {
+
+      beforeEach(() => {
+        store.dispatch(loadLastPurchaseSuccess({purchase: {
+          payment: {receiptUrl: "anyReceiptUrl"
+        }} as any}));
+        fixture.detectChanges();
+      })
+
+      it('then hide last purchase loader', () => {
+        expect(page.querySelector('[test-id="last-purchase-loader"]')).toBeNull();
+      })
+  
+      it('then show last purchase', () => {
+        expect(page.querySelector('[test-id="last-purchase"]')).not.toBeNull();
+      })
+
+      describe('and payment success', () => {
+  
+        it('then show last purchase success', () => {
+          expect(page.querySelector('[test-id="last-purchase-success"]')).not.toBeNull();
+        })
+    
+        it('then hide last purchase error', () => {
+          expect(page.querySelector('[test-id="last-purchase-error"]')).toBeNull();
+        })
+
+      })
+
+      describe('and payment fail', () => {
+
+        beforeEach(() => {
+          store.dispatch(loadLastPurchaseSuccess({purchase: {
+            payment: {error: "any error"}
+          } as any}));
+          fixture.detectChanges();
+        })
+  
+        it('then hide last purchase success', () => {
+          expect(page.querySelector('[test-id="last-purchase-success"]')).toBeNull();
+        })
+    
+        it('then show last purchase error', () => {
+          expect(page.querySelector('[test-id="last-purchase-error"]')).not.toBeNull();
+        })
+
+      })
+
+    })
+
+  })
 
   describe('given payment by money', () => {
 

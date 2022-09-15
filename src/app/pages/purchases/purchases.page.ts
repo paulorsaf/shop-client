@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ViewDidEnter } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { Company } from 'src/app/model/company/company';
 import { Purchase } from 'src/app/model/purchase/purchase';
 import { AppState } from 'src/app/store/app-state';
+import { clearPurchaseDetail } from 'src/app/store/purchase-detail/purchase-detail.action';
 import { loadPurchases } from 'src/app/store/purchases/purchases.actions';
 
 @Component({
@@ -14,7 +14,7 @@ import { loadPurchases } from 'src/app/store/purchases/purchases.actions';
   templateUrl: './purchases.page.html',
   styleUrls: ['./purchases.page.scss'],
 })
-export class PurchasesPage implements OnInit, OnDestroy {
+export class PurchasesPage implements OnInit, OnDestroy, ViewDidEnter {
 
   company$: Observable<Company>;
   isLoading$: Observable<boolean>;
@@ -39,6 +39,10 @@ export class PurchasesPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.errorSubscription.unsubscribe();
+  }
+
+  ionViewDidEnter(): void {
+    this.store.dispatch(clearPurchaseDetail());
   }
 
   private watchError() {

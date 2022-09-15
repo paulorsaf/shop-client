@@ -9,4 +9,10 @@ export class PurchaseServiceMock {
     findById() {
         return this.response || of({});
     }
+    findLastPurchase() {
+        return this.response || of({});
+    }
+    findPaymentPurchase() {
+        return this.response || of({});
+    }
 }

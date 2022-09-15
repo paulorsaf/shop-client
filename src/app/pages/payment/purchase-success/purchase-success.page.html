@@ -15,20 +15,58 @@
       <ion-text>
         <p>Aguarde enquanto preparamos o seu pedido.</p>
       </ion-text>
+      <ion-text>
+        <p>Como isso pode demorar, enviaremos uma mensagem quando terminarmos.</p>
+      </ion-text>
     </span>
 
     <span *ngIf="(payment$ | async)?.type !== 'MONEY'" test-id="payment-confirmation">
       <ion-text color="primary">
         <h1>Pedido feito com sucesso!</h1>
       </ion-text>
-      <ion-text>
-        <p>Aguarde enquanto confirmamos o seu pagamento.<p>
-      </ion-text>
-    </span>
 
-    <ion-text>
-      <p>Como isso pode demorar, enviaremos uma mensagem quando terminarmos.</p>
-    </ion-text>
+      <span *ngIf="isLoadingPaymentPurchase$ | async" test-id="last-purchase-loader">
+        <ion-text>
+          <p>Aguarde enquanto confirmamos o seu pagamento.<p>
+        </ion-text>
+        <ion-spinner color="primary"></ion-spinner>
+        <ion-text>
+          <p>Como isso pode demorar, enviaremos uma mensagem quando terminarmos.</p>
+        </ion-text>
+      </span>
+      <span *ngIf="!(isLoadingPaymentPurchase$ | async)" test-id="last-purchase">
+        <span *ngIf="(paymentPurchase$ | async)?.payment?.receiptUrl" test-id="last-purchase-success">
+          <ion-text *ngIf="(paymentPurchase$ | async)?.payment?.type === 'PIX'">
+            <p>
+              Encontramos o seu comprovante.
+              Vamos confirmar os dados e em você receberá uma mensagem com a atualização do seu pedido.
+            </p>
+          </ion-text>
+          <ion-text *ngIf="(paymentPurchase$ | async)?.payment?.type === 'CREDIT_CARD'">
+            <p>
+              Encontramos o seu pagamento.
+              Em breve você receberá uma mensagem com a atualização do seu pedido.
+            </p>
+          </ion-text>
+          <ion-icon name="checkmark-circle-outline" color="primary"></ion-icon>
+        </span>
+        <span *ngIf="(paymentPurchase$ | async)?.payment?.error" test-id="last-purchase-error">
+          <ion-text color="danger" *ngIf="(paymentPurchase$ | async)?.payment?.type === 'PIX'">
+            <p>
+              Tivemos um problema ao salvar o seu comprovante. Você pode ir até as suas compras e tentar realizar o pagamento novamente.
+            </p>
+          </ion-text>
+          <ion-text color="danger" *ngIf="(paymentPurchase$ | async)?.payment?.type === 'CREDIT_CARD'">
+            <p>Erro ao realizar pagamento com cartão de crédito.</p>
+            <p>Descrição do erro: {{(paymentPurchase$ | async)?.payment?.error}}</p>
+          </ion-text>
+          <ion-icon color="danger" name="close-circle-outline"></ion-icon>
+          <ion-text color="primary">
+            <p>Você pode ir até as suas compras e tentar realizar o pagamento novamente.</p>
+          </ion-text>
+        </span>
+      </span>
+    </span>
   </section>
 
   <section>
@@ -38,9 +76,5 @@
     <ion-button fill="clear" (click)="home()" size="full" test-id="home-button">
       Ir para página principal
     </ion-button>
-  </section>
-  
-  <section test-id="purchase-details">
-    
   </section>
 </ion-content>

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { ViewDidEnter } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Trending } from 'src/app/model/trending/trending';
 import { AppState } from 'src/app/store/app-state';
 import { loadBanners } from 'src/app/store/banner/banner.actions';
 import { loadCategories } from 'src/app/store/category/category.actions';
+import { clearPurchaseDetail } from 'src/app/store/purchase-detail/purchase-detail.action';
 import { loadTrendingss } from 'src/app/store/trending/trending.actions';
 
 @Component({
@@ -12,7 +14,7 @@ import { loadTrendingss } from 'src/app/store/trending/trending.actions';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, ViewDidEnter {
 
   isLoading$: Observable<boolean>;
   isLoadingCategories$: Observable<boolean>;
@@ -34,6 +36,10 @@ export class HomePage implements OnInit {
     this.store.dispatch(loadBanners());
     this.store.dispatch(loadCategories());
     this.store.dispatch(loadTrendingss());
+  }
+
+  ionViewDidEnter(): void {
+    this.store.dispatch(clearPurchaseDetail());
   }
 
 };

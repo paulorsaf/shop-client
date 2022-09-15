@@ -1,5 +1,5 @@
 import { appInitialState } from '../app-initial-state';
-import { loadPurchaseDetail, loadPurchaseDetailFail, loadPurchaseDetailSuccess } from './purchase-detail.action';
+import { clearPurchaseDetail, loadPurchaseDetail, loadPurchaseDetailFail, loadPurchaseDetailSuccess } from './purchase-detail.action';
 import { purchaseDetailReducer } from './purchase-detail.reducers';
 import { PurchaseDetailState } from './purchase-detail.state';
 
@@ -56,6 +56,22 @@ describe('Purchase detail store', () => {
             error,
             isLoaded: false,
             isLoading: false
+        });
+    });
+
+    it('clearPurchaseDetail', () => {
+        const initialState: PurchaseDetailState = {
+            ...appInitialState.purchaseDetail,
+            error: {},
+            isLoaded: true,
+            isLoading: true,
+            purchase: {} as any
+        };
+
+        const newState = purchaseDetailReducer(initialState, clearPurchaseDetail());
+
+        expect(newState).toEqual({
+            ...appInitialState.purchaseDetail
         });
     });
 

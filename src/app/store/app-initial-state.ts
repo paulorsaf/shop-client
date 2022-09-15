@@ -70,6 +70,9 @@ export const appInitialState: AppState = {
         error: undefined,
         isLoaded: false,
         isLoading: false,
+        isLoadedPaymentPurchase: false,
+        isLoadingPaymentPurchase: false,
+        paymentPurchase: undefined,
         purchases: []
     },
     register: {
