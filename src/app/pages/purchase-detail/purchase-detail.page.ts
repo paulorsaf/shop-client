@@ -32,7 +32,7 @@ export class PurchaseDetailPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.address$ = this.store.select(state =>
-      state.purchaseDetail.purchase.address || state.company.company.address
+      state.purchaseDetail.purchase?.address || state.company.company.address
     );
     this.isLoading$ = this.store.select(state => state.purchaseDetail.isLoading);
     this.purchase$ = this.store.select(state => state.purchaseDetail.purchase);
