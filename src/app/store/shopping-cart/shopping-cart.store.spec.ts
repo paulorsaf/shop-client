@@ -2,11 +2,11 @@ import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shoppin
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
 import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
-import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
+import { addProduct, addProductNotes, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, removeProductNotes, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { selectTotalPrice, selectTotalQuantity, selectTotalQuantityForProductStock, ShoppingCartState } from './shopping-cart.state';
 
-describe('Shopping cart store', () => {
+fdescribe('Shopping cart store', () => {
 
     const product: ShoppingCartProduct = {
         amount: 1,
@@ -382,6 +382,104 @@ describe('Shopping cart store', () => {
             isCalculatedPrice: false,
             isCalculatingPrice: false
         });
+    });
+
+    describe('addProductNotes', () => {
+
+        it('given notes empty, then add notes', () => {
+            const initialState: ShoppingCartState = {
+                ...appInitialState.shoppingCart,
+                notes: []
+            };
+
+            const notes = {productId: "anyProductId"} as any;
+            const newState = shoppingCartReducer(initialState, addProductNotes({notes}));
+
+            expect(newState).toEqual({
+                ...appInitialState.shoppingCart,
+                notes: [notes],
+            });
+        })
+
+        it('given notes have an element with different id, then add notes', () => {
+            const initialState: ShoppingCartState = {
+                ...appInitialState.shoppingCart,
+                notes: [{productId: "anyProductId1"}] as any
+            };
+
+            const notes = {productId: "anyProductId2"} as any;
+            const newState = shoppingCartReducer(initialState, addProductNotes({notes}));
+
+            expect(newState).toEqual({
+                ...appInitialState.shoppingCart,
+                notes: [{productId: "anyProductId1"}, notes]
+            });
+        })
+
+        it('given notes have an element with same id, then replace notes', () => {
+            const initialState: ShoppingCartState = {
+                ...appInitialState.shoppingCart,
+                notes: [{productId: "anyProductId1", notes: "anyNotes"}] as any
+            };
+
+            const notes = {productId: "anyProductId1", notes: "anyReplacedNotes"} as any;
+            const newState = shoppingCartReducer(initialState, addProductNotes({notes}));
+
+            expect(newState).toEqual({
+                ...appInitialState.shoppingCart,
+                notes: [{productId: "anyProductId1", notes: "anyReplacedNotes"}]
+            });
+        })
+
+    });
+
+    describe('removeProductNotes', () => {
+
+        it('given notes with same id, then remove notes', () => {
+            const initialState: ShoppingCartState = {
+                ...appInitialState.shoppingCart,
+                notes: [{productId: "anyProductId1"}, {productId: "anyProductId2"}] as any
+            };
+
+            const productId = "anyProductId2";
+            const newState = shoppingCartReducer(initialState, removeProductNotes({productId}));
+
+            expect(newState).toEqual({
+                ...appInitialState.shoppingCart,
+                notes: [{productId: "anyProductId1"}] as any,
+            });
+        })
+
+        it('given notes with different id, then do not remove notes', () => {
+            const initialState: ShoppingCartState = {
+                ...appInitialState.shoppingCart,
+                notes: [{productId: "anyProductId1"}, {productId: "anyProductId2"}] as any
+            };
+
+            const productId = "anyProductId3";
+            const newState = shoppingCartReducer(initialState, removeProductNotes({productId}));
+
+            expect(newState).toEqual({
+                ...appInitialState.shoppingCart,
+                notes: [{productId: "anyProductId1"}, {productId: "anyProductId2"}] as any
+            });
+        })
+
+        it('given notes empty, then keep notes empty', () => {
+            const initialState: ShoppingCartState = {
+                ...appInitialState.shoppingCart,
+                notes: []
+            };
+
+            const productId = "anyProductId";
+            const newState = shoppingCartReducer(initialState, removeProductNotes({productId}));
+
+            expect(newState).toEqual({
+                ...appInitialState.shoppingCart,
+                notes: []
+            });
+        })
+
     });
 
 });

@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { Address } from "src/app/model/address/address";
 import { CreditCardPayment, Payment } from "src/app/model/payment/payment";
-import { ShoppingCartProduct } from "src/app/model/shopping-cart-product/shopping-cart-product";
+import { ProductNotes, ShoppingCartProduct } from "src/app/model/shopping-cart-product/shopping-cart-product";
 
 export const addProduct = createAction('[Shopping cart] add', props<{product: ShoppingCartProduct}>());
 export const decreaseProduct = createAction('[Shopping cart] decrease', props<{product: ShoppingCartProduct}>());
@@ -35,3 +35,6 @@ export const makePurchaseBySavedCreditCard =
     }>());
 
 export const clear = createAction('[Shopping cart] clear');
+
+export const addProductNotes = createAction('[Shopping cart] add notes', props<{notes: ProductNotes}>());
+export const removeProductNotes = createAction('[Shopping cart] remove notes', props<{productId: string}>());

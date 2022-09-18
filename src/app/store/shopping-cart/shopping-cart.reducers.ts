@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { appInitialState } from '../app-initial-state';
-import { addProduct, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
+import { addProduct, addProductNotes, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, removeProductNotes, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
 import { ShoppingCartState } from './shopping-cart.state';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
@@ -121,6 +121,16 @@ const shoppingCartReduce = createReducer(
     error: action.error,
     isCalculatedPrice: false,
     isCalculatingPrice: false,
+  })),
+  on(addProductNotes, (state, action) => ({
+    ...state,
+    notes: state.notes.some(n => n.productId === action.notes.productId) ?
+      state.notes.map(n => n.productId === action.notes.productId ? action.notes : n) :
+      [...state.notes, action.notes]
+  })),
+  on(removeProductNotes, (state, action) => ({
+    ...state,
+    notes: state.notes.filter(n => n.productId !== action.productId)
   }))
 );
 

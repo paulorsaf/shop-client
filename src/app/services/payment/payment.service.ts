@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Address } from 'src/app/model/address/address';
 import { CreditCardPayment, PaymentType } from 'src/app/model/payment/payment';
 import { CalculatePrice, CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
-import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
+import { ProductNotes, ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -57,6 +57,7 @@ export class PaymentService {
       payment: {
         type: PaymentType.MONEY
       },
+      productNotes: paymentDetails.productNotes,
       products: paymentDetails.shoppingCart.map(s => ({
         amount: s.amount,
         productId: s.product.id,
@@ -106,6 +107,7 @@ export class PaymentService {
         creditCard: paymentDetails.creditCard,
         type: PaymentType.CREDIT_CARD
       },
+      productNotes: paymentDetails.productNotes,
       products: paymentDetails.shoppingCart.map(s => ({
         amount: s.amount,
         productId: s.product.id,
@@ -123,6 +125,7 @@ export class PaymentService {
         creditCardId: paymentDetails.creditCardId,
         type: PaymentType.CREDIT_CARD
       },
+      productNotes: paymentDetails.productNotes,
       products: paymentDetails.shoppingCart.map(s => ({
         amount: s.amount,
         productId: s.product.id,
@@ -199,6 +202,7 @@ export class PaymentService {
 type Payment = {
   deliveryAddress: Address;
   deliveryPrice: number;
+  productNotes: ProductNotes[];
   purchaseId?: string;
   shoppingCart: ShoppingCartProduct[];
 }

@@ -55,6 +55,7 @@ export class ShoppingCartEffects {
         this.paymentService.payByPix({
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,
+          productNotes: storeState.shoppingCart.notes,
           purchaseId: action.purchaseId,
           receipt: action.receipt,
           shoppingCart: storeState.shoppingCart.products
@@ -74,6 +75,7 @@ export class ShoppingCartEffects {
         this.paymentService.payByMoney({
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,
+          productNotes: storeState.shoppingCart.notes,
           purchaseId: action.purchaseId,
           shoppingCart: storeState.shoppingCart.products
         }).pipe(
@@ -94,6 +96,7 @@ export class ShoppingCartEffects {
           creditCard: action.creditCard,
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,
+          productNotes: storeState.shoppingCart.notes,
           purchaseId: action.purchaseId,
           shoppingCart: storeState.shoppingCart.products
         }).pipe(
@@ -113,6 +116,7 @@ export class ShoppingCartEffects {
           creditCardId: action.creditCardId,
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,
+          productNotes: storeState.shoppingCart.notes,
           purchaseId: action.purchaseId,
           shoppingCart: storeState.shoppingCart.products
         }).pipe(

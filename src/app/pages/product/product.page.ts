@@ -1,15 +1,16 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, ViewWillLeave } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import { Product, Stock } from 'src/app/model/product/product';
+import { ProductNotes } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from 'src/app/store/app-state';
 import { clearProduct, loadProduct } from 'src/app/store/product/product.actions';
 import { selectHasStockOptions, selectProduct, selectStockOptionSelected } from 'src/app/store/product/product.state';
-import { addProduct, decreaseProduct, removeProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { addProduct, addProductNotes, decreaseProduct, removeProduct, removeProductNotes } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { selectTotalPrice, selectTotalQuantityForProductStock } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
@@ -17,7 +18,7 @@ import { selectTotalPrice, selectTotalQuantityForProductStock } from 'src/app/st
   templateUrl: './product.page.html',
   styleUrls: ['./product.page.scss'],
 })
-export class ProductPage implements OnInit {
+export class ProductPage implements OnInit, ViewWillLeave {
 
   isLoading$: Observable<boolean>;
   product$: Observable<Product>;
@@ -27,6 +28,7 @@ export class ProductPage implements OnInit {
   
   hasBackButton = true;
   hasTriedToAdd = false;
+  notes = "";
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -46,8 +48,45 @@ export class ProductPage implements OnInit {
     this.selectedSize$ = this.store.select(state => state.product.selectedSize);
     this.totalPrice$ = this.store.select(selectTotalPrice);
 
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.store.dispatch(loadProduct({id}));
+    this.store.dispatch(loadProduct({id: this.getId()}));
+
+    this.getNotesWithProductIdOnce()
+      .subscribe(notes => {
+        if (notes) {
+          this.notes = notes.notes;
+        }
+      });
+  }
+
+  ionViewWillLeave(): void {
+    this.getNotesWithProductIdOnce()
+      .subscribe(storedProductNotes => {
+        if (this.shouldAddProductNotes(storedProductNotes)) {
+          this.store.dispatch(addProductNotes({notes: {
+            notes: this.notes, productId: this.getId()
+          }}))
+        } else if (storedProductNotes?.notes && !this.notes) {
+          this.store.dispatch(removeProductNotes({productId: this.getId()}));
+        }
+      });
+  }
+
+  private shouldAddProductNotes(storedProductNotes: ProductNotes) {
+    if (storedProductNotes?.notes === this.notes) {
+      return false;
+    } else if (!this.notes) {
+      return false;
+    }
+    return true;
+  }
+
+  private getNotesWithProductIdOnce() {
+    return this.store
+      .select(state => state.shoppingCart.notes)
+      .pipe(
+        take(1),
+        switchMap(notes => of(notes.find(n => n.productId === this.getId())))
+      )
   }
 
   goHome() {
@@ -120,6 +159,10 @@ export class ProductPage implements OnInit {
           }
         }}));
       })
+  }
+
+  private getId() {
+    return this.activatedRoute.snapshot.paramMap.get('id');
   }
 
 }

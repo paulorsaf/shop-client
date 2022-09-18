@@ -17,9 +17,9 @@ import { HasSizePipeModule } from 'src/app/pipes/product-has-size/product-has-si
 import { HasColorPipeModule } from 'src/app/pipes/product-has-color/product-has-color.pipe.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
-import { addProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { addProduct, addProductNotes } from 'src/app/store/shopping-cart/shopping-cart.actions';
 
-describe('ProductPage', () => {
+fdescribe('ProductPage', () => {
   let component: ProductPage;
   let fixture: ComponentFixture<ProductPage>;
   let page: PageMock;
@@ -58,18 +58,39 @@ describe('ProductPage', () => {
 
     component = fixture.componentInstance;
     page = fixture.debugElement.nativeElement;
-
-    fixture.detectChanges();
   }));
 
-  it('given page start, then load product', done => {
-    store.select('product').subscribe(state => {
-      expect(state.isLoading).toBeTruthy();
-      done();
+  describe('given page starts', () => {
+
+    it('then load product', done => {
+      fixture.detectChanges();
+
+      store.select('product').subscribe(state => {
+        expect(state.isLoading).toBeTruthy();
+        done();
+      });
     });
-  });
+
+    it('when notes do not exist, then do not set notes', () => {
+      fixture.detectChanges();
+
+      expect(component.notes).toEqual("");
+    })
+
+    it('when notes exist, then set notes', () => {
+      store.dispatch(addProductNotes({notes: {notes: "anyNotes", productId: 'id'}}));
+      fixture.detectChanges();
+
+      expect(component.notes).toEqual("anyNotes");
+    })
+
+  })
 
   describe('given loading product', () => {
+
+    beforeEach(() => {
+      fixture.detectChanges();
+    })
 
     it('then show product loader', () => {
       expect(page.querySelector('[test-id="loader"]')).not.toBeNull();
@@ -84,6 +105,8 @@ describe('ProductPage', () => {
   describe('given product loaded', () => {
 
     beforeEach(() => {
+      fixture.detectChanges();
+
       const product = {id: 1} as any;
       store.dispatch(loadProductSuccess({product}));
       fixture.detectChanges();
@@ -138,6 +161,8 @@ describe('ProductPage', () => {
   describe('given product has colors and sizes', () => {
 
     beforeEach(() => {
+      fixture.detectChanges();
+
       const product = {id: 1, stock: [
         {color: 'Amarelo', size: 'M'}, {color: 'Verde', size: 'P'}, {color: 'Vermelho', size: 'G'}
       ]} as any;
@@ -270,6 +295,8 @@ describe('ProductPage', () => {
   describe('given reduce product button', () => {
 
     beforeEach(() => {
+      fixture.detectChanges();
+
       const product = {id: "anyProductId1"} as any;
       store.dispatch(loadProductSuccess({product}));
       fixture.detectChanges();
@@ -291,6 +318,8 @@ describe('ProductPage', () => {
   describe('given user clicks on remove from shopping cart', () => {
 
     beforeEach(() => {
+      fixture.detectChanges();
+
       const product = {id: "anyProductId1"} as any;
       store.dispatch(loadProductSuccess({product}));
 
@@ -319,6 +348,69 @@ describe('ProductPage', () => {
         expect(state.products).toEqual([{
           product: {id: "anyProductId1"}, amount: 1
         }] as any);
+        done();
+      })
+    })
+
+  })
+
+  describe('given page leaves', () => {
+
+    beforeEach(() => {
+      fixture.detectChanges();
+    })
+
+    it('when product notes filled, then set product notes', done => {
+      component.notes = "anyNotes";
+
+      component.ionViewWillLeave();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.notes).toEqual([{productId: 'id', notes: "anyNotes"}]);
+        done();
+      })
+    })
+
+    it('when product notes filled, then do not set product notes', done => {
+      component.ionViewWillLeave();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.notes).toEqual([]);
+        done();
+      })
+    })
+
+    it('when stored notes are different from filled product notes, then set product notes', done => {
+      store.dispatch(addProductNotes({notes: {notes: "anyNotes", productId: "id"}}))
+      component.notes = "anyOtherNotes";
+
+      component.ionViewWillLeave();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.notes).toEqual([{productId: 'id', notes: "anyOtherNotes"}]);
+        done();
+      })
+    })
+
+    it('when stored notes are equal to filled product notes, then do not set product notes', () => {
+      store.dispatch(addProductNotes({notes: {notes: "anyNotes", productId: "id"}}))
+      component.notes = "anyNotes";
+
+      spyOn(store, 'dispatch');
+
+      component.ionViewWillLeave();
+
+      expect(store.dispatch).not.toHaveBeenCalled();
+    })
+
+    it('when stored notes exist and product notes are empty, then remove product notes', done => {
+      store.dispatch(addProductNotes({notes: {notes: "anyNotes", productId: "id"}}))
+      component.notes = "";
+
+      component.ionViewWillLeave();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.notes).toEqual([]);
         done();
       })
     })

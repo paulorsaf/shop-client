@@ -62,6 +62,13 @@
         </ion-fab-button>
       </section>
 
+      <section class="options">
+        <ion-item>
+          <ion-label position="floating">Observações</ion-label>
+          <ion-textarea placeholder="Observações" autoGrow="true" [(ngModel)]="notes"></ion-textarea>
+        </ion-item>
+      </section>
+
       <section class="options" *ngIf="product.description" test-id="product-description">
         <div class="title">
           <ion-text>Descrição:</ion-text>
