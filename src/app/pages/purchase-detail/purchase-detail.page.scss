@@ -16,6 +16,11 @@ ion-card {
         ion-card-content {
             padding: 0;
         }
+        &.notes {
+            p {
+                white-space: normal;
+            }
+        }
     }
     ion-list {
         padding: 0;

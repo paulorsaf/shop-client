@@ -22,55 +22,6 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card class="product-list">
-        <ion-card-header>
-          <ion-card-title>Produtos</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list>
-            <ion-item *ngFor="let product of purchase.products">
-              <ion-label>
-                <h2>{{product.amount}} x {{product.name}}</h2>
-                <ion-text class="prices">
-                  <p class="price">
-                    <span *ngIf="product.priceWithDiscount">
-                      {{product.priceWithDiscount | currency: "R$ "}}
-                    </span>
-                    <span [ngClass]="product.priceWithDiscount ? 'discount' : ''">
-                      {{product.price | currency: "R$ "}}
-                    </span>
-                  </p>
-                  <p>{{product.totalPrice | currency: "R$ "}}</p>
-                </ion-text>
-
-                <app-purchase-stock-option *ngIf="product.stock"
-                  [stockOption]="product.stock">
-                </app-purchase-stock-option>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>Dados da entrega</ion-card-title>
-          <ion-card-subtitle>
-            <span *ngIf="purchase.address">Entrega à domicílio</span>
-            <span *ngIf="!purchase.address">Buscar na loja</span>
-          </ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content *ngIf="address$ | async; let address">
-          <p>Rua: {{address.street}}</p>
-          <p>Número: {{address.number}}</p>
-          <p>Bairro: {{address.neighborhood}}</p>
-          <p>CEP: {{address.zipCode}}</p>
-          <p>Complemento: {{address.complement}}</p>
-          <p>Cidade: {{address.city}}</p>
-          <p>Estado: {{address.state}}</p>
-        </ion-card-content>
-      </ion-card>
-
       <ion-card class="payment-details" *ngIf="purchase.payment">
         <ion-card-header>
           <ion-card-title>Dados do pagamento</ion-card-title>
@@ -128,6 +79,71 @@
               Tentar novamente
             </ion-button>
           </ion-text>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="product-list">
+        <ion-card-header>
+          <ion-card-title>Produtos</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            <ion-item *ngFor="let product of purchase.products">
+              <ion-label>
+                <h2>{{product.amount}} x {{product.name}}</h2>
+                <ion-text class="prices">
+                  <p class="price">
+                    <span *ngIf="product.priceWithDiscount">
+                      {{product.priceWithDiscount | currency: "R$ "}}
+                    </span>
+                    <span [ngClass]="product.priceWithDiscount ? 'discount' : ''">
+                      {{product.price | currency: "R$ "}}
+                    </span>
+                  </p>
+                  <p>{{product.totalPrice | currency: "R$ "}}</p>
+                </ion-text>
+
+                <app-purchase-stock-option *ngIf="product.stock"
+                  [stockOption]="product.stock">
+                </app-purchase-stock-option>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card *ngIf="purchase.productNotes?.length" class="product-list notes">
+        <ion-card-header>
+          <ion-card-title>Observações</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            <ion-item *ngFor="let notes of purchase.productNotes">
+              <ion-label>
+                <h2>{{notes.productId | productNameById : purchase.products}}</h2>
+                <p>{{notes.notes}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Dados da entrega</ion-card-title>
+          <ion-card-subtitle>
+            <span *ngIf="purchase.address">Entrega à domicílio</span>
+            <span *ngIf="!purchase.address">Buscar na loja</span>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content *ngIf="address$ | async; let address">
+          <p>Rua: {{address.street}}</p>
+          <p>Número: {{address.number}}</p>
+          <p>Bairro: {{address.neighborhood}}</p>
+          <p>CEP: {{address.zipCode}}</p>
+          <p>Complemento: {{address.complement}}</p>
+          <p>Cidade: {{address.city}}</p>
+          <p>Estado: {{address.state}}</p>
         </ion-card-content>
       </ion-card>
     </div>

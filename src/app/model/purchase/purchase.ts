@@ -1,5 +1,6 @@
 import { Address } from "../address/address"
 import { Stock } from "../product/product"
+import { ProductNotes } from "../product/product-notes"
 
 export type Purchase = {
     companyId: string;
@@ -10,6 +11,7 @@ export type Purchase = {
     deliveryPrice: number;
     payment: Payment;
     price: Price;
+    productNotes: ProductNotes[];
     products: PurchaseProduct[];
     reason: string;
     status: string;

@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { Product, Stock } from 'src/app/model/product/product';
-import { ProductNotes } from 'src/app/model/shopping-cart-product/shopping-cart-product';
+import { ProductNotes } from 'src/app/model/product/product-notes';
 import { AppState } from 'src/app/store/app-state';
 import { clearProduct, loadProduct } from 'src/app/store/product/product.actions';
 import { selectHasStockOptions, selectProduct, selectStockOptionSelected } from 'src/app/store/product/product.state';

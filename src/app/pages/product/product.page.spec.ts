@@ -19,7 +19,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { addProduct, addProductNotes } from 'src/app/store/shopping-cart/shopping-cart.actions';
 
-fdescribe('ProductPage', () => {
+describe('ProductPage', () => {
   let component: ProductPage;
   let fixture: ComponentFixture<ProductPage>;
   let page: PageMock;

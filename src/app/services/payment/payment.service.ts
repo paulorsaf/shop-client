@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Address } from 'src/app/model/address/address';
 import { CreditCardPayment, PaymentType } from 'src/app/model/payment/payment';
+import { ProductNotes } from 'src/app/model/product/product-notes';
 import { CalculatePrice, CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
-import { ProductNotes, ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
+import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

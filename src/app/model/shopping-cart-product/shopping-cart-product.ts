@@ -11,8 +11,3 @@ export type ShoppingCartProductStockOption = {
     id: string;
     size?: string;
 };
-
-export type ProductNotes = {
-    productId: string;
-    notes: string;
-}

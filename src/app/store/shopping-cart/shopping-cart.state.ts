@@ -2,8 +2,9 @@ import { createSelector } from '@ngrx/store';
 import { Address } from 'src/app/model/address/address';
 import { Payment } from 'src/app/model/payment/payment';
 import { Product, Stock } from 'src/app/model/product/product';
+import { ProductNotes } from 'src/app/model/product/product-notes';
 import { CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
-import { ProductNotes, ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
+import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from '../app-state';
 import { selectStockOptionSelected } from '../product/product.state';
 
