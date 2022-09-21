@@ -6,7 +6,10 @@ export type Company = {
     id: string;
     logo: Image;
     payment: Payment;
-    pixKey: string;
+    facebook: string;
+    instagram: string;
+    website: string;
+    whatsapp: string;
 }
 
 export type Image = {
