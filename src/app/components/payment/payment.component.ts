@@ -15,6 +15,7 @@ import { loadCreditCards } from 'src/app/store/credit-cards/credit-cards.actions
 import { calculatePurchasePrice } from 'src/app/store/purchases/purchases.actions';
 import { makePurchase } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { ShoppingCartState } from 'src/app/store/shopping-cart/shopping-cart.state';
+import { copyText } from 'src/app/utils/text.util';
 
 @Component({
   selector: 'app-payment-form',
@@ -161,29 +162,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   copyPix() {
-    this.copyText(this.company.payment.pixKey);
-  }
-
-  private copyText(text: string) {
-    const el = document.createElement("textarea");
-    el.value = text;
-    el.setAttribute("readonly", "");
-    document.body.appendChild(el);
-
-    el.select();
-    try {
-      const successful = document.execCommand("copy");
-      if (successful) {
-        document.body.removeChild(el);
-        this.toastController.create({
-          color: "success",
-          message: "PIX copiado com sucesso",
-          position: "bottom",
-          duration: 3000
-        }).then(toast => toast.present());
-      }
-    } catch (err) {
-    }
+    copyText({
+      message: "PIX copiado com sucesso",
+      text: this.company.payment.pixKey,
+      toastController: this.toastController
+    });
   }
 
   private onPaying() {

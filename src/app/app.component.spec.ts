@@ -11,10 +11,10 @@ import { PageMock } from './model/mocks/page.mock';
 import { AppState } from './store/app-state';
 import { loadCompanySuccess } from './store/company/company.action';
 import { companyReducer } from './store/company/company.reducers';
-import { loginUserByTokenFail, loginUserByTokenSuccess, setUser } from './store/user/user.actions';
+import { loginUserByTokenFail, loginUserByTokenSuccess } from './store/user/user.actions';
 import { userReducer } from './store/user/user.reducers';
 
-describe('AppComponent', () => {
+fdescribe('AppComponent', () => {
 
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
@@ -32,6 +32,7 @@ describe('AppComponent', () => {
       imports: [
         RouterTestingModule.withRoutes([
           { path: "about-us", component: BlankMockComponent },
+          { path: "contact-us", component: BlankMockComponent },
           { path: "credit-cards", component: BlankMockComponent },
           { path: "purchases", component: BlankMockComponent }
         ]),
@@ -62,8 +63,22 @@ describe('AppComponent', () => {
       })
     })
 
+    it('then show contact us button', () => {
+      expect(page.querySelector('[test-id="contact-us-menu"]')).not.toBeNull();
+    })
+
     it('then show about us button', () => {
       expect(page.querySelector('[test-id="about-us-menu"]')).not.toBeNull();
+    })
+
+    it('when user clicks on contact us button, then go to my contact us page', done => {
+      page.querySelector('[test-id="contact-us-menu"]').click();
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        expect(location.path()).toEqual('/contact-us');
+        done();
+      }, 100)
     })
 
     describe('when logging in user by token', () => {

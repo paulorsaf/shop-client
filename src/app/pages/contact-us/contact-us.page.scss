@@ -1,0 +1,15 @@
+ion-content {
+    --padding-top: 7rem;
+}
+
+p {
+    white-space: normal;
+}
+.sub-card-content {
+    padding: 0;
+    border-top: 1px solid lightgray;
+
+    ion-label {
+        margin-left: 1rem;
+    }
+}

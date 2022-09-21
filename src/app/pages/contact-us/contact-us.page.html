@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="hasBackButton">
+      <ion-back-button fill="clear" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="!hasBackButton">
+      <ion-button (click)="goHome()">
+        <ion-icon name="home" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="light">Entre em contato</ion-title>
+    <ion-buttons slot="end">
+      <app-header></app-header>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="company$ | async; let company">
+  <ion-card *ngIf="company.whatsapp">
+    <ion-card-content (click)="openPhone(company.whatsapp)" test-id="whatsapp">
+      <ion-item lines="none">
+        <ion-icon name="logo-whatsapp" color="success" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Whatsapp</h2>
+          <p>{{company.whatsapp}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+    <ion-card-content class="sub-card-content" (click)="copyWhatsapp(company.whatsapp)">
+      <ion-item lines="none" align="right">
+        <ion-icon name="copy-outline" slot="end"></ion-icon>
+        <ion-label slot="end">
+          <p>Copiar número</p>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="company.instagram" (click)="openUrl(company.instagram)" test-id="instagram">
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-icon name="logo-instagram" color="danger" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Instagram</h2>
+          <p>{{company.instagram}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="company.facebook" (click)="openUrl(company.facebook)" test-id="facebook">
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-icon name="logo-facebook" color="primary" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Facebook</h2>
+          <p>{{company.facebook}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="company.website" (click)="openUrl(company.website)" test-id="website">
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-icon name="globe" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Website</h2>
+          <p>{{company.website}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
