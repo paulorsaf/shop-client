@@ -14,7 +14,7 @@ import { companyReducer } from './store/company/company.reducers';
 import { loginUserByTokenFail, loginUserByTokenSuccess } from './store/user/user.actions';
 import { userReducer } from './store/user/user.reducers';
 
-fdescribe('AppComponent', () => {
+describe('AppComponent', () => {
 
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;

@@ -8,7 +8,7 @@ import { loadCompanySuccess } from 'src/app/store/company/company.action';
 import { companyReducer } from 'src/app/store/company/company.reducers';
 import { ContactUsPage } from './contact-us.page';
 
-fdescribe('ContactUsPage', () => {
+describe('ContactUsPage', () => {
   let component: ContactUsPage;
   let fixture: ComponentFixture<ContactUsPage>;
   let store: Store<AppState>;
