@@ -7,10 +7,11 @@ import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { ShoppingCartComponent } from 'src/app/components/shopping-cart/shopping-cart.component';
 import { Payment, PaymentType } from 'src/app/model/payment/payment';
 import { CalculatePrice } from 'src/app/model/purchase/calculate-price';
+import { CupomService } from 'src/app/services/cupom/cupom.service';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { AppState } from '../app-state';
 import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
-import { closeShoppingCart, makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseBySavedCreditCard, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
+import { closeShoppingCart, loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseBySavedCreditCard, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
 
 @Injectable()
 export class ShoppingCartEffects {
@@ -21,12 +22,14 @@ export class ShoppingCartEffects {
       switchMap((params: {payment: Payment, purchaseId?: string}) => {
         if (params.payment.type === PaymentType.PIX) {
           return of(makePurchaseByPix({
+            cupom: params.payment.cupom,
             purchaseId: params.purchaseId,
             receipt: params.payment.receiptUrl
           }));
         }
         if (params.payment.type === PaymentType.MONEY) {
           return of(makePurchaseByMoney({
+            cupom: params.payment.cupom,
             purchaseId: params.purchaseId
           }));
         }
@@ -34,12 +37,14 @@ export class ShoppingCartEffects {
           if (params.payment.creditCardId) {
             return of(makePurchaseBySavedCreditCard({
               creditCardId: params.payment.creditCardId,
+              cupom: params.payment.cupom,
               purchaseId: params.purchaseId
             }));
           }
           return of(makePurchaseByCreditCard({
             billingAddress: params.payment.billingAddress,
             creditCard: params.payment.creditCard,
+            cupom: params.payment.cupom,
             purchaseId: params.purchaseId
           }));
         }
@@ -53,6 +58,7 @@ export class ShoppingCartEffects {
       this.getStore(),
       switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
         this.paymentService.payByPix({
+          cupom: action.cupom,
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,
           productNotes: storeState.shoppingCart.notes,
@@ -73,6 +79,7 @@ export class ShoppingCartEffects {
       this.getStore(),
       switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
         this.paymentService.payByMoney({
+          cupom: action.cupom,
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,
           productNotes: storeState.shoppingCart.notes,
@@ -94,6 +101,7 @@ export class ShoppingCartEffects {
         this.paymentService.payByCreditCard({
           billingAddress: action.billingAddress,
           creditCard: action.creditCard,
+          cupom: action.cupom,
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,
           productNotes: storeState.shoppingCart.notes,
@@ -114,6 +122,7 @@ export class ShoppingCartEffects {
       switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
         this.paymentService.payBySavedCreditCard({
           creditCardId: action.creditCardId,
+          cupom: action.cupom,
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,
           productNotes: storeState.shoppingCart.notes,
@@ -147,6 +156,18 @@ export class ShoppingCartEffects {
     }
   );
 
+  loadCupomEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadCupom),
+      switchMap((params: {cupom: string}) =>
+        this.cupomService.findCupom(params.cupom).pipe(
+          map(cupom => loadCupomSuccess({cupom})),
+          catchError(error => of(loadCupomFail({error})))
+        )
+      )
+    )
+  );
+
   calculatePurchasePriceEffect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(calculatePurchasePrice),
@@ -165,6 +186,7 @@ export class ShoppingCartEffects {
 
   constructor(
     private actions$: Actions,
+    private cupomService: CupomService,
     private modalController: ModalController,
     private paymentService: PaymentService,
     private store: Store<AppState>

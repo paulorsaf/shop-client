@@ -81,11 +81,14 @@ export const appInitialState: AppState = {
         isRegistering: false
     },
     shoppingCart: {
+        cupom: undefined,
         deliveryAddress: undefined,
         deliveryPrice: undefined,
         error: undefined,
         isCalculatedPrice: false,
         isCalculatingPrice: false,
+        isLoadedCupom: false,
+        isLoadingCupom: false,
         isOpen: false,
         isPaid: false,
         isPaying: false,

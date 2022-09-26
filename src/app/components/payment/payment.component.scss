@@ -6,6 +6,18 @@ ion-list {
             font-size: 18px;
         }
     }
+    ion-item.cupom {
+        ion-input {
+            text-transform: uppercase;
+        }
+        ion-button {
+            margin-top: 18px;
+            font-size: inherit;
+        }
+        ion-spinner {
+            width: 20px;
+        }
+    }
 }
 
 input[type="file"] {

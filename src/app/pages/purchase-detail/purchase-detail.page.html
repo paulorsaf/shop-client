@@ -41,6 +41,12 @@
               </ion-label>
               <p slot="end">{{purchase.price?.delivery | currency: "R$ "}}</p>
             </div>
+            <div class="payment-line" *ngIf="purchase.price?.discount">
+              <ion-label>
+                <h2>Desconto ({{purchase.payment.cupom}})</h2>
+              </ion-label>
+              <p slot="end">- {{purchase.price?.discount | currency: "R$ "}}</p>
+            </div>
             <div class="payment-line" *ngIf="purchase.payment.type === 'CREDIT_CARD'">
               <ion-label>
                 <h2>Taxa do cartão de crédito</h2>

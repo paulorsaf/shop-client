@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 import { Address } from 'src/app/model/address/address';
 import { states } from 'src/app/model/address/states-list';
 import { Company } from 'src/app/model/company/company';
@@ -13,7 +14,7 @@ import { CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
 import { AppState } from 'src/app/store/app-state';
 import { loadCreditCards } from 'src/app/store/credit-cards/credit-cards.actions';
 import { calculatePurchasePrice } from 'src/app/store/purchases/purchases.actions';
-import { makePurchase } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { loadCupom, makePurchase } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { ShoppingCartState } from 'src/app/store/shopping-cart/shopping-cart.state';
 import { copyText } from 'src/app/utils/text.util';
 
@@ -36,6 +37,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   creditCards$: Observable<CreditCard[]>;
   isLoadingCreditCards$: Observable<boolean>;
+  isLoadingCupom$: Observable<boolean>;
   isLoadingPrice$: Observable<boolean>;
   price$: Observable<CalculatePriceResponse>;
 
@@ -51,6 +53,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.creditCards$ = this.store.select(state => state.creditCards.creditCards);
     this.isLoadingCreditCards$ = this.store.select(state => state.creditCards.isLoading);
+    this.isLoadingCupom$ = this.store.select(state => state.shoppingCart.isLoadingCupom);
     this.isLoadingPrice$ = this.store.select(state => state.shoppingCart.isCalculatingPrice);
     this.price$ = this.store.select(state => state.shoppingCart.price);
 
@@ -71,6 +74,14 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.paymentSubscription.unsubscribe();
+  }
+
+  loadCupom() {
+    if (this.form.value.cupom){
+      this.store.dispatch(loadCupom({cupom: this.form.value.cupom}));
+
+      this.onCupomLoadedOrFailed();
+    }
   }
 
   finishPurchase() {
@@ -99,12 +110,34 @@ export class PaymentComponent implements OnInit, OnDestroy {
         handler: () => this.store.dispatch(makePurchase({
           payment: {
             creditCardId: card.id,
+            cupom: this.form.value.cupom,
             type: this.form.value.paymentType
           },
           purchaseId: this.purchaseId
         }))
       }]
     }).then(alert => alert.present());
+  }
+
+  private onCupomLoadedOrFailed() {
+    this.store
+      .select(state => ({
+        cupom: state.shoppingCart.cupom,
+        error: state.shoppingCart.error,
+        isLoadedCupom: state.shoppingCart.isLoadedCupom,
+      }))
+      .pipe(
+        filter(state => state.isLoadedCupom || state.error),
+        take(1)
+      )
+      .subscribe(state => {
+        if (state.isLoadedCupom) {
+          if (!state.cupom) {
+            this.showError({error: {message: "Cupom não encontrado"}})
+          }
+        }
+        this.calculatePrice();
+      })
   }
 
   private calculatePrice() {
@@ -117,6 +150,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(calculatePurchasePrice({calculate: {
       address,
+      cupom: this.form.value.cupom,
       paymentType: this.form.controls.paymentType.value,
       products: this.products
     }}));
@@ -126,7 +160,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       makePurchase({
         payment: {
-          type: this.form.value.paymentType
+          type: this.form.value.paymentType,
+          cupom: this.form.value.cupom
         },
         purchaseId: this.purchaseId
       })
@@ -139,6 +174,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         payment: {
           billingAddress: this.form.value.billingAddress,
           creditCard: this.form.value.creditCard,
+          cupom: this.form.value.cupom,
           type: this.form.value.paymentType
         },
         purchaseId: this.purchaseId
@@ -151,8 +187,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       makePurchase({
         payment: {
-          type: this.form.value.paymentType,
-          receiptUrl
+          cupom: this.form.value.cupom,
+          receiptUrl,
+          type: this.form.value.paymentType
         },
         purchaseId: this.purchaseId
       })
@@ -174,7 +211,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       .subscribe(state => {
         this.toggleLoading(state);
         this.onPaymentSuccess(state);
-        this.onPaymentFail(state.error);
+        this.showError(state.error);
       })
   }
 
@@ -197,7 +234,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async onPaymentFail(error: any){
+  private async showError(error: any){
     if (error) {
       const toast = await this.toastController.create({
         color: "danger",
@@ -211,7 +248,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   private createForm() {
     this.form = this.formBuilder.group({
-      paymentType: [PaymentType.PIX],
       billingAddress: this.formBuilder.group({
         street: [''],
         number: [''],
@@ -227,7 +263,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
         cardMonth: [''],
         cardYear: [''],
         cardCvc: ['']
-      })
+      }),
+      cupom: [''],
+      paymentType: [PaymentType.PIX]
     });
   }
 

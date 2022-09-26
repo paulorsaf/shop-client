@@ -1,6 +1,6 @@
 <form [formGroup]="form" *ngIf="form">
   <ion-list *ngIf="isLoadingPrice$ | async" class="payment-method" test-id="price-loader">
-    <ion-item lines="none" *ngFor="let a of [1,2,3,4]">
+    <ion-item lines="none" *ngFor="let a of [1,2]">
       <ion-label>
         <ion-skeleton-text [animated]="true"></ion-skeleton-text>
       </ion-label>
@@ -21,6 +21,12 @@
           {{price.deliveryPrice | currency: "R$ "}}
         </ion-button>
       </ion-item>
+      <ion-item lines="none" *ngIf="price.discount">
+        <ion-label>Desconto</ion-label>
+        <ion-button fill="clear" color="success" slot="end">
+          - {{price.discount | currency: "R$ "}}
+        </ion-button>
+      </ion-item>
       <ion-item lines="none" *ngIf="form.value.paymentType === 'CREDIT_CARD'" test-id="credit-card-fee">
         <ion-label>Taxa do cartão</ion-label>
         <ion-button fill="clear" color="success" slot="end">
@@ -36,6 +42,18 @@
           <span *ngIf="form.value.paymentType === 'CREDIT_CARD'">
             {{price.totalPriceWithPaymentFee | currency: "R$ "}}
           </span>
+        </ion-button>
+      </ion-item>
+      <ion-item class="cupom">
+        <ion-label color="primary" position="floating">Cupom de desconto</ion-label>
+        <ion-input formControlName="cupom"></ion-input>
+        <ion-button *ngIf="!(isLoadingCupom$ | async)" slot="end" color="primary" fill="clear"
+          (click)="loadCupom()" test-id="search-cupom-button">
+          <ion-icon name="search" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button *ngIf="isLoadingCupom$ | async" slot="end" color="primary" fill="clear"
+          test-id="cupom-loader">
+          <ion-spinner></ion-spinner>
         </ion-button>
       </ion-item>
     </ion-list>
@@ -185,13 +203,18 @@
   </span>
 
   <div class="ion-padding">
-    <ion-button size="full" (click)="finishPurchase()" *ngIf="form.value.paymentType !== 'PIX'"
-      test-id="finish-purchase-button">
-      Finalizar pedido
-    </ion-button>
-    <ion-button size="full" *ngIf="form.value.paymentType === 'PIX'" test-id="receipt-button">
-      <input type="file" (change)="uploadReceipt($event)" accept=".png, .jpg, .pdf"/>
-      Enviar comprovante
-    </ion-button>
+    <span *ngIf="!(isLoadingPrice$ | async)" test-id="action-buttons">
+      <ion-button size="full" (click)="finishPurchase()" *ngIf="form.value.paymentType !== 'PIX'"
+        test-id="finish-purchase-button">
+        Finalizar pedido
+      </ion-button>
+      <ion-button size="full" *ngIf="form.value.paymentType === 'PIX'" test-id="receipt-button">
+        <input type="file" (change)="uploadReceipt($event)" accept=".png, .jpg, .pdf"/>
+        Enviar comprovante
+      </ion-button>
+    </span>
+    <div *ngIf="isLoadingPrice$ | async" align="middle">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
   </div>
 </form>

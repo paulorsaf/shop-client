@@ -4,7 +4,7 @@ import { Action, Store, StoreModule } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { ShoppingCartEffects } from './shopping-cart.effects';
-import { makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseBySavedCreditCard, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
+import { loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseBySavedCreditCard, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
 import { ModalControllerMock } from 'src/app/model/mocks/modal-controller.mock';
 import { ModalController } from '@ionic/angular';
 import { AppState } from '../app-state';
@@ -13,10 +13,12 @@ import { PaymentType } from 'src/app/model/payment/payment';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { PaymentServiceMock } from 'src/app/model/mocks/payment-service.mock';
 import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
+import { CupomService } from 'src/app/services/cupom/cupom.service';
 
-describe('Products effects', () => {
+describe('Shopping carg effects', () => {
   let effects: ShoppingCartEffects;
   let actions$: Observable<Action>;
+  let cupomService: CupomServiceMock;
   let modalController: ModalControllerMock;
   let paymentService: PaymentServiceMock;
   let store: Store<AppState>;
@@ -24,6 +26,7 @@ describe('Products effects', () => {
   const error = {error: "error"};
 
   beforeEach(() => {
+    cupomService = new CupomServiceMock();
     modalController = new ModalControllerMock();
     paymentService = new PaymentServiceMock();
 
@@ -38,6 +41,7 @@ describe('Products effects', () => {
         provideMockActions(() => actions$)
       ],
     })
+    .overrideProvider(CupomService, {useValue: cupomService})
     .overrideProvider(ModalController, {useValue: modalController})
     .overrideProvider(PaymentService, {useValue: paymentService});
 
@@ -65,21 +69,28 @@ describe('Products effects', () => {
   describe('given make purchase', () => {
 
     it('when pix, then return make purchase with pix', (done) => {
-      const payment = {type:  PaymentType.PIX, receiptUrl: {id: 1} as any}
+      const payment = {cupom: '10', type:  PaymentType.PIX, receiptUrl: {id: 1} as any}
       actions$ = of(makePurchase({payment}));
 
       effects.makePurchaseEffect$.subscribe(action => {
-        expect(action).toEqual(makePurchaseByPix({purchaseId: undefined, receipt: {id: 1} as any}));
+        expect(action).toEqual(makePurchaseByPix({
+          cupom: '10',
+          purchaseId: undefined,
+          receipt: {id: 1} as any
+        }));
         done();
       });
     });
 
     it('when money, then return make purchase with money', (done) => {
-      const payment = {type:  PaymentType.MONEY}
+      const payment = {cupom: '10', type:  PaymentType.MONEY}
       actions$ = of(makePurchase({payment}));
 
       effects.makePurchaseEffect$.subscribe(action => {
-        expect(action).toEqual(makePurchaseByMoney({purchaseId: undefined}));
+        expect(action).toEqual(makePurchaseByMoney({
+          cupom: '10',
+          purchaseId: undefined
+        }));
         done();
       });
     });
@@ -91,7 +102,7 @@ describe('Products effects', () => {
       let payment: any;
 
       beforeEach(() => {
-        payment = {billingAddress, creditCard, type:  PaymentType.CREDIT_CARD}
+        payment = {billingAddress, creditCard, cupom: '10', type: PaymentType.CREDIT_CARD}
       })
 
       it('and new credit card, then return make purchase with credit card', (done) => {
@@ -101,6 +112,7 @@ describe('Products effects', () => {
           expect(action).toEqual(makePurchaseByCreditCard({
             billingAddress,
             creditCard,
+            cupom: '10',
             purchaseId: undefined
           }));
           done();
@@ -114,6 +126,7 @@ describe('Products effects', () => {
         effects.makePurchaseEffect$.subscribe(action => {
           expect(action).toEqual(makePurchaseBySavedCreditCard({
             creditCardId: "anyCreditCardId",
+            cupom: '10',
             purchaseId: undefined
           }));
           done();
@@ -131,7 +144,10 @@ describe('Products effects', () => {
     it('when success, then return make purchase success', (done) => {
       paymentService.response = of({});
 
-      actions$ = of(makePurchaseByPix({receipt}));
+      actions$ = of(makePurchaseByPix({
+        cupom: '10',
+        receipt
+      }));
 
       effects.makePurchaseByPixEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseSuccess());
@@ -142,7 +158,10 @@ describe('Products effects', () => {
     it('when fail, then return make purchase fail', (done) => {
       paymentService.response = throwError(error)
 
-      actions$ = of(makePurchaseByPix({receipt}));
+      actions$ = of(makePurchaseByPix({
+        receipt,
+        cupom: '10'
+      }));
 
       effects.makePurchaseByPixEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseFail({error}));
@@ -157,7 +176,7 @@ describe('Products effects', () => {
     it('when success, then return make purchase success', (done) => {
       paymentService.response = of({});
 
-      actions$ = of(makePurchaseByMoney({}));
+      actions$ = of(makePurchaseByMoney({cupom: '10'}));
 
       effects.makePurchaseByMoneyEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseSuccess());
@@ -168,7 +187,7 @@ describe('Products effects', () => {
     it('when fail, then return make purchase fail', (done) => {
       paymentService.response = throwError(error)
 
-      actions$ = of(makePurchaseByMoney({}));
+      actions$ = of(makePurchaseByMoney({cupom: '10'}));
 
       effects.makePurchaseByMoneyEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseFail({error}));
@@ -184,7 +203,11 @@ describe('Products effects', () => {
       const billingAddress = {id: "anyBillingAddress"} as any;
       const creditCard = {id: "anyCreditCard"} as any;
 
-      actions$ = of(makePurchaseByCreditCard({billingAddress, creditCard}));
+      actions$ = of(makePurchaseByCreditCard({
+        billingAddress,
+        creditCard,
+        cupom: '10'
+      }));
     })
 
     it('when success, then return make purchase success', (done) => {
@@ -210,7 +233,10 @@ describe('Products effects', () => {
   describe('given make purchase by saved credit card', () => {
 
     beforeEach(() => {
-      actions$ = of(makePurchaseBySavedCreditCard({creditCardId: "anyCreditCardId"}));
+      actions$ = of(makePurchaseBySavedCreditCard({
+        creditCardId: "anyCreditCardId",
+        cupom: '10'
+      }));
     })
 
     it('when success, then return make purchase success', (done) => {
@@ -261,4 +287,38 @@ describe('Products effects', () => {
 
   });
 
+  describe('given load cupom', () => {
+
+    beforeEach(() => {
+      actions$ = of(loadCupom({cupom: "anyCupom"}));
+    })
+
+    it('when success, then return load cupom success', (done) => {
+      const cupom = {id: "anyCupom"} as any;
+      cupomService._response = of(cupom);
+
+      effects.loadCupomEffect$.subscribe(action => {
+        expect(action).toEqual(loadCupomSuccess({cupom}));
+        done();
+      });
+    });
+
+    it('when fail, then return load cupom fail', (done) => {
+      cupomService._response = throwError(error);
+
+      effects.loadCupomEffect$.subscribe(action => {
+        expect(action).toEqual(loadCupomFail({error}));
+        done();
+      });
+    });
+
+  });
+
 });
+
+class CupomServiceMock {
+  _response = of({});
+  findCupom() {
+    return this._response;
+  }
+}

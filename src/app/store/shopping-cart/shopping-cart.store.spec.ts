@@ -2,7 +2,7 @@ import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shoppin
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
 import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
-import { addProduct, addProductNotes, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, removeProductNotes, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
+import { addProduct, addProductNotes, clear, closeShoppingCart, decreaseProduct, loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, removeProductNotes, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { selectTotalPrice, selectTotalQuantity, selectTotalQuantityForProductStock, ShoppingCartState } from './shopping-cart.state';
 
@@ -480,6 +480,61 @@ describe('Shopping cart store', () => {
             });
         })
 
+    });
+
+    it('loadCupom', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            cupom: {} as any,
+            error: {},
+            isLoadedCupom: true,
+            isLoadingCupom: false
+        };
+
+        const cupom = "anyCupom";
+        const newState = shoppingCartReducer(initialState, loadCupom({cupom}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            cupom: undefined,
+            error: undefined,
+            isLoadedCupom: false,
+            isLoadingCupom: true
+        });
+    });
+
+    it('loadCupomSuccess', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isLoadingCupom: true
+        };
+
+        const cupom = {id: "anyCupom"} as any;
+        const newState = shoppingCartReducer(initialState, loadCupomSuccess({cupom}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            cupom,
+            isLoadedCupom: true,
+            isLoadingCupom: false
+        });
+    });
+
+    it('loadCupomFail', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isLoadingCupom: true
+        };
+
+        const error = {error: "error"} as any;
+        const newState = shoppingCartReducer(initialState, loadCupomFail({error}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            error,
+            isLoadedCupom: false,
+            isLoadingCupom: false
+        });
     });
 
 });

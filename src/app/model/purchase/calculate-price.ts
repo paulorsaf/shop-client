@@ -1,5 +1,6 @@
 export type CalculatePrice = {
     readonly address?: Address,
+    readonly cupom?: string,
     readonly paymentType?: string,
     readonly products: Product[]
 }

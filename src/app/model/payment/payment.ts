@@ -4,6 +4,7 @@ export type Payment = {
     billingAddress?: Address;
     creditCard?: CreditCardPayment;
     creditCardId?: string;
+    cupom?: string;
     type: string;
     error?: any;
     receiptUrl?: File;

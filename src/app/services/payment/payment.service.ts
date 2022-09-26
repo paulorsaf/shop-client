@@ -56,6 +56,7 @@ export class PaymentService {
       deliveryAddress: paymentDetails.deliveryAddress,
       deliveryPrice: paymentDetails.deliveryPrice,
       payment: {
+        cupom: paymentDetails.cupom,
         type: PaymentType.MONEY
       },
       productNotes: paymentDetails.productNotes,
@@ -75,6 +76,7 @@ export class PaymentService {
           deliveryAddress: paymentDetails.deliveryAddress,
           deliveryPrice: paymentDetails.deliveryPrice,
           payment: {
+            cupom: paymentDetails.cupom,
             type: PaymentType.PIX
           },
           products: paymentDetails.shoppingCart.map(s => ({
@@ -106,6 +108,7 @@ export class PaymentService {
       payment: {
         billingAddress: paymentDetails.billingAddress,
         creditCard: paymentDetails.creditCard,
+        cupom: paymentDetails.cupom,
         type: PaymentType.CREDIT_CARD
       },
       productNotes: paymentDetails.productNotes,
@@ -124,6 +127,7 @@ export class PaymentService {
       deliveryPrice: paymentDetails.deliveryPrice,
       payment: {
         creditCardId: paymentDetails.creditCardId,
+        cupom: paymentDetails.cupom,
         type: PaymentType.CREDIT_CARD
       },
       productNotes: paymentDetails.productNotes,
@@ -139,6 +143,7 @@ export class PaymentService {
     const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
     return this.http.patch<void>(url, {
       payment: {
+        cupom: paymentDetails.cupom,
         type: PaymentType.MONEY
       }
     });
@@ -150,6 +155,7 @@ export class PaymentService {
       this.toBase64(paymentDetails.receipt).then(result => {
         this.http.patch<void>(url, {
           payment: {
+            cupom: paymentDetails.cupom,
             type: PaymentType.PIX
           },
           file: result,
@@ -174,6 +180,7 @@ export class PaymentService {
       payment: {
         billingAddress: paymentDetails.billingAddress,
         creditCard: paymentDetails.creditCard,
+        cupom: paymentDetails.cupom,
         type: PaymentType.CREDIT_CARD
       }
     });
@@ -184,6 +191,7 @@ export class PaymentService {
     return this.http.patch<void>(url, {
       payment: {
         creditCardId: paymentDetails.creditCardId,
+        cupom: paymentDetails.cupom,
         type: PaymentType.CREDIT_CARD
       }
     });
@@ -201,6 +209,7 @@ export class PaymentService {
 }
 
 type Payment = {
+  cupom: string;
   deliveryAddress: Address;
   deliveryPrice: number;
   productNotes: ProductNotes[];

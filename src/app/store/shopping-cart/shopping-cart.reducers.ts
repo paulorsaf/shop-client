@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { appInitialState } from '../app-initial-state';
-import { addProduct, addProductNotes, clear, closeShoppingCart, decreaseProduct, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, removeProductNotes, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
+import { addProduct, addProductNotes, clear, closeShoppingCart, decreaseProduct, loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, removeProductNotes, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
 import { ShoppingCartState } from './shopping-cart.state';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
@@ -131,6 +131,25 @@ const shoppingCartReduce = createReducer(
   on(removeProductNotes, (state, action) => ({
     ...state,
     notes: state.notes.filter(n => n.productId !== action.productId)
+  })),
+  on(loadCupom, (state) => ({
+    ...state,
+    cupom: undefined,
+    error: undefined,
+    isLoadedCupom: false,
+    isLoadingCupom: true
+  })),
+  on(loadCupomSuccess, (state, action) => ({
+    ...state,
+    cupom: action.cupom,
+    isLoadedCupom: true,
+    isLoadingCupom: false
+  })),
+  on(loadCupomFail, (state, action) => ({
+    ...state,
+    error: action.error,
+    isLoadedCupom: false,
+    isLoadingCupom: false
   }))
 );
 

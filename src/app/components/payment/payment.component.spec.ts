@@ -15,7 +15,7 @@ import { companyReducer } from 'src/app/store/company/company.reducers';
 import { loadCreditCardsSuccess } from 'src/app/store/credit-cards/credit-cards.actions';
 import { creditCardsReducer } from 'src/app/store/credit-cards/credit-cards.reducers';
 import { calculatePurchasePriceSuccess } from 'src/app/store/purchases/purchases.actions';
-import { makePurchase, makePurchaseFail, makePurchaseSuccess } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { loadCupomSuccess, makePurchase, makePurchaseFail, makePurchaseSuccess } from 'src/app/store/shopping-cart/shopping-cart.actions';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { PaymentComponent } from './payment.component';
 
@@ -65,6 +65,7 @@ describe('PaymentComponent', () => {
       address: {city: "anyCity"},
       payment: {
         creditCard: {},
+        cupom: '',
         money: true,
         pixKey: "anyPixKey"
       }
@@ -102,6 +103,10 @@ describe('PaymentComponent', () => {
       expect(page.querySelector('[test-id="price"]')).toBeNull();
     })
 
+    it('then hide action buttons', () => {
+      expect(page.querySelector('[test-id="action-buttons"]')).toBeNull();
+    })
+
     describe('when price calculated', () => {
 
       beforeEach(() => {
@@ -116,6 +121,10 @@ describe('PaymentComponent', () => {
   
       it('then show price', () => {
         expect(page.querySelector('[test-id="price"]')).not.toBeNull();
+      })
+
+      it('then show action buttons', () => {
+        expect(page.querySelector('[test-id="action-buttons"]')).not.toBeNull();
       })
   
     })
@@ -618,6 +627,7 @@ describe('PaymentComponent', () => {
       expect(store.dispatch).toHaveBeenCalledWith(
         makePurchase({
           payment: {
+            cupom: '',
             type: 'PIX',
             receiptUrl: {id: 1}
           } as any,
@@ -637,6 +647,7 @@ describe('PaymentComponent', () => {
       expect(store.dispatch).toHaveBeenCalledWith(
         makePurchase({
           payment: {
+            cupom: '',
             type: 'PIX',
             receiptUrl: {id: 1}
           } as any,
@@ -648,6 +659,12 @@ describe('PaymentComponent', () => {
   })
 
   describe('given user clicks on finish purchase button', () => {
+
+    beforeEach(() => {
+      const price = {id: 1} as any;
+      store.dispatch(calculatePurchasePriceSuccess({price}));
+      fixture.detectChanges();
+    })
 
     describe('when payment by money', () => {
 
@@ -676,6 +693,7 @@ describe('PaymentComponent', () => {
         expect(store.dispatch).toHaveBeenCalledWith(
           makePurchase({
             payment: {
+              cupom: '',
               type: 'MONEY'
             } as any,
             purchaseId: undefined
@@ -693,6 +711,7 @@ describe('PaymentComponent', () => {
         expect(store.dispatch).toHaveBeenCalledWith(
           makePurchase({
             payment: {
+              cupom: '',
               type: 'MONEY'
             } as any,
             purchaseId: "anyPurchaseId"
@@ -746,6 +765,7 @@ describe('PaymentComponent', () => {
             payment: {
               billingAddress: component.form.controls.billingAddress.value,
               creditCard: component.form.value.creditCard,
+              cupom: '',
               type: 'CREDIT_CARD'
             } as any,
             purchaseId: undefined
@@ -766,6 +786,7 @@ describe('PaymentComponent', () => {
             payment: {
               billingAddress: component.form.controls.billingAddress.value,
               creditCard: component.form.value.creditCard,
+              cupom: '',
               type: 'CREDIT_CARD'
             } as any,
             purchaseId: "anyPurchaseId"
@@ -835,6 +856,104 @@ describe('PaymentComponent', () => {
           expect(toastController.isPresented).toBeTruthy();
           done();
         }, 100)
+      })
+
+    })
+
+  })
+
+  describe('given user clicks on search cupom button', () => {
+
+    beforeEach(() => {
+      const price = {id: "anyPrice"} as any;
+      store.dispatch(calculatePurchasePriceSuccess({price}));
+      fixture.detectChanges();
+    })
+
+    it('when cupom is empty, then do not search for cupom', done => {
+      page.querySelector('[test-id="search-cupom-button"]').click();
+      fixture.detectChanges();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.isLoadingCupom).toBeFalsy();
+        done();
+      })
+    })
+
+    it('when cupom is filled, then search for cupom', done => {
+      component.form.get('cupom').setValue('anyCupom');
+      fixture.detectChanges();
+
+      page.querySelector('[test-id="search-cupom-button"]').click();
+      fixture.detectChanges();
+
+      store.select('shoppingCart').subscribe(state => {
+        expect(state.isLoadingCupom).toBeTruthy();
+        done();
+      })
+    })
+
+    describe('when cupom is loading', () => {
+
+      beforeEach(() => {
+        component.form.get('cupom').setValue("anyCupom");
+        fixture.detectChanges();
+
+        page.querySelector('[test-id="search-cupom-button"]').click();
+        fixture.detectChanges();
+      })
+
+      it('then hide search cupom button', () => {
+        expect(page.querySelector('[test-id="search-cupom-button"]')).toBeNull();
+      })
+
+      it('then show cupom loader', () => {
+        expect(page.querySelector('[test-id="cupom-loader"]')).not.toBeNull();
+      })
+
+    })
+
+    describe('when cupom is loaded', () => {
+
+      beforeEach(() => {
+        component.form.get('cupom').setValue('anyCupom');
+        fixture.detectChanges();
+
+        page.querySelector('[test-id="search-cupom-button"]').click();
+        fixture.detectChanges();
+      })
+
+      describe('and cupom is found', () => {
+
+        beforeEach(() => {
+          const cupom = {id: "anyCupomId"} as any;
+          store.dispatch(loadCupomSuccess({cupom}));
+          fixture.detectChanges();
+        })
+
+        it('then calculate purchase price', done => {
+          store.select('shoppingCart').subscribe(state => {
+            expect(state.isCalculatingPrice).toBeTruthy();
+            done();
+          })
+        })
+
+      })
+
+      describe('and cupom not found', () => {
+
+        beforeEach(() => {
+          store.dispatch(loadCupomSuccess({cupom: null}));
+          fixture.detectChanges();
+        })
+
+        it('then show error message', done => {
+          setTimeout(() => {
+            expect(toastController.isPresented).toBeTruthy();
+            done();
+          }, 100)
+        })
+
       })
 
     })

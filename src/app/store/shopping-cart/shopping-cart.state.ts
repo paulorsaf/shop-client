@@ -4,16 +4,20 @@ import { Payment } from 'src/app/model/payment/payment';
 import { Product, Stock } from 'src/app/model/product/product';
 import { ProductNotes } from 'src/app/model/product/product-notes';
 import { CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
+import { Cupom } from 'src/app/model/purchase/cupom';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from '../app-state';
 import { selectStockOptionSelected } from '../product/product.state';
 
 export type ShoppingCartState = {
+    cupom: Cupom;
     deliveryAddress: Address;
     deliveryPrice: number;
     error: any;
     isCalculatedPrice: boolean;
     isCalculatingPrice: boolean;
+    isLoadedCupom: boolean;
+    isLoadingCupom: boolean;
     isOpen: boolean;
     isPaid: boolean;
     isPaying: boolean;
