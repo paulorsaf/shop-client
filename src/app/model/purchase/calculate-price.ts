@@ -20,6 +20,7 @@ type Product = {
 export type CalculatePriceResponse = {
     readonly productsPrice: number;
     readonly deliveryPrice: number;
+    readonly discount: number;
     readonly paymentFee: number;
     readonly totalPrice: number;
     readonly totalPriceWithPaymentFee: number;

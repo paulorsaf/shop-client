@@ -21,6 +21,7 @@ export type Purchase = {
 
 export type Payment = {
     card?: PayByCreditCardResponse;
+    cupom: string;
     error: any;
     receiptUrl: string;
     type: string;
@@ -48,6 +49,7 @@ export type PurchaseProduct = {
 type Price = {
     products: number;
     delivery: number;
+    discount: number;
     paymentFee: number;
     total: number;
     totalWithPaymentFee: number;
