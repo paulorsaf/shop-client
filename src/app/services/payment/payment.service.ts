@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Address } from 'src/app/model/address/address';
@@ -7,6 +6,7 @@ import { ProductNotes } from 'src/app/model/product/product-notes';
 import { CalculatePrice, CalculatePriceResponse } from 'src/app/model/purchase/calculate-price';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { environment } from 'src/environments/environment';
+import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +14,12 @@ import { environment } from 'src/environments/environment';
 export class PaymentService {
 
   constructor(
-    private http: HttpClient
+    private apiService: ApiService
   ) { }
 
   calculatePrice(calculate: CalculatePrice): Observable<CalculatePriceResponse> {
     const url = `${environment.api}/purchases/prices`;
-    return this.http.patch<CalculatePriceResponse>(url, calculate);
+    return this.apiService.patch<CalculatePriceResponse>(url, calculate);
   }
 
   payByMoney(paymentDetails: Payment): Observable<void> {
@@ -52,7 +52,7 @@ export class PaymentService {
 
   private makePaymentByMoney(paymentDetails: Payment) {
     const url = `${environment.api}/purchases`;
-    return this.http.post<void>(url, {
+    return this.apiService.post<void>(url, {
       deliveryAddress: paymentDetails.deliveryAddress,
       deliveryPrice: paymentDetails.deliveryPrice,
       payment: {
@@ -69,40 +69,31 @@ export class PaymentService {
   }
 
   private makePaymentByPix(paymentDetails: PaymentByPix) {
-    return new Observable<void>(observer => {
-      this.toBase64(paymentDetails.receipt).then(result => {
-        const url = `${environment.api}/purchases`;
-        this.http.post<void>(url, {
-          deliveryAddress: paymentDetails.deliveryAddress,
-          deliveryPrice: paymentDetails.deliveryPrice,
-          payment: {
-            cupom: paymentDetails.cupom,
-            type: PaymentType.PIX
-          },
-          products: paymentDetails.shoppingCart.map(s => ({
-            amount: s.amount,
-            productId: s.product.id,
-            stockOptionId: s.stockOption?.id
-          })),
-          file: result,
-          name: paymentDetails.receipt.name
-        }).subscribe(() => {
-          observer.next();
-          observer.complete();
-        }, error => {
-          observer.error(error);
-          observer.complete();
-        });
-      }).catch(error => {
-        observer.error(error);
-        observer.complete();
-      })
-    });
+    const url = `${environment.api}/purchases`;
+
+    let formData = new FormData();
+    formData.append('files', paymentDetails.receipt, paymentDetails.receipt.name);
+    formData.append('body', JSON.stringify({
+      deliveryAddress: paymentDetails.deliveryAddress,
+      deliveryPrice: paymentDetails.deliveryPrice,
+      payment: {
+        cupom: paymentDetails.cupom,
+        type: PaymentType.PIX
+      },
+      products: paymentDetails.shoppingCart.map(s => ({
+        amount: s.amount,
+        productId: s.product.id,
+        stockOptionId: s.stockOption?.id
+      })),
+      name: paymentDetails.receipt.name
+    }));
+
+    return this.apiService.post<void>(url, formData);
   }
 
   private makePaymentCreditCard(paymentDetails: PaymentByCreditCard) {
     const url = `${environment.api}/purchases`;
-    return this.http.post<void>(url, {
+    return this.apiService.post<void>(url, {
       deliveryAddress: paymentDetails.deliveryAddress,
       deliveryPrice: paymentDetails.deliveryPrice,
       payment: {
@@ -122,7 +113,7 @@ export class PaymentService {
 
   private makePaymentBySavedCreditCard(paymentDetails: PaymentBySavedCreditCard) {
     const url = `${environment.api}/purchases`;
-    return this.http.post<void>(url, {
+    return this.apiService.post<void>(url, {
       deliveryAddress: paymentDetails.deliveryAddress,
       deliveryPrice: paymentDetails.deliveryPrice,
       payment: {
@@ -141,7 +132,7 @@ export class PaymentService {
 
   private retryPaymentByMoney(paymentDetails: Payment) {
     const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
-    return this.http.patch<void>(url, {
+    return this.apiService.patch<void>(url, {
       payment: {
         cupom: paymentDetails.cupom,
         type: PaymentType.MONEY
@@ -151,32 +142,22 @@ export class PaymentService {
 
   private retryPaymentByPix(paymentDetails: PaymentByPix) {
     const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
-    return new Observable<void>(observer => {
-      this.toBase64(paymentDetails.receipt).then(result => {
-        this.http.patch<void>(url, {
-          payment: {
-            cupom: paymentDetails.cupom,
-            type: PaymentType.PIX
-          },
-          file: result,
-          name: paymentDetails.receipt.name
-        }).subscribe(() => {
-          observer.next();
-          observer.complete();
-        }, error => {
-          observer.error(error);
-          observer.complete();
-        });
-      }).catch(error => {
-        observer.error(error);
-        observer.complete();
-      })
-    });
+    let formData = new FormData();
+    formData.append('files', paymentDetails.receipt, paymentDetails.receipt.name);
+    formData.append('body', JSON.stringify({
+      payment: {
+        cupom: paymentDetails.cupom,
+        type: PaymentType.PIX
+      },
+      name: paymentDetails.receipt.name
+    }));
+
+    return this.apiService.patch<void>(url, formData);
   }
 
   private retryPaymentByCreditCard(paymentDetails: PaymentByCreditCard) {
     const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
-    return this.http.patch<void>(url, {
+    return this.apiService.patch<void>(url, {
       payment: {
         billingAddress: paymentDetails.billingAddress,
         creditCard: paymentDetails.creditCard,
@@ -188,22 +169,13 @@ export class PaymentService {
 
   private retryPaymentBySavedCreditCard(paymentDetails: PaymentBySavedCreditCard) {
     const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
-    return this.http.patch<void>(url, {
+    return this.apiService.patch<void>(url, {
       payment: {
         creditCardId: paymentDetails.creditCardId,
         cupom: paymentDetails.cupom,
         type: PaymentType.CREDIT_CARD
       }
     });
-  }
-
-  private toBase64(image: File) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(image);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    })
   }
 
 }

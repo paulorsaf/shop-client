@@ -21,13 +21,6 @@ export class ApiService {
         return this.http.post<T>(url, body);
     }
 
-    postMultipart<T>(url: string, file?: any, fileName?: string) : Observable<T>{
-        let formData = new FormData();
-        formData.append('files', file, fileName);
-
-        return this.http.post<T>(url, formData)
-    }
-
     patch<T>(url: string, body?: any) : Observable<T>{
         return this.http.patch<T>(url, body);
     }
