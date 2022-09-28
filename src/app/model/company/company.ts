@@ -10,6 +10,7 @@ export type Company = {
     instagram: string;
     website: string;
     whatsapp: string;
+    chatId: string;
 }
 
 export type Image = {
