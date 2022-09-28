@@ -69,7 +69,7 @@ export class PaymentService {
   }
 
   private makePaymentByPix(paymentDetails: PaymentByPix) {
-    const url = `${environment.api}/purchases`;
+    const url = `${environment.api}/purchases/pix`;
 
     let formData = new FormData();
     formData.append('files', paymentDetails.receipt, paymentDetails.receipt.name);
@@ -141,7 +141,7 @@ export class PaymentService {
   }
 
   private retryPaymentByPix(paymentDetails: PaymentByPix) {
-    const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
+    const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments/pix`;
     let formData = new FormData();
     formData.append('files', paymentDetails.receipt, paymentDetails.receipt.name);
     formData.append('body', JSON.stringify({
