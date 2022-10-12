@@ -43,7 +43,7 @@ export class DeliveryAddressPage implements OnInit {
     this.store.dispatch(clearAddress());
 
     this.address$ = this.store.select(state => state.address.address);
-    this.company$ = this.store.select(state => state.company.company);
+    this.company$ = this.store.select(state => state.organization.selectedCompany);
     this.deliveryPrice$ = this.store.select(state => state.address.deliveryPrice);
     this.isLoadingDeliveryPrice$ = this.store.select(
       state => state.address.isGettingDeliveryPrice

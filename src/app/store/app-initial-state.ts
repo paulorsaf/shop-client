@@ -46,6 +46,13 @@ export const appInitialState: AppState = {
         isRecoveredPassword: false,
         isRecoveringPassword: false
     },
+    organization: {
+        companies: [],
+        error: undefined,
+        isLoaded: false,
+        isLoading: false,
+        selectedCompany: undefined
+    },
     product: {
         error: undefined,
         isLoaded: false,

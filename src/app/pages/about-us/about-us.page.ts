@@ -25,7 +25,7 @@ export class AboutUsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.aboutUs$ = this.store.select(state => state.company.company?.aboutUs || "");
+    this.aboutUs$ = this.store.select(state => state.organization.selectedCompany?.aboutUs || "");
   }
 
   goHome() {

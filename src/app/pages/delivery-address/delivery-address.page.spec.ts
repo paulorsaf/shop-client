@@ -12,7 +12,7 @@ import { ToastControllerMock } from 'src/app/model/mocks/toast-controller.mock';
 import { getDeliveryPrice, getDeliveryPriceSuccess, searchByZipCodeFail, searchByZipCodeSuccess } from 'src/app/store/address/address.actions';
 import { addressReducer } from 'src/app/store/address/address.reducers';
 import { AppState } from 'src/app/store/app-state';
-import { companyReducer } from 'src/app/store/company/company.reducers';
+import { organizationReducer } from 'src/app/store/organization/organization.reducers';
 import { shoppingCartReducer } from 'src/app/store/shopping-cart/shopping-cart.reducers';
 import { DeliveryAddressPage } from './delivery-address.page';
 
@@ -50,7 +50,7 @@ describe('DeliveryAddressPage', () => {
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
         StoreModule.forFeature('address', addressReducer),
-        StoreModule.forFeature('company', companyReducer),
+        StoreModule.forFeature('organization', organizationReducer),
         StoreModule.forFeature('shoppingCart', shoppingCartReducer)
       ]
     })

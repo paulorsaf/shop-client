@@ -4,6 +4,7 @@ import { CategoryState } from './category/category-state';
 import { CompanyState } from './company/company.state';
 import { CreditCardsState } from './credit-cards/credit-cards.state';
 import { LoginState } from './login/login.state';
+import { OrganizationState } from './organization/organization.state';
 import { ProductState } from './product/product.state';
 import { ProductsState } from './products/products.state';
 import { PurchaseDetailState } from './purchase-detail/purchase-detail.state';
@@ -20,6 +21,7 @@ export type AppState = {
     company: CompanyState;
     creditCards: CreditCardsState;
     login: LoginState;
+    organization: OrganizationState;
     product: ProductState;
     products: ProductsState;
     purchaseDetail: PurchaseDetailState;

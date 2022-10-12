@@ -5,6 +5,7 @@ export type Company = {
     address: Address;
     id: string;
     logo: Image;
+    name: string;
     payment: Payment;
     facebook: string;
     instagram: string;

@@ -16,7 +16,8 @@ import { loadTrendingss } from 'src/app/store/trending/trending.actions';
 })
 export class HomePage implements OnInit, ViewDidEnter {
 
-  isLoading$: Observable<boolean>;
+  hasBanners$: Observable<boolean>;
+  isLoadingBanners$: Observable<boolean>;
   isLoadingCategories$: Observable<boolean>;
   isLoadingTrendings$: Observable<boolean>;
 
@@ -27,7 +28,8 @@ export class HomePage implements OnInit, ViewDidEnter {
   ) { }
 
   ngOnInit() {
-    this.isLoading$ = this.store.select(state => state.banner.isLoading);
+    this.hasBanners$ = this.store.select(state => !!state.banner.banners?.length)
+    this.isLoadingBanners$ = this.store.select(state => state.banner.isLoading);
     this.isLoadingCategories$ = this.store.select(state => state.category.isLoading);
     this.isLoadingTrendings$ = this.store.select(state => state.trending.isLoading);
 

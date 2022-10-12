@@ -12,6 +12,10 @@ ion-list {
         --inner-padding-top: 1rem;
         --inner-padding-bottom: 1rem;
 
+        ion-label {
+            white-space: normal;
+        }
+
         ion-icon {
             margin-right: 1.5rem;
         }

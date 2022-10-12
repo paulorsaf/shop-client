@@ -10,7 +10,7 @@ import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.
 import { ProductOptionsPipeModule } from './pipes/product-options/product-options.pipe.module';
 import { ProductOptionsPipe } from './pipes/product-options/product-options.pipe';
 import { ProductTotalPricePipeModule } from './pipes/product-total-price/product-total-price.pipe.module';
-import { registerLocaleData } from '@angular/common';
+import { DatePipe, registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { AddTokenHeaderHttpRequestInterceptor } from './interceptors/add-token-header-http-request.interceptor';
 import { environment } from 'src/environments/environment';
@@ -24,6 +24,7 @@ import { BrMaskDirective, BrMaskerModule } from 'br-mask';
 import { RegisterComponent } from './components/register/register.component';
 import { PurchaseStockOptionModule } from './components/purchase-stock-option/purchase-stock-option.module';
 import * as Sentry from "@sentry/angular";
+import { OrganizationPageModule } from './pages/organization/organization.module';
 
 registerLocaleData(localePt);
 
@@ -48,10 +49,12 @@ registerLocaleData(localePt);
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     AngularFireAnalyticsModule,
+    OrganizationPageModule,
 
     BrMaskerModule
   ],
   providers: [
+    DatePipe,
     ProductOptionsPipe,
     BrMaskDirective,
     {

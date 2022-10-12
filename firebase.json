@@ -55,5 +55,19 @@
         "destination": "/index.html"
       }
     ]
+  }, {
+    "target": "ricco-alimentos",
+    "public": "www",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }]
 }

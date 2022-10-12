@@ -7,8 +7,13 @@ import { LoginComponent } from './components/login/login.component';
 import { Company } from './model/company/company';
 import { User } from './model/user/user';
 import { AppState } from './store/app-state';
-import { loadCompany } from './store/company/company.action';
 import { loginUserByToken, logout } from './store/user/user.actions';
+import { loadOrganizationCompanies } from './store/organization/organization.action';
+import { OrganizationPage } from './pages/organization/organization.page';
+import { loadBanners } from './store/banner/banner.actions';
+import { loadCategories } from './store/category/category.actions';
+import { loadTrendingss } from './store/trending/trending.actions';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -18,6 +23,7 @@ export class AppComponent implements OnInit {
 
   company$: Observable<Company>;
   isLoggingUserByToken$!: Observable<boolean>;
+  isMultiCompany$: Observable<boolean>;
   user$: Observable<User>;
 
   constructor(
@@ -28,12 +34,13 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.company$ = this.store.select(state => state.company.company);
+    this.isMultiCompany$ = this.store.select(state => state.organization.companies?.length > 1);
+    this.company$ = this.store.select(state => state.organization.selectedCompany);
     this.isLoggingUserByToken$ = this.store.select(state => state.user.isLoggingInByToken);
     this.user$ = this.store.select(state => state.user.user);
 
     this.store.dispatch(loginUserByToken());
-    this.store.dispatch(loadCompany());
+    this.store.dispatch(loadOrganizationCompanies());
   }
 
   async openLogin() {
@@ -42,6 +49,19 @@ export class AppComponent implements OnInit {
       component: LoginComponent
     })
     modal.present();
+  }
+
+  async openChangeCompany() {
+    this.menu.close();
+    const modal = await this.modalController.create({
+      component: OrganizationPage
+    })
+    modal.present();
+    modal.onWillDismiss().then(() => {
+      this.store.dispatch(loadBanners());
+      this.store.dispatch(loadCategories());
+      this.store.dispatch(loadTrendingss());
+    })
   }
 
   logout() {

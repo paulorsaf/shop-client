@@ -40,7 +40,7 @@ export class PurchaseService {
 
   private makeCallLastPurchase(observer: Subscriber<Purchase>, counter: number) {
     this.callLastPurchase().pipe(take(1)).subscribe(response => {
-      if (counter === 2 || response.payment.error || response.payment.receiptUrl){
+      if (counter === 2 || response.payment.error || response.payment.id){
         observer.next(response);
         observer.complete();
       } else {
@@ -61,7 +61,7 @@ export class PurchaseService {
 
   private makeCallPaymentPurchase(id: string, observer: Subscriber<Purchase>, counter: number) {
     this.callPaymentPurchase(id).pipe(take(1)).subscribe(response => {
-      if (counter === 2 || response.payment.error || response.payment.receiptUrl){
+      if (counter === 2 || response.payment.error || response.payment.id){
         observer.next(response);
         observer.complete();
       } else {

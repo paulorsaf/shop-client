@@ -1,0 +1,13 @@
+ion-content {
+    --padding-top: 7rem;
+}
+
+ion-card.loader {
+    ion-card-content {
+        padding: 0;
+        height: 200px;
+        ion-skeleton-text {
+            margin: 0;
+        }
+    }
+}

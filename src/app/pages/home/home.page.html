@@ -10,9 +10,10 @@
 </ion-header>
 
 <ion-content>
-  <section class="banners">
-    <ion-skeleton-text *ngIf="isLoading$ | async" animated test-id="banners-loader"></ion-skeleton-text>
-    <app-banners *ngIf="(isLoading$ | async) === false" test-id="banners"></app-banners>
+  <section class="banners"
+    [ngClass]="(isLoadingBanners$ | async) || (hasBanners$ | async) ? '' : 'padding-bottom'">
+    <ion-skeleton-text *ngIf="isLoadingBanners$ | async" animated test-id="banners-loader"></ion-skeleton-text>
+    <app-banners *ngIf="(isLoadingBanners$ | async) === false" test-id="banners"></app-banners>
   </section>
 
   <section class="trending"

@@ -26,7 +26,7 @@ export class PaymentPage implements OnInit {
 
   ngOnInit() {
     this.address$ = this.store.select(state => state.shoppingCart.deliveryAddress);
-    this.company$ = this.store.select(state => state.company.company);
+    this.company$ = this.store.select(state => state.organization.selectedCompany);
     this.deliveryPrice$ = this.store.select(state => state.shoppingCart.deliveryPrice);
 
     this.products$ = this.store.select(state => state.shoppingCart.products.map(p => ({

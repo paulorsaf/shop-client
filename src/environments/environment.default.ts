@@ -12,5 +12,6 @@ export const environmentDefault = {
     measurementId: "G-QB8JPRDJ66"
   },
   imageBaseUrl: "http://paulorsaf.dev",
+  organizationId: "example",
   production: false
 };

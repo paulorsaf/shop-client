@@ -140,8 +140,8 @@ describe('PurchaseSuccessPage', () => {
 
       beforeEach(() => {
         store.dispatch(loadLastPurchaseSuccess({purchase: {
-          payment: {receiptUrl: "anyReceiptUrl"
-        }} as any}));
+          payment: {receiptUrl: "anyReceiptUrl", id: "anyPurchaseId"}
+        } as any}));
         fixture.detectChanges();
       })
 

@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title color="light">Escolha uma filial</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <section *ngIf="isLoading$ | async" test-id="organization-loader">
+    <ion-card class="loader" *ngFor="let i of [1, 2]">
+      <ion-card-content>
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+  </section>
+
+  <section *ngIf="!(isLoading$ | async)" test-id="organization">
+    <ion-card *ngFor="let company of companies$ | async" (click)="selectCompany(company)"
+      test-id="company">
+      <ion-card-header>
+        <ion-card-title>{{company.name}}</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content *ngIf="company.address">
+        <p>{{company.address.street}}, {{company.address.number}}</p>
+        <p *ngIf="company.address.complement">{{company.address.complement}}</p>
+        <p>{{company.address.neighborhood}}, {{company.address.zipCode}}</p>
+        <p>{{company.address.city}}, {{company.address.state}}</p>
+      </ion-card-content>
+    </ion-card>
+  </section>
+</ion-content>

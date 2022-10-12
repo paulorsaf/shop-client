@@ -23,6 +23,7 @@ export type Payment = {
     card?: PayByCreditCardResponse;
     cupom: string;
     error: any;
+    id: string;
     receiptUrl: string;
     type: string;
 }
