@@ -98,6 +98,12 @@ describe('AppComponent', () => {
 
     describe('when logging in user by token', () => {
 
+      beforeEach(() => {
+        const companies = [{id: 1}, {id: 2}] as any;
+        store.dispatch(loadOrganizationCompaniesSuccess({companies}));
+        fixture.detectChanges();
+      })
+
       it('then hide page', () => {
         expect(page.querySelector('[test-id="app"][hidden]')).not.toBeNull();
       })
@@ -108,11 +114,33 @@ describe('AppComponent', () => {
 
     })
 
-    describe('when user logged in by token', () => {
+    describe('when loading organization companies', () => {
 
       beforeEach(() => {
         const user = {id: 1} as any;
         store.dispatch(loginUserByTokenSuccess({user}));
+        fixture.detectChanges();
+      })
+
+      it('then hide page', () => {
+        expect(page.querySelector('[test-id="app"][hidden]')).not.toBeNull();
+      })
+  
+      it('then show app loader', () => {
+        expect(page.querySelector('[test-id="app-loader"]')).not.toBeNull();
+      })
+
+    })
+
+    describe('when user logged in by token and organization companies loaded', () => {
+
+      beforeEach(() => {
+        const user = {id: 1} as any;
+        store.dispatch(loginUserByTokenSuccess({user}));
+        fixture.detectChanges();
+
+        const companies = [{id: 1}, {id: 2}] as any;
+        store.dispatch(loadOrganizationCompaniesSuccess({companies}));
         fixture.detectChanges();
       })
 
@@ -129,6 +157,10 @@ describe('AppComponent', () => {
     describe('when user not logged by token', () => {
 
       beforeEach(() => {
+        const companies = [{id: 1}, {id: 2}] as any;
+        store.dispatch(loadOrganizationCompaniesSuccess({companies}));
+        fixture.detectChanges();
+
         store.dispatch(loginUserByTokenFail());
         fixture.detectChanges();
       })

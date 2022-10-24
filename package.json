@@ -41,6 +41,7 @@
     "amplitude-js": "^4.1.0",
     "br-mask": "0.0.10",
     "firebase": "^9.9.1",
+    "redux-beacon": "^2.1.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"

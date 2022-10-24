@@ -22,7 +22,7 @@ import { loadTrendingss } from './store/trending/trending.actions';
 export class AppComponent implements OnInit {
 
   company$: Observable<Company>;
-  isLoggingUserByToken$!: Observable<boolean>;
+  isLoading$!: Observable<boolean>;
   isMultiCompany$: Observable<boolean>;
   user$: Observable<User>;
 
@@ -36,7 +36,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.isMultiCompany$ = this.store.select(state => state.organization.companies?.length > 1);
     this.company$ = this.store.select(state => state.organization.selectedCompany);
-    this.isLoggingUserByToken$ = this.store.select(state => state.user.isLoggingInByToken);
+    this.isLoading$ = this.store.select(
+      state => state.user.isLoggingInByToken || state.organization.isLoading
+    );
     this.user$ = this.store.select(state => state.user.user);
 
     this.store.dispatch(loginUserByToken());
