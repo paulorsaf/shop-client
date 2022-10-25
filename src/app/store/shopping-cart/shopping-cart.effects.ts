@@ -143,7 +143,7 @@ export class ShoppingCartEffects {
         const modal = await this.modalController.create({
           component: ShoppingCartComponent,
           initialBreakpoint: 0.5,
-          breakpoints: [0, .5, .90, 1]
+          breakpoints: [0, .5, .90]
         })
 
         modal.present();
