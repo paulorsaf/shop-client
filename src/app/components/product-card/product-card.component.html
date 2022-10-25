@@ -13,5 +13,6 @@
     <div class="price" *ngIf="!product.priceWithDiscount">
       <ion-text>{{product.price | currency: "R$ "}}</ion-text>
     </div>
+    <ion-text *ngIf="product.unit">{{product.weight}} {{product.unit}}</ion-text>
   </ion-card-content>
 </ion-card>

@@ -38,6 +38,9 @@
         <div class="price" *ngIf="!product.priceWithDiscount">
           <ion-text>{{product.price | currency: "R$ "}}</ion-text>
         </div>
+        <div>
+          <ion-text *ngIf="product.unit">{{product.weight}} {{product.unit}}</ion-text>
+        </div>
       </section>
 
       <section class="options" *ngIf="product | productHasSize" test-id="product-sizes">

@@ -4,6 +4,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { ProductNotes } from 'src/app/model/product/product-notes';
 import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { AppState } from 'src/app/store/app-state';
 import { addProduct, decreaseProduct, removeProduct } from 'src/app/store/shopping-cart/shopping-cart.actions';
@@ -17,6 +18,7 @@ import { LoginComponent } from '../login/login.component';
 })
 export class ShoppingCartComponent implements OnInit {
 
+  notes$: Observable<ProductNotes[]>;
   products$: Observable<ShoppingCartProduct[]>;
   totalPrice$: Observable<number>;
   totalQuantity$: Observable<number>;
@@ -29,6 +31,7 @@ export class ShoppingCartComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.notes$ = this.store.select(state => state.shoppingCart.notes);
     this.products$ = this.store.select(state => state.shoppingCart.products);
     this.totalPrice$ = this.store.select(selectTotalPrice);
     this.totalQuantity$ = this.store.select(selectTotalQuantity);
