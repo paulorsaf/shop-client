@@ -6,6 +6,7 @@ export type Product = {
     priceWithDiscount: number;
     name: string;
     stock?: Stock[];
+    unit: string;
     weight: number;
 };
 

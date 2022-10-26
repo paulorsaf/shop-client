@@ -5,6 +5,8 @@ export type Trending = {
     images: TrendingImage[];
     price: number;
     priceWithDiscount: number;
+    unit: string;
+    weight: number;
 };
 
 export type TrendingWrapper = {
