@@ -18,9 +18,7 @@ export function copyText(copy: CopyText) {
                 duration: 3000
             }).then(toast => toast.present());
         }
-    } catch (err) {
-        console.log('###', err)
-    }
+    } catch (err) {}
 }
 
 type CopyText = {

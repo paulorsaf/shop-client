@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { Address } from 'src/app/model/address/address';
 import { states } from 'src/app/model/address/states-list';
 import { Company } from 'src/app/model/company/company';
+import { LoadingService } from 'src/app/services/loading/loading.service';
+import { MessageService } from 'src/app/services/message/message.service';
 import { clearAddress, searchByZipCode } from 'src/app/store/address/address.actions';
 import { AddressState } from 'src/app/store/address/address.state';
 import { AppState } from 'src/app/store/app-state';
-import { setDeliveryAddress, setDeliveryPrice } from 'src/app/store/shopping-cart/shopping-cart.actions';
+import { savePurchase, setDeliveryAddress, setDeliveryPrice } from 'src/app/store/shopping-cart/shopping-cart.actions';
 
 @Component({
   selector: 'app-delivery-address',
@@ -33,10 +35,10 @@ export class DeliveryAddressPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private loadingController: LoadingController,
+    private loadingService: LoadingService,
     private router: Router,
     private store: Store<AppState>,
-    private toastController: ToastController
+    private messageService: MessageService
   ) { }
 
   ngOnInit() {
@@ -61,10 +63,10 @@ export class DeliveryAddressPage implements OnInit {
       if (this.form.valid) {
         const address = {...this.form.value};
         delete address.deliveryType;
-        this.updateShoppingCartStateAndGoToPayment(address);
+        this.updateShoppingCartStateAndGoToNextPage(address);
       }
     } else {
-      this.updateShoppingCartStateAndGoToPayment(null);
+      this.updateShoppingCartStateAndGoToNextPage(null);
     }
   }
 
@@ -79,10 +81,45 @@ export class DeliveryAddressPage implements OnInit {
       });
   }
 
-  private updateShoppingCartStateAndGoToPayment(address: Address) {
+  private updateShoppingCartStateAndGoToNextPage(address: Address) {
     this.setDeliveryPrice();
     this.store.dispatch(setDeliveryAddress({address}));
-    this.router.navigate(['/payment']);
+
+    this.store
+      .select(state => state.organization.selectedCompany.payment?.isPaymentAfterPurchase || false)
+      .pipe(take(1))
+      .subscribe(isPaymentAfterPurchase => {
+        if (isPaymentAfterPurchase) {
+          this.savePurchase();
+        } else {
+          this.router.navigate(['/payment']);
+        }
+      })
+  }
+
+  private savePurchase() {
+    this.store.dispatch(savePurchase());
+
+    this.onSavePurchase();
+  }
+
+  private onSavePurchase() {
+    this.store
+      .select('shoppingCart')
+      .pipe(take(2))
+      .subscribe(state => {
+        if (state.isSaving) {
+          this.loadingService.show();
+        } else {
+          this.loadingService.hide();
+        }
+        if (state.error) {
+          this.messageService.showError(state.error.error)
+        }
+        if (state.isSaved) {
+          this.router.navigate(['/payment/order-success']);
+        }
+      })
   }
 
   private setDeliveryPrice() {
@@ -99,19 +136,8 @@ export class DeliveryAddressPage implements OnInit {
 
   private onZipCodeFail(error: any) {
     if (error) {
-      this.showErrorMessage(error);
+      this.messageService.showError(error.error)
     }
-  }
-
-  private async showErrorMessage(error: any){
-    const toast = await this.toastController.create({
-      color: "danger",
-      header: "Erro ao buscar CEP",
-      message: error?.error?.message,
-      position: "bottom",
-      duration: 2000
-    });
-    toast.present();
   }
 
   private onZipCodeLoaded(state: AddressState) {
@@ -129,19 +155,11 @@ export class DeliveryAddressPage implements OnInit {
 
   private async toggleLoading(isLoading: boolean) {
     if (isLoading) {
-      this.showLoading();
+      this.loadingService.show();
     } else {
       this.addressSubscription.unsubscribe();
-      try {
-        const loading = await this.loadingController.getTop();
-        loading?.dismiss();
-      } catch (error){}
+      this.loadingService.hide();
     }
-  }
-
-  private async showLoading() {
-    const loading = await this.loadingController.create();
-    loading.present();
   }
 
   private createForm() {

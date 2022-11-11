@@ -4,7 +4,7 @@ import { Action, Store, StoreModule } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { ShoppingCartEffects } from './shopping-cart.effects';
-import { loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseBySavedCreditCard, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
+import { loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseBySavedCreditCard, makePurchaseFail, makePurchaseSuccess, openShoppingCart, savePurchase, savePurchaseFail, savePurchaseSuccess } from './shopping-cart.actions';
 import { ModalControllerMock } from 'src/app/model/mocks/modal-controller.mock';
 import { ModalController } from '@ionic/angular';
 import { AppState } from '../app-state';
@@ -14,6 +14,7 @@ import { PaymentService } from 'src/app/services/payment/payment.service';
 import { PaymentServiceMock } from 'src/app/model/mocks/payment-service.mock';
 import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
 import { CupomService } from 'src/app/services/cupom/cupom.service';
+import { PurchaseService } from 'src/app/services/purchase/purchase.service';
 
 describe('Shopping carg effects', () => {
   let effects: ShoppingCartEffects;
@@ -21,6 +22,7 @@ describe('Shopping carg effects', () => {
   let cupomService: CupomServiceMock;
   let modalController: ModalControllerMock;
   let paymentService: PaymentServiceMock;
+  let purchaseService: PurchaseServiceMock;
   let store: Store<AppState>;
 
   const error = {error: "error"};
@@ -29,6 +31,7 @@ describe('Shopping carg effects', () => {
     cupomService = new CupomServiceMock();
     modalController = new ModalControllerMock();
     paymentService = new PaymentServiceMock();
+    purchaseService = new PurchaseServiceMock();
 
     TestBed.configureTestingModule({
       imports: [
@@ -43,7 +46,8 @@ describe('Shopping carg effects', () => {
     })
     .overrideProvider(CupomService, {useValue: cupomService})
     .overrideProvider(ModalController, {useValue: modalController})
-    .overrideProvider(PaymentService, {useValue: paymentService});
+    .overrideProvider(PaymentService, {useValue: paymentService})
+    .overrideProvider(PurchaseService, {useValue: purchaseService});
 
     effects = TestBed.get(ShoppingCartEffects);
     store = TestBed.inject(Store);
@@ -314,11 +318,44 @@ describe('Shopping carg effects', () => {
 
   });
 
+  describe('given save purchase', () => {
+
+    beforeEach(() => {
+      actions$ = of(savePurchase());
+    })
+
+    it('when success, then return save purchase success', (done) => {
+      purchaseService._response = of({});
+
+      effects.savePurchaseEffect$.subscribe(action => {
+        expect(action).toEqual(savePurchaseSuccess());
+        done();
+      });
+    });
+
+    it('when fail, then return make purchase fail', (done) => {
+      purchaseService._response = throwError(error);
+
+      effects.savePurchaseEffect$.subscribe(action => {
+        expect(action).toEqual(savePurchaseFail({error}));
+        done();
+      });
+    });
+
+  });
+
 });
 
 class CupomServiceMock {
   _response = of({});
   findCupom() {
+    return this._response;
+  }
+}
+
+class PurchaseServiceMock {
+  _response = of({});
+  savePurchase() {
     return this._response;
   }
 }

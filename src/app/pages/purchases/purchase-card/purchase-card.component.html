@@ -21,11 +21,14 @@
       </ion-button>
     </div>
     <p>{{purchase.price?.totalWithPaymentFee | currency: "R$ "}}</p>
-    <p *ngIf="purchase.address">Entrega à domicílio</p>
-    <p *ngIf="!purchase.address">Busca na loja</p>
+    <p *ngIf="purchase.address">Entrega à domicílio.</p>
+    <p *ngIf="!purchase.address">Busca na loja.</p>
+    <p *ngIf="purchase.payment">Pagamento com {{purchase.payment?.type | paymentType}}.</p>
     <p>
-      Pagamento com {{purchase.payment?.type | paymentType}}.
+      Pedido criado em
+      {{purchase.createdAt | date: "dd/MM/yyyy"}}
+      às
+      {{purchase.createdAt | date: "HH:mm"}}.
     </p>
-    <p>Pedido criado em {{purchase.createdAt | date: "dd/MM/yyyy HH:mm"}}</p>
   </ion-card-content>
 </ion-card>

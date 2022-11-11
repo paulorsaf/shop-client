@@ -2,7 +2,7 @@ import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shoppin
 import { appInitialState } from '../app-initial-state';
 import { AppState } from '../app-state';
 import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
-import { addProduct, addProductNotes, clear, closeShoppingCart, decreaseProduct, loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, removeProductNotes, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
+import { addProduct, addProductNotes, clear, closeShoppingCart, decreaseProduct, loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseFail, makePurchaseSuccess, openShoppingCart, removeProduct, removeProductNotes, savePurchase, savePurchaseFail, savePurchaseSuccess, setDeliveryAddress, setDeliveryPrice } from './shopping-cart.actions';
 import { shoppingCartReducer } from './shopping-cart.reducers';
 import { selectTotalPrice, selectTotalQuantity, selectTotalQuantityForProductStock, ShoppingCartState } from './shopping-cart.state';
 
@@ -305,6 +305,8 @@ describe('Shopping cart store', () => {
             isOpen: true,
             isPaid: true,
             isPaying: true,
+            isSaved: true,
+            isSaving: true,
             payment: {} as any,
             products: [{} as any]
         };
@@ -534,6 +536,56 @@ describe('Shopping cart store', () => {
             error,
             isLoadedCupom: false,
             isLoadingCupom: false
+        });
+    });
+
+    it('savePurchase', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            error: {},
+            isSaved: true,
+            isSaving: false
+        };
+
+        const newState = shoppingCartReducer(initialState, savePurchase());
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            error: undefined,
+            isSaved: false,
+            isSaving: true
+        });
+    });
+
+    it('savePurchaseSuccess', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isSaving: true
+        };
+
+        const newState = shoppingCartReducer(initialState, savePurchaseSuccess());
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            isSaved: true,
+            isSaving: false
+        });
+    });
+
+    it('savePurchaseFail', () => {
+        const initialState: ShoppingCartState = {
+            ...appInitialState.shoppingCart,
+            isSaving: true
+        };
+
+        const error = {error: "error"};
+        const newState = shoppingCartReducer(initialState, savePurchaseFail({error}));
+
+        expect(newState).toEqual({
+            ...appInitialState.shoppingCart,
+            error,
+            isSaved: false,
+            isSaving: false
         });
     });
 

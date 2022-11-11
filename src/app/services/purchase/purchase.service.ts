@@ -1,9 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { interval, Observable, Subscriber } from 'rxjs';
+import { interval, Observable, of, Subscriber } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
+import { Address } from 'src/app/model/address/address';
+import { ProductNotes } from 'src/app/model/product/product-notes';
 import { Purchase } from 'src/app/model/purchase/purchase';
+import { ShoppingCartProduct } from 'src/app/model/shopping-cart-product/shopping-cart-product';
 import { environment } from 'src/environments/environment';
+import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +15,17 @@ import { environment } from 'src/environments/environment';
 export class PurchaseService {
 
   constructor(
-    private http: HttpClient
+    private apiService: ApiService
   ) { }
 
   findAll(): Observable<Purchase[]> {
     const url = `${environment.api}/purchases`;
-    return this.http.get<Purchase[]>(url)
+    return this.apiService.get<Purchase[]>(url)
   }
 
   findById(id: string) {
     const url = `${environment.api}/purchases/${id}`;
-    return this.http.get<Purchase>(url);
+    return this.apiService.get<Purchase>(url);
   }
 
   findLastPurchase(): Observable<Purchase> {
@@ -36,6 +40,20 @@ export class PurchaseService {
     return new Observable(observer => {
       return this.makeCallPaymentPurchase(id, observer, counter)
     })
+  }
+
+  savePurchase(purchase: SavePurchase) {
+    const url = `${environment.api}/purchases`;
+    return this.apiService.post<void>(url, {
+      deliveryAddress: purchase.deliveryAddress,
+      deliveryPrice: purchase.deliveryPrice,
+      productNotes: purchase.productNotes,
+      products: purchase.shoppingCart.map(s => ({
+        amount: s.amount,
+        productId: s.product.id,
+        stockOptionId: s.stockOption?.id
+      }))
+    });
   }
 
   private makeCallLastPurchase(observer: Subscriber<Purchase>, counter: number) {
@@ -55,7 +73,7 @@ export class PurchaseService {
   private callLastPurchase() {
     const url = `${environment.api}/purchases/last`;
     return interval(5000).pipe(
-      switchMap(() => this.http.get<Purchase>(url))
+      switchMap(() => this.apiService.get<Purchase>(url))
     );
   }
 
@@ -76,8 +94,15 @@ export class PurchaseService {
   private callPaymentPurchase(id: string) {
     const url = `${environment.api}/purchases/${id}`;
     return interval(5000).pipe(
-      switchMap(() => this.http.get<Purchase>(url))
+      switchMap(() => this.apiService.get<Purchase>(url))
     );
   }
 
+}
+
+type SavePurchase = {
+  deliveryAddress: Address;
+  deliveryPrice: number;
+  productNotes: ProductNotes[];
+  shoppingCart: ShoppingCartProduct[];
 }

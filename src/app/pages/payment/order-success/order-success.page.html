@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title color="light">Dados do pedido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <section class="purchase">
+    <ion-icon color="primary" name="bag-check"></ion-icon>
+
+    <ion-text color="primary">
+      <h1>Pedido feito com sucesso!</h1>
+    </ion-text>
+
+    <ion-text>
+      <p>Aguarde enquanto confirmamos o seu pedido.</p>
+      <p>
+        Só conseguiremos saber o valor exato da compra após coletarmos todos os seus produtos.
+        O pagamento será feito após isso.
+      </p>
+    </ion-text>
+    <ion-text>
+      <p>Como isso pode demorar, enviaremos uma mensagem quando terminarmos.</p>
+    </ion-text>
+  </section>
+
+  <section>
+    <ion-button size="full" (click)="myPurchases()" test-id="my-purchases-button">
+      Ver minhas compras
+    </ion-button>
+    <ion-button fill="clear" (click)="home()" size="full" test-id="home-button">
+      Ir para página principal
+    </ion-button>
+  </section>
+</ion-content>

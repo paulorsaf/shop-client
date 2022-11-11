@@ -99,6 +99,8 @@ export const appInitialState: AppState = {
         isOpen: false,
         isPaid: false,
         isPaying: false,
+        isSaved: false,
+        isSaving: false,
         notes: [],
         payment: undefined,
         price: undefined,

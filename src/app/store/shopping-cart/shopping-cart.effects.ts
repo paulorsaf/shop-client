@@ -9,9 +9,10 @@ import { Payment, PaymentType } from 'src/app/model/payment/payment';
 import { CalculatePrice } from 'src/app/model/purchase/calculate-price';
 import { CupomService } from 'src/app/services/cupom/cupom.service';
 import { PaymentService } from 'src/app/services/payment/payment.service';
+import { PurchaseService } from 'src/app/services/purchase/purchase.service';
 import { AppState } from '../app-state';
 import { calculatePurchasePrice, calculatePurchasePriceFail, calculatePurchasePriceSuccess } from '../purchases/purchases.actions';
-import { closeShoppingCart, loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseBySavedCreditCard, makePurchaseFail, makePurchaseSuccess, openShoppingCart } from './shopping-cart.actions';
+import { closeShoppingCart, loadCupom, loadCupomFail, loadCupomSuccess, makePurchase, makePurchaseByCreditCard, makePurchaseByMoney, makePurchaseByPix, makePurchaseBySavedCreditCard, makePurchaseFail, makePurchaseSuccess, openShoppingCart, savePurchase, savePurchaseFail, savePurchaseSuccess } from './shopping-cart.actions';
 
 @Injectable()
 export class ShoppingCartEffects {
@@ -180,6 +181,24 @@ export class ShoppingCartEffects {
     )
   );
 
+  savePurchaseEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(savePurchase),
+      this.getStore(),
+      switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
+        this.purchaseService.savePurchase({
+          deliveryAddress: storeState.shoppingCart.deliveryAddress,
+          deliveryPrice: storeState.shoppingCart.deliveryPrice,
+          productNotes: storeState.shoppingCart.notes,
+          shoppingCart: storeState.shoppingCart.products
+        }).pipe(
+          map(() => savePurchaseSuccess()),
+          catchError(error => of(savePurchaseFail({error})))
+        )
+      )
+    )
+  );
+
   private getStore(){
     return withLatestFrom(this.store);
   }
@@ -189,6 +208,7 @@ export class ShoppingCartEffects {
     private cupomService: CupomService,
     private modalController: ModalController,
     private paymentService: PaymentService,
+    private purchaseService: PurchaseService,
     private store: Store<AppState>
   ) {}
 

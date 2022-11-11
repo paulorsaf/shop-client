@@ -1,37 +1,64 @@
 <div class="status">
-  <div class="status-item" [ngClass]="purchase.status === 'CREATED' ? 'selected' : ''">
+  <div class="status-item" [ngClass]="purchase.status === 'CREATED' ? 'selected' : ''" test-id="created">
     <ion-icon name="bag-check-outline"></ion-icon>
     <div>Pedido</div>
   </div>
-  <div class="status-item" *ngIf="purchase.payment?.type !== 'MONEY'"
-    [ngClass]="purchase.status === 'VERIFYING_PAYMENT' || purchase.status === 'PAID' ? 'selected' : ''"
-    test-id="payment">
-    <ion-icon name="wallet-outline"></ion-icon>
-    <div>Pagamento</div>
-  </div>
-  <div class="status-item" [ngClass]="purchase.status === 'SORTING_OUT' ? 'selected' : ''">
+
+  <ng-template [ngIf]="!(company$ | async)?.payment?.isPaymentAfterPurchase">
+    <ng-template [ngIf]="purchase.payment?.type !== 'MONEY'">
+      <div class="status-item"
+        [ngClass]="purchase.status === 'VERIFYING_PAYMENT' || purchase.status === 'PAID' ? 'selected' : ''"
+        test-id="payment">
+        <ion-icon name="wallet-outline"></ion-icon>
+        <div>Pagamento</div>
+      </div>
+    </ng-template>
+  </ng-template>
+
+  <div class="status-item" [ngClass]="purchase.status === 'SORTING_OUT' ? 'selected' : ''"
+    test-id="sorting-out">
     <ion-icon name="archive-outline"></ion-icon>
     <div>Separando</div>
   </div>
-  <div class="status-item" *ngIf="!purchase.address"
-    [ngClass]="purchase.status === 'READY' ? 'selected' : ''" test-id="ready-for-pick-up">
-    <ion-icon name="car-outline"></ion-icon>
-    <div>Pronto</div>
-  </div>
-  <div class="status-item" *ngIf="purchase.address"
-    [ngClass]="purchase.status === 'DELIVERYING' || purchase.status === 'READY' ? 'selected' : ''"
-    test-id="deliverying">
-    <ion-icon name="car-outline"></ion-icon>
-    <div>Enviando</div>
-  </div>
-  <div class="status-item" [ngClass]="purchase.status === 'FINISHED' ? 'selected' : ''"
-    test-id="finished" *ngIf="purchase.status !== 'CANCELLED'">
-    <ion-icon name="bag-check"></ion-icon>
-    <div>Finalizado</div>
-  </div>
-  <div class="status-item cancelled" [ngClass]="purchase.status === 'CANCELLED' ? 'selected' : ''"
-    test-id="cancelled" *ngIf="purchase.status === 'CANCELLED'">
-    <ion-icon name="bag-check"></ion-icon>
-    <div>Cancelado</div>
-  </div>
+
+  <ng-template [ngIf]="(company$ | async)?.payment?.isPaymentAfterPurchase">
+    <div class="status-item"
+      [ngClass]="purchase.status === 'WAITING_PAYMENT' || purchase.status === 'PAID' ? 'selected' : ''"
+      test-id="payment-after">
+      <ion-icon name="wallet-outline"></ion-icon>
+      <div>Pagamento</div>
+    </div>
+  </ng-template>
+
+  <span *ngIf="purchase.address">
+    <div class="status-item" [ngClass]="purchase.status === 'DELIVERYING' ? 'selected' : ''"
+      test-id="deliverying">
+      <ion-icon name="car-outline"></ion-icon>
+      <div>Enviando</div>
+    </div>
+  </span>
+
+  <span *ngIf="!purchase.address">
+    <div class="status-item" [ngClass]="purchase.status === 'READY' ? 'selected' : ''"
+      test-id="ready">
+      <ion-icon name="car-outline"></ion-icon>
+      <div>Pronto</div>
+    </div>
+  </span>
+
+  <span *ngIf="purchase.status !== 'CANCELLED'">
+    <div class="status-item" [ngClass]="purchase.status === 'FINISHED' ? 'selected' : ''"
+      test-id="finished">
+      <ion-icon name="bag-check"></ion-icon>
+      <div>Finalizado</div>
+    </div>
+  </span>
+
+  <span *ngIf="purchase.status === 'CANCELLED'">
+    <div class="status-item cancelled" [ngClass]="purchase.status === 'CANCELLED' ? 'selected' : ''"
+      test-id="cancelled">
+      <ion-icon name="bag-check"></ion-icon>
+      <div>Cancelado</div>
+    </div>
+  </span>
 </div>

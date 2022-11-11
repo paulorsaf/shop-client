@@ -21,6 +21,8 @@ export type ShoppingCartState = {
     isOpen: boolean;
     isPaid: boolean;
     isPaying: boolean;
+    isSaved: boolean;
+    isSaving: boolean;
     notes: ProductNotes[];
     payment: Payment;
     price: CalculatePriceResponse;

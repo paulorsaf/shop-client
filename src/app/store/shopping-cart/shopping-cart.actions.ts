@@ -52,3 +52,7 @@ export const removeProductNotes = createAction('[Shopping cart] remove notes', p
 export const loadCupom = createAction('[Purchases] load cupom', props<{cupom: string}>());
 export const loadCupomSuccess = createAction('[Purchases] load cupom success', props<{cupom: Cupom}>());
 export const loadCupomFail = createAction('[Purchases] load cupom fail', props<{error: any}>());
+
+export const savePurchase = createAction('[Purchases] save');
+export const savePurchaseSuccess = createAction('[Purchases] save success');
+export const savePurchaseFail = createAction('[Purchases] save fail', props<{error: any}>());
