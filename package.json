@@ -40,6 +40,7 @@
     "@sentry/tracing": "^7.12.1",
     "amplitude-js": "^4.1.0",
     "br-mask": "0.0.10",
+    "date-fns": "^2.29.3",
     "firebase": "^9.9.1",
     "redux-beacon": "^2.1.0",
     "rxjs": "~6.6.0",
