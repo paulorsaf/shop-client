@@ -61,5 +61,12 @@ describe('PurchaseStatusMessageComponent', () => {
 
     expect(page.querySelector('[test-id="deliverying-message"]')).not.toBeNull();
   })
+
+  it('given purchase status is waiting for payment, then show waiting for payment message', () => {
+    component.purchase = {status: "WAITING_PAYMENT"} as any;
+    fixture.detectChanges();
+
+    expect(page.querySelector('[test-id="waiting-payment-message"]')).not.toBeNull();
+  })
   
 });

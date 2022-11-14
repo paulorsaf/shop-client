@@ -19,6 +19,15 @@
         </ion-card-content>
         <ion-card-content *ngIf="purchase.status !== 'FINISHED'">
           <app-purchase-status-message [purchase]="purchase"></app-purchase-status-message>
+
+          <ng-template [ngIf]="purchase.status === 'WAITING_PAYMENT' && !purchase.payment?.error">
+            <div class="main-message">
+              <ion-button color="primary" size="full" (click)="retryPayment()"
+                test-id="payment-button">
+                Fazer pagamento
+              </ion-button>
+            </div>
+          </ng-template>
         </ion-card-content>
       </ion-card>
 
@@ -77,7 +86,7 @@
             Ver recibo
           </ion-button>
 
-          <ion-text *ngIf="purchase.payment.error" color="danger" test-id="payment-error">
+          <ion-text *ngIf="purchase.payment?.error" color="danger" test-id="payment-error">
             Erro ao realizar pagamento: <br/>
             {{purchase.payment.error?.message || (purchase.payment.error | json)}}
             <br/><br/>

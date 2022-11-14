@@ -1,8 +1,10 @@
 <p class="main-message" *ngIf="purchase.status !== 'CANCELLED'">
-  <ion-text color="primary" *ngIf="purchase.status === 'CREATED'" test-id="created-payment-message">
+  <ion-text color="primary" *ngIf="purchase.status === 'CREATED'"
+    test-id="created-payment-message">
     Por favor, aguarde enquanto atendemos o seu pedido.
   </ion-text>
-  <ion-text color="primary" *ngIf="purchase.status === 'VERIFYING_PAYMENT'" test-id="verifying-payment-message">
+  <ion-text color="primary" *ngIf="purchase.status === 'VERIFYING_PAYMENT'"
+    test-id="verifying-payment-message">
     Por favor, aguarde enquanto confirmamos o seu pagamento.
   </ion-text>
   <ion-text color="primary" *ngIf="purchase.status === 'PAID'" test-id="paid-message">
@@ -20,6 +22,10 @@
   </ion-text>
   <ion-text color="primary" *ngIf="purchase.status === 'DELIVERYING'" test-id="deliverying-message">
     Sua compra está a caminho e em breve chegará até a sua casa.
+  </ion-text>
+  <ion-text color="primary" *ngIf="purchase.status === 'WAITING_PAYMENT'"
+    test-id="waiting-payment-message">
+    Escolha como pagar a sua compra.
   </ion-text>
 </p>
 

@@ -20,6 +20,15 @@
         Tentar novamente
       </ion-button>
     </div>
+
+    <ng-template [ngIf]="purchase.status === 'WAITING_PAYMENT' && !purchase.payment?.error">
+      <div class="main-message">
+        <ion-button color="primary" size="full" test-id="payment-button">
+          Fazer pagamento
+        </ion-button>
+      </div>
+    </ng-template>
+
     <p>{{purchase.price?.totalWithPaymentFee | currency: "R$ "}}</p>
     <p *ngIf="purchase.address">Entrega à domicílio.</p>
     <p *ngIf="!purchase.address">Busca na loja.</p>

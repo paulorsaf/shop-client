@@ -91,4 +91,22 @@ describe('PurchaseCardComponent', () => {
     
   });
 
+  describe('when status is waiting for payment', () => {
+
+    it('and there is no error, then show payment button', () => {
+      component.purchase = {id: '1', payment: {}, status: "WAITING_PAYMENT"} as any;
+      fixture.detectChanges();
+      
+      expect(page.querySelector('[test-id="payment-button"]')).not.toBeNull();
+    })
+
+    it('and there is error, then hide payment button', () => {
+      component.purchase = {id: '1', payment: {error: {}}, status: "WAITING_PAYMENT"} as any;
+      fixture.detectChanges();
+
+      expect(page.querySelector('[test-id="payment-button"]')).toBeNull();
+    })
+
+  })
+
 });
