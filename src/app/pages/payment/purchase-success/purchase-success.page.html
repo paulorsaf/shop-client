@@ -35,11 +35,11 @@
         </ion-text>
       </span>
       <span *ngIf="!(isLoadingPaymentPurchase$ | async)" test-id="last-purchase">
-        <span *ngIf="(paymentPurchase$ | async)?.payment?.id" test-id="last-purchase-success">
+        <span *ngIf="!(paymentPurchase$ | async)?.payment?.error" test-id="last-purchase-success">
           <ion-text *ngIf="(paymentPurchase$ | async)?.payment?.type === 'PIX'">
             <p>
               Encontramos o seu comprovante.
-              Vamos confirmar os dados e em você receberá uma mensagem com a atualização do seu pedido.
+              Vamos confirmar os dados e em breve você receberá uma mensagem com a atualização do seu pedido.
             </p>
           </ion-text>
           <ion-text *ngIf="(paymentPurchase$ | async)?.payment?.type === 'CREDIT_CARD'">
