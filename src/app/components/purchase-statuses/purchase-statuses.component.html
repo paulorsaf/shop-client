@@ -23,7 +23,7 @@
 
   <ng-template [ngIf]="(company$ | async)?.payment?.isPaymentAfterPurchase">
     <div class="status-item"
-      [ngClass]="purchase.status === 'WAITING_PAYMENT' || purchase.status === 'PAID' ? 'selected' : ''"
+      [ngClass]="purchase.status === 'VERIFYING_PAYMENT' || purchase.status === 'WAITING_PAYMENT' || purchase.status === 'PAID' ? 'selected' : ''"
       test-id="payment-after">
       <ion-icon name="wallet-outline"></ion-icon>
       <div>Pagamento</div>
