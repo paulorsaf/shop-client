@@ -6,6 +6,10 @@ import { of } from 'rxjs';
 })
 export class StorageService {
 
+  getItem(key: string) {
+    return of(localStorage.getItem(key));
+  }
+
   setItem(key: string, value: string) {
     localStorage.setItem(key, value);
     return of({});

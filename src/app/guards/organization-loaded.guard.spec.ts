@@ -1,7 +1,9 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
 import { ModalController } from "@ionic/angular";
 import { Store, StoreModule } from "@ngrx/store";
+import { of } from "rxjs";
 import { ModalControllerMock } from "../model/mocks/modal-controller.mock";
+import { StorageService } from "../services/storage/storage.service";
 import { AppState } from "../store/app-state";
 import { loadOrganizationCompaniesSuccess, setSelectedCompany } from "../store/organization/organization.action";
 import { organizationReducer } from "../store/organization/organization.reducers";
@@ -12,9 +14,11 @@ describe('Organization loaded guard', () => {
     let guard: OrganizationLoadedGuard;
     let modalController: ModalControllerMock;
     let store: Store<AppState>;
+    let storageService: StorageServiceMock;
 
     beforeEach(waitForAsync(() => {
         modalController = new ModalControllerMock();
+        storageService = new StorageServiceMock();
 
         TestBed.configureTestingModule({
             imports: [
@@ -23,41 +27,53 @@ describe('Organization loaded guard', () => {
             ]
         })
         .overrideProvider(ModalController, {useValue: modalController})
+        .overrideProvider(StorageService, {useValue: storageService})
         .compileComponents();
     
         guard = TestBed.inject(OrganizationLoadedGuard);
         store = TestBed.inject(Store);
     }));
 
-    describe('given organization loaded', () => {
+    it('given only one company in organization, then return true', done => {
+        store.dispatch(loadOrganizationCompaniesSuccess({companies: [{id: 1}] as any}));
 
-        it('when only one company exists, then return true', done => {
-            store.dispatch(loadOrganizationCompaniesSuccess({companies: [{id: 1}] as any}));
-    
-            guard.canActivate().subscribe(canActivate => {
-                expect(canActivate).toBeTruthy();
+        guard.canActivate().subscribe(canActivate => {
+            expect(canActivate).toBeTruthy();
+            done();
+        })
+    })
+
+    describe('when multiple companies in organization', () => {
+
+        const companies = [{id: "anyId1"}, {id: "anyId2"}] as any;
+        
+        beforeEach(() => {
+            store.dispatch(loadOrganizationCompaniesSuccess({companies}));
+        })
+
+        it('when selected company is not stored, then open select company modal', done => {
+            guard.canActivate().subscribe(() => {
+                expect(modalController.isPresented).toBeTruthy();
                 done();
             })
         })
 
-        describe('when more than one company exists', () => {
+        describe('when selected company is stored', () => {
 
-            const companies = [{id: 1}, {id: 2}] as any;
-            
             beforeEach(() => {
-                store.dispatch(loadOrganizationCompaniesSuccess({companies}));
+                storageService._getResponse = of("anyId2");
             })
-    
-            it('and no company is selected, then open select company modal', done => {
+
+            it('then set company as selected', done => {
                 guard.canActivate().subscribe(() => {
-                    expect(modalController.isPresented).toBeTruthy();
-                    done();
+                    store.select('organization').subscribe(state => {
+                        expect(state.selectedCompany).toEqual({id: "anyId2"} as any);
+                        done();
+                    })
                 })
             })
-        
-            it('and company is selected, then return true', done => {
-                store.dispatch(setSelectedCompany({company: {id: 1} as any}));
 
+            it('then return true', done => {
                 guard.canActivate().subscribe(canActivate => {
                     expect(canActivate).toBeTruthy();
                     done();
@@ -65,7 +81,23 @@ describe('Organization loaded guard', () => {
             })
 
         })
+    
+        it('when user selected a company, then return true', done => {
+            store.dispatch(setSelectedCompany({company: {id: "anyId1"} as any}));
+
+            guard.canActivate().subscribe(canActivate => {
+                expect(canActivate).toBeTruthy();
+                done();
+            })
+        })
 
     })
 
 })
+
+class StorageServiceMock {
+    _getResponse = of(null);
+    getItem() {
+        return this._getResponse;
+    }
+}
