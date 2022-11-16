@@ -7,16 +7,19 @@ import { OrganizationEffects } from './organization.effects';
 import { loadOrganizationCompanies, loadOrganizationCompaniesFail, loadOrganizationCompaniesSuccess, setSelectedCompany } from './organization.action';
 import { OrganizationService } from 'src/app/services/organization/organization.service';
 import { clear } from '../shopping-cart/shopping-cart.actions';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 describe('Organization effects', () => {
   let effects: OrganizationEffects;
   let actions$: Observable<Action>;
   let organizationService: OrganizationServiceMock;
+  let storageService: StorageServiceMock;
 
   const error = { error: 'error' };
 
   beforeEach(() => {
     organizationService = new OrganizationServiceMock();
+    storageService = new StorageServiceMock();
 
     TestBed.configureTestingModule({
       imports: [
@@ -26,7 +29,8 @@ describe('Organization effects', () => {
       ],
       providers: [provideMockActions(() => actions$)],
     })
-    .overrideProvider(OrganizationService, { useValue: organizationService });
+    .overrideProvider(OrganizationService, { useValue: organizationService })
+    .overrideProvider(StorageService, { useValue: storageService });
 
     effects = TestBed.inject(OrganizationEffects);
   });
@@ -66,8 +70,15 @@ describe('Organization effects', () => {
     })
 
     it('then clear shopping cart', (done) => {
-      effects.setSelectedCompanyEffect$.subscribe((newAction) => {
+      effects.setSelectedCompany_ClearShoppingCartEffect$.subscribe((newAction) => {
         expect(newAction).toEqual(clear());
+        done();
+      });
+    });
+
+    it('then save company id on memory', (done) => {
+      effects.setSelectedCompany_SaveOnMemory$.subscribe(() => {
+        expect(storageService._keySet).toEqual("SELECTED_COMPANY_ID");
         done();
       });
     });
@@ -77,8 +88,16 @@ describe('Organization effects', () => {
 });
 
 export class OrganizationServiceMock {
-    response = of({});
-    findById() {
-      return this.response;
-    }
+  response = of({});
+  findById() {
+    return this.response;
+  }
+}
+
+class StorageServiceMock {
+  _keySet;
+  setItem(key) {
+    this._keySet = key;
+    return of({});
+  }
 }
