@@ -12,6 +12,7 @@
     "build:thegardenbr": "ng build --configuration=thegardenbr",
     "build:maxpet": "ng build --configuration=maxpet",
     "build:ricco": "ng build --configuration=ricco",
+    "build:parisltda": "ng build --configuration=parisltda",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
