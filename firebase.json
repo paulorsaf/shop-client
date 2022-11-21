@@ -70,7 +70,7 @@
       }
     ]
   }, {
-    "target": "paris-ltda",
+    "target": "parisltda",
     "public": "www",
     "ignore": [
       "firebase.json",
