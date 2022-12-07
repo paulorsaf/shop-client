@@ -40,7 +40,7 @@
             {{price.totalPrice | currency: "R$ "}}
           </span>
           <span *ngIf="form.value.paymentType === 'CREDIT_CARD'">
-            {{price.totalPriceWithPaymentFee | currency: "R$ "}}
+            {{price.totalWithPaymentFee | currency: "R$ "}}
           </span>
         </ion-button>
       </ion-item>
