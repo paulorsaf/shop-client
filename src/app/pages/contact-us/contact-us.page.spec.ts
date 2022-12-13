@@ -4,8 +4,8 @@ import { IonicModule } from '@ionic/angular';
 import { Store, StoreModule } from '@ngrx/store';
 import { PageMock } from 'src/app/model/mocks/page.mock';
 import { AppState } from 'src/app/store/app-state';
-import { loadCompanySuccess } from 'src/app/store/company/company.action';
-import { companyReducer } from 'src/app/store/company/company.reducers';
+import { setSelectedCompany } from 'src/app/store/organization/organization.action';
+import { organizationReducer } from 'src/app/store/organization/organization.reducers';
 import { ContactUsPage } from './contact-us.page';
 
 describe('ContactUsPage', () => {
@@ -21,7 +21,7 @@ describe('ContactUsPage', () => {
         RouterTestingModule.withRoutes([]),
         IonicModule.forRoot(),
         StoreModule.forRoot([]),
-        StoreModule.forFeature('company', companyReducer)
+        StoreModule.forFeature('organization', organizationReducer)
       ]
     }).compileComponents();
 
@@ -33,7 +33,7 @@ describe('ContactUsPage', () => {
 
     spyOn(window, 'open');
 
-    store.dispatch(loadCompanySuccess({company: {} as any}));
+    store.dispatch(setSelectedCompany({company: {} as any}));
     fixture.detectChanges();
   }));
 
@@ -56,7 +56,7 @@ describe('ContactUsPage', () => {
   describe('given company has facebook', () => {
 
     beforeEach(() => {
-      store.dispatch(loadCompanySuccess({company: {facebook: "anyFacebookLink"} as any}));
+      store.dispatch(setSelectedCompany({company: {facebook: "anyFacebookLink"} as any}));
       fixture.detectChanges();
     })
 
@@ -76,7 +76,7 @@ describe('ContactUsPage', () => {
   describe('given company has instagram', () => {
 
     beforeEach(() => {
-      store.dispatch(loadCompanySuccess({company: {instagram: "anyInstagramLink"} as any}));
+      store.dispatch(setSelectedCompany({company: {instagram: "anyInstagramLink"} as any}));
       fixture.detectChanges();
     })
 
@@ -96,7 +96,7 @@ describe('ContactUsPage', () => {
   describe('given company has website', () => {
 
     beforeEach(() => {
-      store.dispatch(loadCompanySuccess({company: {website: "anyWebsiteLink"} as any}));
+      store.dispatch(setSelectedCompany({company: {website: "anyWebsiteLink"} as any}));
       fixture.detectChanges();
     })
 
@@ -116,7 +116,7 @@ describe('ContactUsPage', () => {
   describe('given company has whatsapp', () => {
 
     beforeEach(() => {
-      store.dispatch(loadCompanySuccess({company: {whatsapp: "anyWhatsappLink"} as any}));
+      store.dispatch(setSelectedCompany({company: {whatsapp: "anyWhatsappLink"} as any}));
       fixture.detectChanges();
     })
 

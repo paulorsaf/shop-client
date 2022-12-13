@@ -28,7 +28,7 @@ export class ContactUsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.company$ = this.store.select(state => state.company.company);
+    this.company$ = this.store.select(state => state.organization.selectedCompany);
   }
 
   openUrl(url: string){
