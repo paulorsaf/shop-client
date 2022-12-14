@@ -3,5 +3,5 @@
 </ion-button> -->
 <ion-button fill="clear" color="light" (click)="showShoppingCart()"
   test-id="shopping-cart-button">
-  <ion-icon name="cart-outline"></ion-icon> &nbsp;{{totalQuantity$ | async}}
+  {{(totalPrice$ | async) | currency: 'R$ '}} &nbsp; <ion-icon name="cart-outline"></ion-icon>
 </ion-button>

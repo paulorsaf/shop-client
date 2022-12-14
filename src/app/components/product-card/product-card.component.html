@@ -3,16 +3,16 @@
     <ion-img object-fit="cover" *ngIf="product.images?.length" [src]="product.images[0].imageUrl"></ion-img>
   </ion-card-content>
   <ion-card-content class="details">
-    <ion-text class="description">{{product.name}}</ion-text>
+    <ion-text color="primary" class="description">{{product.name}}</ion-text>
     <div class="price" *ngIf="product.priceWithDiscount">
-      <ion-text>{{product.priceWithDiscount | currency: "R$ "}}</ion-text>
+      <ion-text color="primary">{{product.priceWithDiscount | currency: "R$ "}}</ion-text>
       <ion-text class="discount">
         {{product.price | currency: "R$ "}}
       </ion-text>
     </div>
     <div class="price" *ngIf="!product.priceWithDiscount">
-      <ion-text>{{product.price | currency: "R$ "}}</ion-text>
+      <ion-text color="primary">{{product.price | currency: "R$ "}}</ion-text>
     </div>
-    <ion-text *ngIf="product.unit">{{product.weight}} {{product.unit}}</ion-text>
+    <ion-text *ngIf="product.unit" class="weight">{{product.weight}} {{product.unit}}</ion-text>
   </ion-card-content>
 </ion-card>

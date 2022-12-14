@@ -31,6 +31,10 @@ body {
   background-color: white;
 }
 
+.header-ios ion-toolbar:last-of-type {
+  --border-width: 0;
+}
+
 ion-content {
   --background: rgb(235,241,253);
 }

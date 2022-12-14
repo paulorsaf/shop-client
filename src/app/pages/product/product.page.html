@@ -27,18 +27,18 @@
 
       <section class="header">
         <div class="title">
-          <ion-text>{{product.name}}</ion-text>
+          <ion-text color="primary">{{product.name}}</ion-text>
         </div>
         <div class="price" *ngIf="product.priceWithDiscount">
-          <ion-text>{{product.priceWithDiscount | currency: "R$ "}}</ion-text>
+          <ion-text color="primary">{{product.priceWithDiscount | currency: "R$ "}}</ion-text>
           <ion-text class="discount">
             {{product.price | currency: "R$ "}}
           </ion-text>
         </div>
         <div class="price" *ngIf="!product.priceWithDiscount">
-          <ion-text>{{product.price | currency: "R$ "}}</ion-text>
+          <ion-text color="primary">{{product.price | currency: "R$ "}}</ion-text>
         </div>
-        <div>
+        <div class="unit">
           <ion-text *ngIf="product.unit">{{product.weight}} {{product.unit}}</ion-text>
         </div>
       </section>

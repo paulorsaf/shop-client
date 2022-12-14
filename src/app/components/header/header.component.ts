@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { AppState } from 'src/app/store/app-state';
 import { openShoppingCart } from 'src/app/store/shopping-cart/shopping-cart.actions';
-import { selectTotalQuantity } from 'src/app/store/shopping-cart/shopping-cart.state';
+import { selectTotalPrice, selectTotalQuantity } from 'src/app/store/shopping-cart/shopping-cart.state';
 
 @Component({
   selector: 'app-header',
@@ -14,6 +14,7 @@ export class HeaderComponent implements OnInit {
 
   @Input() hasSearchButton = false;
 
+  totalPrice$: Observable<number>;
   totalQuantity$: Observable<number>;
 
   constructor(
@@ -21,6 +22,7 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.totalPrice$ = this.store.select(selectTotalPrice);
     this.totalQuantity$ = this.store.select(selectTotalQuantity);
   }
 

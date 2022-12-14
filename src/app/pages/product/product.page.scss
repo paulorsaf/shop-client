@@ -50,13 +50,18 @@ section.header {
     font-size: 1.4rem;
 
     .title {
-        font-size: 3.2rem;
-        line-height: 4rem;
+        font-size: 2rem;
+        line-height: 2.4rem;
     }
 
     .price {
+        font-size: 2rem;
         align-items: center;
         justify-content: flex-start;
+    }
+
+    .unit {
+        margin-top: 1rem;
     }
 }
 

@@ -8,7 +8,7 @@
         <ion-icon name="home" color="light"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title color="light">{{(category$ | async)?.name}}</ion-title>
+    <ion-title color="light"></ion-title>
     <ion-buttons slot="end">
       <app-header></app-header>
     </ion-buttons>
@@ -16,8 +16,11 @@
 </ion-header>
 
 <ion-content>
-  
   <section *ngIf="isLoading$ | async" class="loader" test-id="products-loader">
+    <div class="title">
+      <ion-label color="primary">{{(category$ | async)?.name}}</ion-label>
+    </div>
+
     <ion-skeleton-text animated class="product"></ion-skeleton-text>
     <ion-skeleton-text animated class="product"></ion-skeleton-text>
     <ion-skeleton-text animated class="product"></ion-skeleton-text>
@@ -25,6 +28,10 @@
   </section>
 
   <section *ngIf="(isLoading$ | async) === false" class="products" test-id="products">
+    <div class="title">
+      <ion-label color="primary">{{(category$ | async)?.name}}</ion-label>
+    </div>
+
     <app-product-card *ngFor="let product of (products$ | async)" [product]="product"></app-product-card>
   </section>
 </ion-content>
