@@ -24,6 +24,25 @@ export class OrganizationEffects {
     )
   );
 
+  loadOrganizationCompaniesSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadOrganizationCompaniesSuccess),
+      switchMap((params: {companies: Company[]}) => {
+        if (params.companies.length === 1) {
+          const company = params.companies[0];
+          if (company.chatId) {
+            var s = document.createElement('script');
+            s.innerHTML = `(function(d, w, c) {w.SibConversationsID = '${company.chatId}';w[c] = w[c] || function() {(w[c].q = w[c].q || []).push(arguments);};var s = d.createElement('script');s.async = true;s.src = 'https://conversations-widget.sendinblue.com/sib-conversations.js';if (d.head) d.head.appendChild(s);})(document, window, 'SibConversations')`;
+            document.body.appendChild(s);
+          }
+        }
+        return of({});
+      })
+    ), {
+      dispatch: false
+    }
+  );
+
   setSelectedCompany_ClearShoppingCartEffect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(setSelectedCompany),
@@ -37,6 +56,22 @@ export class OrganizationEffects {
       switchMap((params: {company: Company}) => 
         this.storageService.setItem('SELECTED_COMPANY_ID', params.company.id)
       )
+    ), {
+      dispatch: false
+    }
+  );
+
+  setSelectedCompany_ChatId$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(setSelectedCompany),
+      switchMap((params: {company: Company}) => {
+        if (params.company.chatId) {
+          var s = document.createElement('script');
+          s.innerHTML = `(function(d, w, c) {w.SibConversationsID = '${params.company.chatId}';w[c] = w[c] || function() {(w[c].q = w[c].q || []).push(arguments);};var s = d.createElement('script');s.async = true;s.src = 'https://conversations-widget.sendinblue.com/sib-conversations.js';if (d.head) d.head.appendChild(s);})(document, window, 'SibConversations')`;
+          document.body.appendChild(s);
+        }
+        return of({});
+      })
     ), {
       dispatch: false
     }
