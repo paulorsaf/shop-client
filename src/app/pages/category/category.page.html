@@ -18,13 +18,10 @@
 <ion-content>
   <section *ngIf="isLoading$ | async" class="loader" test-id="products-loader">
     <div class="title">
-      <ion-label color="primary">{{(category$ | async)?.name}}</ion-label>
+      <ion-skeleton-text animated></ion-skeleton-text>
     </div>
 
-    <ion-skeleton-text animated class="product"></ion-skeleton-text>
-    <ion-skeleton-text animated class="product"></ion-skeleton-text>
-    <ion-skeleton-text animated class="product"></ion-skeleton-text>
-    <ion-skeleton-text animated class="product"></ion-skeleton-text>
+    <ion-skeleton-text animated *ngFor="let i of [1,2,3,4,5,6]"></ion-skeleton-text>
   </section>
 
   <section *ngIf="(isLoading$ | async) === false" class="products" test-id="products">
@@ -32,6 +29,25 @@
       <ion-label color="primary">{{(category$ | async)?.name}}</ion-label>
     </div>
 
-    <app-product-card *ngFor="let product of (products$ | async)" [product]="product"></app-product-card>
+    <ion-list>
+      <ion-item *ngFor="let product of (products$ | async)" (click)="goToProduct(product)">
+        <ion-thumbnail slot="start">
+          <ion-img object-fit="cover" *ngIf="product.images?.length" [src]="product.images[0].imageUrl"></ion-img>
+        </ion-thumbnail>
+        <ion-label>
+          <div><ion-text color="primary" class="description">{{product.name}}</ion-text></div>
+          <div><ion-text *ngIf="product.unit" class="weight">{{product.weight}} {{product.unit}}</ion-text></div>
+          <div class="price" *ngIf="product.priceWithDiscount">
+            <ion-text class="discount">
+              {{product.price | currency: "R$ "}}
+            </ion-text>
+            <ion-text color="primary">{{product.priceWithDiscount | currency: "R$ "}}</ion-text>
+          </div>
+          <div class="price" *ngIf="!product.priceWithDiscount">
+            <ion-text color="primary">{{product.price | currency: "R$ "}}</ion-text>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </section>
 </ion-content>

@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -27,6 +27,7 @@ export class CategoryPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private navController: NavController,
+    private router: Router,
     private store: Store<AppState>
   ) {
     this.hasBackButton = (this.location.getState() as any)?.navigationId !== 1;
@@ -45,6 +46,10 @@ export class CategoryPage implements OnInit {
 
   goHome() {
     this.navController.navigateRoot('/');
+  }
+
+  goToProduct(product: {id: string}) {
+    this.router.navigate([`/products/${product.id}`]);
   }
 
 }

@@ -8,15 +8,62 @@
     }
 }
 
+ion-list {
+    width: 100%;
+}
+ion-item {
+    --padding-start: 0;
+    ion-thumbnail {
+        width: 120px;
+        height: 120px;
+        margin: 0;
+    }
+    ion-label {
+        margin-left: 15px;
+
+        .price [color="primary"] {
+            background: var(--ion-color-primary);
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+        }
+    }
+    ion-text {
+        white-space: normal;
+    }
+    .description {
+        font-size: 1.8rem;
+    }
+    .price {
+        color: red;
+        font-weight: 600;
+        font-size: 1.6rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: end;
+        margin-top: 10px;
+    
+        .discount {
+            font-size: 1.6rem;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+    }
+
+    .weight {
+        font-size: 14px;
+    }
+}
+
 .loader {
     margin-top: 50px;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 10px;
 
     ion-skeleton-text {
-        flex: 50%;
-        height: 300px;
+        height: 120px;
+    }
+    .title ion-skeleton-text {
+        height: 30px;
     }
 }
 
