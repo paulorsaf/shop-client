@@ -37,7 +37,9 @@ registerLocaleData(localePt);
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      backButtonText: ''
+    }),
     AppRoutingModule,
     HttpClientModule,
     AppStoreModule,
