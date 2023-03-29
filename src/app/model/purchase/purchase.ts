@@ -52,6 +52,7 @@ type Price = {
     delivery: number;
     discount: number;
     paymentFee: number;
+    serviceFee:number;
     total: number;
     totalWithPaymentFee: number;
 }
