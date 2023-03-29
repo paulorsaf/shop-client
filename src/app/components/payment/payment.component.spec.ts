@@ -110,7 +110,10 @@ describe('PaymentComponent', () => {
     describe('when price calculated', () => {
 
       beforeEach(() => {
-        const price = {id: "anyPrice"} as any;
+        const price = {
+          id: "anyPrice",
+          serviceFee: 10
+        } as any;
         store.dispatch(calculatePurchasePriceSuccess({price}));
         fixture.detectChanges();
       })
@@ -125,6 +128,21 @@ describe('PaymentComponent', () => {
 
       it('then show action buttons', () => {
         expect(page.querySelector('[test-id="action-buttons"]')).not.toBeNull();
+      })
+
+      it('when price has service fee, the show service fee', () => {
+        expect(page.querySelector('[test-id="service-fee"]')).not.toBeNull();
+      })
+
+      it('when price doesnt have service fee, the hide service fee', () => {
+        const price = {
+          id: "anyPrice",
+          serviceFee: 0
+        } as any;
+        store.dispatch(calculatePurchasePriceSuccess({price}));
+        fixture.detectChanges();
+
+        expect(page.querySelector('[test-id="service-fee"]')).toBeNull();
       })
   
     })

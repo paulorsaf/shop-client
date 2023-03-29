@@ -62,6 +62,12 @@
               </ion-label>
               <p slot="end">{{purchase.price?.paymentFee | currency: "R$ "}}</p>
             </div>
+            <div class="payment-line" *ngIf="purchase.price?.serviceFee">
+              <ion-label>
+                <h2>Taxa de serviço</h2>
+              </ion-label>
+              <p slot="end">{{purchase.price?.serviceFee | currency: "R$ "}}</p>
+            </div>
             <div class="payment-line">
               <ion-label>
                 <h2>Total</h2>

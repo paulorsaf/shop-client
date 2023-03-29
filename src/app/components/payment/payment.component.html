@@ -33,6 +33,12 @@
           {{price.paymentFee | currency: "R$ "}}
         </ion-button>
       </ion-item>
+      <ion-item lines="none" *ngIf="price.serviceFee" test-id="service-fee">
+        <ion-label>Taxa de serviço</ion-label>
+        <ion-button fill="clear" color="success" slot="end">
+          {{price.serviceFee | currency: "R$ "}}
+        </ion-button>
+      </ion-item>
       <ion-item lines="none">
         <ion-label>Valor total</ion-label>
         <ion-button fill="clear" color="success" slot="end">
