@@ -77,7 +77,7 @@ describe('PurchaseDetailPage', () => {
   describe('given purchase loaded', () => {
 
     beforeEach(() => {
-      const purchase = {id: '1'} as any;
+      const purchase = {id: '1', price: {}} as any;
       store.dispatch(loadPurchaseDetailSuccess({purchase}));
       fixture.detectChanges();
     })
@@ -95,7 +95,7 @@ describe('PurchaseDetailPage', () => {
     })
 
     it('when payment has error, then show payment error', () => {
-      const purchase = {id: '1', payment: {error: 'any error'}} as any;
+      const purchase = {id: '1', payment: {error: 'any error'}, price: {}} as any;
       store.dispatch(loadPurchaseDetailSuccess({purchase}));
       fixture.detectChanges();
 
@@ -107,7 +107,7 @@ describe('PurchaseDetailPage', () => {
       let purchase;
 
       beforeEach(() => {
-        purchase = {id: '1', payment: {}, status: "WAITING_PAYMENT"} as any;
+        purchase = {id: '1', payment: {}, status: "WAITING_PAYMENT", price: {}} as any;
       })
 
       it('and there is no error, then show payment button', () => {
@@ -166,7 +166,7 @@ describe('PurchaseDetailPage', () => {
   describe('given payment by pix', () => {
 
     beforeEach(() => {
-      const purchase = {id: '1', payment: {type: 'PIX', receiptUrl: "receiptUrl"}} as any;
+      const purchase = {id: '1', payment: {type: 'PIX', receiptUrl: "receiptUrl"}, price: {}} as any;
       store.dispatch(loadPurchaseDetailSuccess({purchase}));
       fixture.detectChanges();
     })
@@ -197,7 +197,7 @@ describe('PurchaseDetailPage', () => {
   describe('given payment by money', () => {
 
     beforeEach(() => {
-      const purchase = {id: '1', payment: {type: 'MONEY'}} as any;
+      const purchase = {id: '1', payment: {type: 'MONEY'}, price: {}} as any;
       store.dispatch(loadPurchaseDetailSuccess({purchase}));
       fixture.detectChanges();
     })
@@ -215,7 +215,7 @@ describe('PurchaseDetailPage', () => {
   describe('given payment by credit card', () => {
 
     beforeEach(() => {
-      const purchase = {id: '1', payment: {type: 'CREDIT_CARD'}} as any;
+      const purchase = {id: '1', payment: {type: 'CREDIT_CARD'}, price: {}} as any;
       store.dispatch(loadPurchaseDetailSuccess({purchase}));
       fixture.detectChanges();
     })
