@@ -31,10 +31,10 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card class="payment-details" *ngIf="purchase.payment">
+      <ion-card class="payment-details" *ngIf="purchase.price">
         <ion-card-header>
           <ion-card-title>Dados do pagamento</ion-card-title>
-          <ion-card-subtitle>{{purchase.payment.type | paymentType}}</ion-card-subtitle>
+          <ion-card-subtitle *ngIf="purchase.payment?.type">{{purchase.payment?.type | paymentType}}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <div class="payment-list">
@@ -56,7 +56,7 @@
               </ion-label>
               <p slot="end">- {{purchase.price?.discount | currency: "R$ "}}</p>
             </div>
-            <div class="payment-line" *ngIf="purchase.payment.type === 'CREDIT_CARD'">
+            <div class="payment-line" *ngIf="purchase.payment?.type === 'CREDIT_CARD'">
               <ion-label>
                 <h2>Taxa do cartão de crédito</h2>
               </ion-label>
@@ -76,10 +76,10 @@
             </div>
           </div>
 
-          <ion-text *ngIf="purchase.payment.type === 'MONEY'" test-id="payment-by-money">
+          <ion-text *ngIf="purchase.payment?.type === 'MONEY'" test-id="payment-by-money">
             Pagamento na entrega do produto.
           </ion-text>
-          <ion-text *ngIf="purchase.payment.type === 'CREDIT_CARD'" test-id="payment-by-credit-card">
+          <ion-text *ngIf="purchase.payment?.type === 'CREDIT_CARD'" test-id="payment-by-credit-card">
             <span *ngIf="purchase.payment.card">
               <p>Bandeira: {{purchase.payment.card.brand}}</p>
               <p>Número: **** **** **** {{purchase.payment.card.last4}}</p>
@@ -165,6 +165,15 @@
           <p>Complemento: {{address.complement}}</p>
           <p>Cidade: {{address.city}}</p>
           <p>Estado: {{address.state}}</p>
+          <div class="payment-list" *ngIf="purchase.price?.delivery">
+            <br/>
+            <div class="payment-line">
+              <ion-label>
+                <h2>Valor da entrega:</h2>
+              </ion-label>
+              <p slot="end">{{purchase.price?.delivery | currency: "R$ "}}</p>
+            </div>
+          </div>
         </ion-card-content>
       </ion-card>
     </div>
