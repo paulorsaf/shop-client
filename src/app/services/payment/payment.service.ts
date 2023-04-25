@@ -56,6 +56,7 @@ export class PaymentService {
       deliveryAddress: paymentDetails.deliveryAddress,
       deliveryPrice: paymentDetails.deliveryPrice,
       payment: {
+        changeFor: paymentDetails.changeFor,
         cupom: paymentDetails.cupom,
         type: PaymentType.MONEY
       },
@@ -134,6 +135,7 @@ export class PaymentService {
     const url = `${environment.api}/purchases/${paymentDetails.purchaseId}/payments`;
     return this.apiService.patch<void>(url, {
       payment: {
+        changeFor: paymentDetails.changeFor,
         cupom: paymentDetails.cupom,
         type: PaymentType.MONEY
       }
@@ -181,6 +183,7 @@ export class PaymentService {
 }
 
 type Payment = {
+  changeFor?: number;
   cupom: string;
   deliveryAddress: Address;
   deliveryPrice: number;

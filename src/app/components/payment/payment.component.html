@@ -74,10 +74,12 @@
         </ion-item>
       </span>
       <span *ngIf="company?.payment?.money">
-        <ion-item *ngIf="!address || address?.city === company?.address?.city" test-id="money">
-          <ion-label>Dinheiro (ao receber produto)</ion-label>
-          <ion-radio slot="start" [value]="PaymentType.MONEY"></ion-radio>
-        </ion-item>
+        <span *ngIf="!address || address?.city === company?.address?.city">
+          <ion-item test-id="money">
+            <ion-label>Dinheiro (ao receber produto)</ion-label>
+            <ion-radio slot="start" [value]="PaymentType.MONEY"></ion-radio>
+          </ion-item>
+        </span>
       </span>
       <ion-item *ngIf="company?.payment?.creditCard" test-id="credit-card">
         <ion-label>Cartão de crédito</ion-label>
@@ -85,6 +87,18 @@
       </ion-item>
     </ion-radio-group>
   </ion-list>
+
+  <ion-card *ngIf="form.value.paymentType === 'MONEY'" formGroupName="money">
+    <ion-card-header>
+      <ion-card-title>Troco</ion-card-title>
+      <ion-card-subtitle>
+        <ion-item *ngIf="form.value.paymentType === 'MONEY'" test-id="change-for">
+          <ion-label position="floating">Eu vou pagar com (R$)</ion-label>
+          <ion-input type="number" formControlName="changeFor"></ion-input>
+        </ion-item>
+      </ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
 
   <ion-card *ngIf="form.value.paymentType === 'PIX'" (click)="copyPix()" test-id="pix-key">
     <ion-card-header>

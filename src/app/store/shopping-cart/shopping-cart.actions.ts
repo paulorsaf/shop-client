@@ -27,6 +27,7 @@ export const makePurchaseByPix =
         receipt: File
     }>());
 export const makePurchaseByMoney = createAction('[Shopping cart] pucharse by money', props<{
+    changeFor: number,
     cupom: string,
     purchaseId?: string
 }>());

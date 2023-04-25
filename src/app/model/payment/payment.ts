@@ -2,6 +2,7 @@ import { Address } from "../address/address";
 
 export type Payment = {
     billingAddress?: Address;
+    changeFor?: number;
     creditCard?: CreditCardPayment;
     creditCardId?: string;
     cupom?: string;

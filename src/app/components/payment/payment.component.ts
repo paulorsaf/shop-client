@@ -69,6 +69,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
       } else {
         this.removeCreditCardValidators();
       }
+      if (paymentType === PaymentType.MONEY) {
+        this.addMoneyValidators();
+      } else {
+        this.removeMoneyValidators();
+      }
     });
   }
 
@@ -160,8 +165,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       makePurchase({
         payment: {
+          changeFor: this.form.value.money.changeFor,
+          cupom: this.form.value.cupom,
           type: this.form.value.paymentType,
-          cupom: this.form.value.cupom
         },
         purchaseId: this.purchaseId
       })
@@ -265,6 +271,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
         cardCvc: ['']
       }),
       cupom: [''],
+      money: this.formBuilder.group({
+        changeFor: ['']
+      }),
       paymentType: [PaymentType.PIX]
     });
   }
@@ -282,6 +291,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.setCreditCardControlValidator('billingAddress', 'zipCode', Validators.required);
     this.setCreditCardControlValidator('billingAddress', 'city', Validators.required);
     this.setCreditCardControlValidator('billingAddress', 'state', Validators.required);
+
+    this.removeMoneyValidators();
   }
 
   private removeCreditCardValidators(){
@@ -297,6 +308,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.setCreditCardControlValidator('billingAddress', 'zipCode');
     this.setCreditCardControlValidator('billingAddress', 'city');
     this.setCreditCardControlValidator('billingAddress', 'state');
+  }
+
+  private addMoneyValidators(){
+    this.form.controls["money"].get("changeFor").addValidators(Validators.required);
+    this.form.controls["money"].get("changeFor").updateValueAndValidity();
+  }
+
+  private removeMoneyValidators(){
+    this.form.controls["money"].get("changeFor").removeValidators(Validators.required);
+    this.form.controls["money"].reset();
+    this.form.controls["money"].get("changeFor").updateValueAndValidity();
   }
 
   private setCreditCardControlValidator(control: string, subControl: string, validator?: ValidatorFn) {

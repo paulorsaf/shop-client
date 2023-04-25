@@ -30,6 +30,7 @@ export class ShoppingCartEffects {
         }
         if (params.payment.type === PaymentType.MONEY) {
           return of(makePurchaseByMoney({
+            changeFor: params.payment.changeFor,
             cupom: params.payment.cupom,
             purchaseId: params.purchaseId
           }));
@@ -80,6 +81,7 @@ export class ShoppingCartEffects {
       this.getStore(),
       switchMap(([action, storeState]: [action: any, storeState: AppState]) =>
         this.paymentService.payByMoney({
+          changeFor: action.changeFor,
           cupom: action.cupom,
           deliveryAddress: storeState.shoppingCart.deliveryAddress,
           deliveryPrice: storeState.shoppingCart.deliveryPrice,

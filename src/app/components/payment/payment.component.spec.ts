@@ -211,6 +211,10 @@ describe('PaymentComponent', () => {
       expect(page.querySelector('[test-id="credit-card"]')).toBeNull();
     })
 
+    it('then hide change for field', () => {
+      expect(page.querySelector('[test-id="change-for"]')).toBeNull();
+    })
+
     describe('when pix selected', () => {
 
       beforeEach(() => {
@@ -259,6 +263,10 @@ describe('PaymentComponent', () => {
         expect(page.querySelector('[test-id="finish-purchase-button"]')).not.toBeNull();
       })
 
+      it('then show change-for field', () => {
+        expect(page.querySelector('[test-id="change-for"]')).not.toBeNull();
+      })
+
       it('then hide pix key', () => {
         expect(page.querySelector('[test-id="pix-key"]')).toBeNull();
       })
@@ -279,8 +287,15 @@ describe('PaymentComponent', () => {
         expect(page.querySelector('[test-id="credit-card-fee"]')).toBeNull();
       })
 
-      it('then form is valid', () => {
+      it('when change for is filled, then form is valid', () => {
+        component.form.get('money').get('changeFor').setValue(10);
+        fixture.detectChanges();
+
         expect(component.form.valid).toBeTruthy();
+      })
+
+      it('when change for is empty, then form is invalid', () => {
+        expect(component.form.valid).toBeFalsy();
       })
 
     })
@@ -438,19 +453,6 @@ describe('PaymentComponent', () => {
         })
       })
 
-    })
-
-  })
-
-  describe('given user changes payment type', () => {
-
-    beforeEach(() => {
-      const price = {id: "anyPrice"} as any;
-      store.dispatch(calculatePurchasePriceSuccess({price}));
-      fixture.detectChanges();
-
-      component.form.controls.paymentType.setValue('CREDIT_CARD');
-      fixture.detectChanges();
     })
 
   })
@@ -690,6 +692,22 @@ describe('PaymentComponent', () => {
         component.company = {payment: {creditCard: {}}} as any;
         component.form.controls.paymentType.setValue('MONEY');
         fixture.detectChanges();
+
+        component.form.get('money').get('changeFor').setValue(10);
+        fixture.detectChanges();
+      })
+
+      it('and form is invalid, then do not pay for purchase', done => {
+        component.form.get('money').get('changeFor').setValue('');
+        fixture.detectChanges();
+
+        page.querySelector('[test-id="finish-purchase-button"]').click();
+        fixture.detectChanges();
+
+        store.select('shoppingCart').subscribe(state => {
+          expect(state.isPaying).toBeFalsy();
+          done();
+        })
       })
 
       it('then pay for purchase', done => {
@@ -711,6 +729,7 @@ describe('PaymentComponent', () => {
         expect(store.dispatch).toHaveBeenCalledWith(
           makePurchase({
             payment: {
+              changeFor: 10,
               cupom: '',
               type: 'MONEY'
             } as any,
@@ -729,6 +748,7 @@ describe('PaymentComponent', () => {
         expect(store.dispatch).toHaveBeenCalledWith(
           makePurchase({
             payment: {
+              changeFor: 10,
               cupom: '',
               type: 'MONEY'
             } as any,

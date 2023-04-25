@@ -87,11 +87,12 @@ describe('Shopping carg effects', () => {
     });
 
     it('when money, then return make purchase with money', (done) => {
-      const payment = {cupom: '10', type:  PaymentType.MONEY}
+      const payment = {changeFor: 10, cupom: '10', type:  PaymentType.MONEY}
       actions$ = of(makePurchase({payment}));
 
       effects.makePurchaseEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseByMoney({
+          changeFor: 10,
           cupom: '10',
           purchaseId: undefined
         }));
@@ -180,7 +181,7 @@ describe('Shopping carg effects', () => {
     it('when success, then return make purchase success', (done) => {
       paymentService.response = of({});
 
-      actions$ = of(makePurchaseByMoney({cupom: '10'}));
+      actions$ = of(makePurchaseByMoney({changeFor: 10, cupom: '10'}));
 
       effects.makePurchaseByMoneyEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseSuccess());
@@ -191,7 +192,7 @@ describe('Shopping carg effects', () => {
     it('when fail, then return make purchase fail', (done) => {
       paymentService.response = throwError(error)
 
-      actions$ = of(makePurchaseByMoney({cupom: '10'}));
+      actions$ = of(makePurchaseByMoney({changeFor: 10, cupom: '10'}));
 
       effects.makePurchaseByMoneyEffect$.subscribe(action => {
         expect(action).toEqual(makePurchaseFail({error}));
