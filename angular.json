@@ -28,7 +28,8 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
-              }
+              },
+              "src/manifest.webmanifest"
             ],
             "styles": ["src/theme/variables.scss", "src/global.scss"],
             "scripts": [],
@@ -81,6 +82,11 @@
                 {
                   "glob": "**/*",
                   "input": "build-configs/production/images",
+                  "output": "assets"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "build-configs/production/pwa",
                   "output": "assets"
                 }
               ]
@@ -415,7 +421,8 @@
   "cli": {
     "schematicCollections": [
       "@ionic/angular-toolkit"
-    ]
+    ],
+    "analytics": false
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
