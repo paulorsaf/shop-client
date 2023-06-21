@@ -3,7 +3,7 @@ steps:
     args: ['build', '-t', 'gcr.io/${_FIREBASE_PROJECT_ID}/firebase', './dockerfiles/firebase']
   - name: 'node:18.15.0'
     entrypoint: 'npm'
-    args: ['install']
+    args: ['install', '--legacy-peer-deps']
   - name: 'node:18.15.0'
     entrypoint: 'npm'
     args: ['run', 'build:parisltda']
