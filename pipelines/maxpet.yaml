@@ -1,10 +1,10 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/${_FIREBASE_PROJECT_ID}/firebase', './dockerfiles/firebase']
-  - name: 'node:16.10'
+  - name: 'node:18.15.0'
     entrypoint: 'npm'
     args: ['install']
-  - name: 'node:16.10'
+  - name: 'node:18.15.0'
     entrypoint: 'npm'
     args: ['run', 'build:maxpet']
   - name: 'gcr.io/${_FIREBASE_PROJECT_ID}/firebase'
