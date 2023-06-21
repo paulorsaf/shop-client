@@ -25,6 +25,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { PurchaseStockOptionModule } from './components/purchase-stock-option/purchase-stock-option.module';
 import * as Sentry from "@sentry/angular";
 import { OrganizationPageModule } from './pages/organization/organization.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 registerLocaleData(localePt);
 
@@ -53,7 +54,13 @@ registerLocaleData(localePt);
     AngularFireAnalyticsModule,
     OrganizationPageModule,
 
-    BrMaskerModule
+    BrMaskerModule,
+     ServiceWorkerModule.register('ngsw-worker.js', {
+       enabled: environment.production,
+       // Register the ServiceWorker as soon as the application is stable
+       // or after 30 seconds (whichever comes first).
+       registrationStrategy: 'registerWhenStable:30000'
+     })
   ],
   providers: [
     DatePipe,
