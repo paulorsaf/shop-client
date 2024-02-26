@@ -13,6 +13,11 @@ import { AppState } from 'src/app/store/app-state';
 export class BannersComponent implements OnInit {
 
   banners$: Observable<Banner[]>;
+  slideOpts = {
+    autoplay: {
+      delay: 5000
+    }
+  }
 
   constructor(
     private router: Router,

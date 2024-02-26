@@ -1,4 +1,4 @@
-<ion-slides pager="true">
+<ion-slides pager="true" [options]="slideOpts">
   <ion-slide *ngFor="let product of (banners$ | async)" test-id="banner">
     <img [src]="product.image" object-fit="cover" />
     <section>
