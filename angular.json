@@ -185,11 +185,11 @@
                 "src/manifest.webmanifest"
               ]
             },
-            "parisltda": {
+            "bbecia": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.parisltda.ts"
+                  "with": "src/environments/environment.bbecia.ts"
                 }
               ],
               "styles": ["src/theme/variables.scss", "src/global.scss"],
@@ -209,7 +209,7 @@
                 }
               ],
               "index": {
-                "input": "build-configs/parisltda/index.html",
+                "input": "build-configs/bbecia/index.html",
                 "output": "index.html"
               },
               "assets": [
@@ -225,7 +225,7 @@
                 },
                 {
                   "glob": "**/*",
-                  "input": "build-configs/parisltda/images",
+                  "input": "build-configs/bbecia/images",
                   "output": "assets"
                 },
                 "src/manifest.webmanifest"
@@ -251,8 +251,8 @@
             "ricco": {
               "browserTarget": "app:build:ricco"
             },
-            "parisltda": {
-              "browserTarget": "app:build:parisltda"
+            "bbecia": {
+              "browserTarget": "app:build:bbecia"
             },
             "ci": {
               "progress": false
@@ -317,8 +317,8 @@
             "ricco": {
               "devServerTarget": "app:serve:ricco"
             },
-            "parisltda": {
-              "devServerTarget": "app:serve:parisltda"
+            "bbecia": {
+              "devServerTarget": "app:serve:bbecia"
             },
             "ci": {
               "devServerTarget": "app:serve:ci"

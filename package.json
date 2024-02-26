@@ -11,10 +11,10 @@
     "build:production": "ng build --configuration=production",
     "build:maxpet": "npm run manifest:maxpet && ng build --configuration=maxpet",
     "build:ricco": "npm run manifest:ricco && ng build --configuration=ricco",
-    "build:parisltda": "npm run manifest:parisltda && ng build --configuration=parisltda",
+    "build:bbecia": "npm run manifest:bbecia && ng build --configuration=bbecia",
     "manifest:maxpet": "cp ./build-configs/maxpet/manifest.webmanifest ./src/manifest.webmanifest",
     "manifest:ricco": "cp ./build-configs/ricco/manifest.webmanifest ./src/manifest.webmanifest",
-    "manifest:parisltda": "cp ./build-configs/parisltda/manifest.webmanifest ./src/manifest.webmanifest",
+    "manifest:bbecia": "cp ./build-configs/bbecia/manifest.webmanifest ./src/manifest.webmanifest",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
