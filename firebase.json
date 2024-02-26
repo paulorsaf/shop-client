@@ -42,7 +42,7 @@
       }
     ]
   }, {
-    "target": "parisltda",
+    "target": "bbecia",
     "public": "www",
     "ignore": [
       "firebase.json",
